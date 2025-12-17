@@ -1,0 +1,25 @@
+# Mac stuff
+.DS_Store
+
+# Jetbrains Stuff
+.idea/*
+.history/*
+
+# pycache
+**/__pycache__/
+
+# Python bytecode
+*.pyc
+
+# Python env
+.venv/*
+
+# Pyenv
+.python-version
+
+
+# Hydra's output
+outputs/*
+
+# Local wandb output
+wandb/*
