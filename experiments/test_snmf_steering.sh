@@ -1,6 +1,6 @@
 PYTHONPATH=. python experiments/train/train.py \
     --sparsity 0.01 \
-    --ranks 50 \
+    --ranks 400,200,100,50 \
     --max-iterations-per-layer 2000 \
     --patience 1500 \
     --model-name gpt2-small \
