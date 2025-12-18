@@ -1,7 +1,9 @@
+from experiments.utils import save_model_and_artifact
 from llm_utils.activation_generator import ActivationGenerator
 from factorization.seminmf import NMFSemiNMF
 from data_utils.concept_dataset import SupervisedConceptDataset
 
+import logging
 import argparse
 import random
 import numpy as np
@@ -10,6 +12,11 @@ import pickle
 from pathlib import Path
 from datetime import datetime
 from typing import List
+
+from tracker import init_tracker
+from utils import setup_logging
+
+logger = logging.getLogger(__name__)
 
 # ------------------------------
 # Helpers
@@ -46,6 +53,8 @@ def default_device() -> str:
 # Main
 # ------------------------------
 def main():
+    # Logger
+    setup_logging()
     parser = argparse.ArgumentParser(
         description="Run Semi-NMF with different initialization methods over model layer activations."
     )
@@ -84,6 +93,8 @@ def main():
     parser.add_argument("--save-path", type=str, default=None,
                         help="Where to save models. If omitted, uses {base}/rebuttal/init_exp/models/{init}.")
 
+    parser.add_argument("--wandb-mode", type=str, default="online", help="wandb mode: online, offline, disabled")
+
     # Repro & misc
     parser.add_argument("--seed", type=int, default=42, help="RNG seed for reproducibility.")
     args = parser.parse_args()
@@ -108,8 +119,12 @@ def main():
 
     data_path = Path(args.data_path).resolve()
 
+    # Initialize tracker
+    cfg = vars(args)
+    tracker_run = init_tracker(cfg)
+
     # Config summary
-    log("Job started.")
+    logger.info("Job started")
     log(f"""
 ==== Configuration Summary ====
 Base Path:             {base_path}
@@ -171,7 +186,9 @@ Seed:                  {args.seed}
 
             with open(file_path, "wb") as f:
                 pickle.dump(nmf, f)
-            log(f"Saved model → {file_path}")
+            log(f"Saved pickled model → {file_path}")
+
+            save_model_and_artifact(nmf, cfg, file_path.with_suffix(".pt"), layer=layer, rank=rank)
 
             del nmf
             if torch.cuda.is_available():
@@ -179,6 +196,7 @@ Seed:                  {args.seed}
                 log("Emptied CUDA cache")
 
     log("All computations done.")
+    tracker_run.finish()
 
 if __name__ == "__main__":
     main()
