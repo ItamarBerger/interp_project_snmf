@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import math, torch
+import wandb
 
 
 # ───────────────────────────────────────────────────────────
@@ -249,6 +250,7 @@ class NMFSemiNMF(nn.Module):
                     num_no_improve += 1
 
                 if verbose and (it % 50 == 0 or num_no_improve == 1):
+                    wandb.log({f"train_{K}/seminmf_loss": loss.item(), f"train_{K}/iteration": it, f"train_{K}/best_seminmf_loss": best_loss})
                     print(f"Iter {it:4d}: loss={loss.item():.6f}  "
                           f"(best={best_loss:.6f}, no_improve={num_no_improve})")
 
