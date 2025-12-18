@@ -23,3 +23,5 @@ outputs/*
 
 # Local wandb output
 wandb/*
+
+# Ignore artifacts

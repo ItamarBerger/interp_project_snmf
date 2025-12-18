@@ -1,6 +1,7 @@
 import torch
 import logging
 import wandb
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,12 @@ def save_model_and_artifact(model, cfg, file_path, layer, rank):
         metadata=artifact_metadata
     )
 
-    # We might want to add more files
+    # Add all the files under the folder of this file to the artifact
+    base_folder = file_path.parent
+    for root, _, files in os.walk(base_folder):
+        for f in files:
+            full_path = os.path.join(root, f)
+            artifact.add_file(full_path, f)
     artifact.add_file(file_path)
 
     # tags
