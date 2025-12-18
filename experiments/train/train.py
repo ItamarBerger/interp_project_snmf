@@ -93,6 +93,8 @@ def main():
     parser.add_argument("--save-path", type=str, default=None,
                         help="Where to save models. If omitted, uses {base}/rebuttal/init_exp/models/{init}.")
 
+    parser.add_argument("--wandb-mode", type=str, default="online", help="wandb mode: online, offline, disabled")
+
     # Repro & misc
     parser.add_argument("--seed", type=int, default=42, help="RNG seed for reproducibility.")
     args = parser.parse_args()
