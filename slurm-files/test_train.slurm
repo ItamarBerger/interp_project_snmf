@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #SBATCH --job-name=test_job
 #SBATCH --chdir=/home/ADV_2526a/itamarberger/interp_project_snmf
 #SBATCH --output=/home/ADV_2526a/itamarberger/slurm_logs/%x_%j.out
@@ -21,5 +20,6 @@ umask 0002
 # activate conda environment
 source /home/ADV_2526a/tslilshani/anaconda3/etc/profile.d/conda.sh
 conda activate snmf_hier
+export WANDB_API_KEY=$(cat ~/.wandb_api_key)
 
 bash experiments/test_snmf_steering.sh  
