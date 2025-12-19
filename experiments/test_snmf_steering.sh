@@ -5,7 +5,7 @@ PYTHONPATH=. python experiments/train/train.py \
     --patience 1500 \
     --model-name gpt2-small \
     --factorization-mode mlp \
-    --layers 0 \
+    --layers 0,3,6,9,11 \
     --data-path data/final_dataset_20_concepts.json \
     --model-device cuda \
     --data-device cpu \
