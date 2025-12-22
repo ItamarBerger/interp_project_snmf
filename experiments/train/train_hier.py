@@ -45,7 +45,13 @@ def parse_int_list(spec: str) -> List[int]:
             out.extend(range(int(a), int(b) + 1))
         elif chunk:
             out.append(int(chunk))
-    return sorted(set(out))
+    seen = set()
+    ordered = []
+    for v in out:
+        if v not in seen:
+            seen.add(v)
+            ordered.append(v)
+    return ordered
 
 def default_device() -> str:
     return "cuda" if torch.cuda.is_available() else "cpu"

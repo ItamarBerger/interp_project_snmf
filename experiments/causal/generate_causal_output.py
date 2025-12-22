@@ -162,7 +162,7 @@ def main():
             factorization_base_path,
             str(layer),
             f"hier_snmf-l{layer}-r{ranks_str}.pkl"
-        )
+      )
         if os.path.isfile(fp):
             with open(fp, "rb") as f:
                 nmf_models[layer] = pickle.load(f)
@@ -178,6 +178,7 @@ def main():
 
         pretrained_layers = hier_snmf["pretrained_layers"]  # list of NMFSemiNMF
         for level, nmf_layer in enumerate(pretrained_layers):
+            # if(level != 3): continue # comment when runing the full experiment.
             num_concepts = nmf_layer.H.shape[0]
             for h_idx in tqdm(range(num_concepts)):
                 key = (layer, h_idx, level, ranks_str)
