@@ -57,7 +57,7 @@ def is_gemma_model(model_name: str) -> bool:
     return "gemma" in model_name.lower()
 
 def get_concept_vector_regular(nmf_F_row: torch.Tensor) -> torch.Tensor:
-    # unit-normalized factor row (as in your "regular" script)
+    # unit-normalized factor row
     v = nmf_F_row
     return v / (v.norm() + 1e-12)
 
@@ -109,7 +109,8 @@ def main():
     print(f"Device: {device}")
     model_name = args.model_name
     layers = args.layers
-    ranks = args.ranks
+    ranks = args.ranks                      # list[int] for hierarchical run, e.g. [400,200,100,50]
+    ranks_str = "-".join(map(str, ranks))
     sparsity = args.sparsity
     num_top_logits_to_save = args.num_top_logits
     num_sentences_to_generate = args.num_sentences
@@ -121,7 +122,7 @@ def main():
     factorization_base_path = args.factorization_base_path
     save_path = args.save_path
 
-    # Track how many rows we already created per (layer, h_row, K)
+    # Track how many rows we already created per (layer, h_row, hier_level, K)
     processed_counts = {}
     if os.path.exists(save_path):
         with open(save_path, "r") as f:
@@ -130,7 +131,12 @@ def main():
             except json.JSONDecodeError:
                 existing = []
         for row in existing:
-            key = (row.get("layer"), row.get("h_row"), row.get("K"))
+            key = (
+                row.get("layer"),
+                row.get("h_row"),
+                row.get("hier_level"),
+                row.get("K"),
+            )
             processed_counts[key] = processed_counts.get(key, 0) + 1
 
     log("Loading model…")
@@ -139,7 +145,7 @@ def main():
     intervener = Intervener(model, **intervener_kwargs)
 
     json_handler = JsonHandler(
-        ["K", "layer", "h_row", "alpha", "kl", "top_logit_values", "top_shifted_tokens", "steered_sentences", "intervention_sign", "sparsity"],
+        ["K","hier_level" ,"layer", "h_row", "alpha", "kl", "top_logit_values", "top_shifted_tokens", "steered_sentences", "intervention_sign", "sparsity"],
         save_path,
         auto_write=False
     )
@@ -149,48 +155,43 @@ def main():
     with torch.no_grad():
         base_logits = model(model.to_tokens(base_prompt))
 
-    for rank in ranks:
-        log(f"\n--- Rank {rank} ---")
-        # load per-layer NMFs
-        nmf_models = {}
-        for layer in layers:
-            rank_dir = os.path.join(factorization_base_path, str(layer), str(rank))
-            if not os.path.isdir(rank_dir):
-                log(f"Dir does not exist, skipping rank: {rank}")
-                continue
+    # load hierarchical models once per layer
+    nmf_models = {}
+    for layer in layers:
+        fp = os.path.join(
+            factorization_base_path,
+            str(layer),
+            f"hier_snmf-l{layer}-r{ranks_str}.pkl"
+        )
+        if os.path.isfile(fp):
+            with open(fp, "rb") as f:
+                nmf_models[layer] = pickle.load(f)
+            log(f"Loaded hierarchical NMF for layer {layer}, ranks {ranks_str}")
+        else:
+            log(f"Missing hierarchical file for layer {layer}: {fp}")
 
-            fn = f"nmf-l{layer}-r{rank}.pkl"
-            fp = os.path.join(rank_dir, fn)
-            if os.path.isfile(fp):
-                with open(fp, "rb") as f:
-                    nmf_models[layer] = pickle.load(f)
-                log(f"Loaded NMF model for layer {layer}, rank {rank}")
-            else:
-                log(f"Missing NMF file for layer {layer}, rank {rank} → skipping")
+    # intervention flow
+    for layer in layers:
+        hier_snmf = nmf_models.get(layer)
+        if hier_snmf is None:
+            continue
 
-        # intervention flow
-        for layer in layers:
-            nmf: NMFSemiNMF = nmf_models.get(layer)
-            if nmf is None:
-                continue
-
-            # nmf.F_.T[h_idx] is the factor row (dimension depends on space)
-            for h_idx in tqdm(range(rank)):
-                key = (layer, h_idx, rank)
+        pretrained_layers = hier_snmf["pretrained_layers"]  # list of NMFSemiNMF
+        for level, nmf_layer in enumerate(pretrained_layers):
+            num_concepts = nmf_layer.H.shape[0]
+            for h_idx in tqdm(range(num_concepts)):
+                key = (layer, h_idx, level, ranks_str)
                 if processed_counts.get(key, 0) >= required_rows:
-                    log(f"Skipping layer {layer}, h_row {h_idx}: already has {processed_counts[key]} rows.")
+                    log(f"Skipping layer {layer}, h_row {h_idx}, level {level}: already has {processed_counts[key]} rows.")
                     continue
 
                 with torch.no_grad():
+                    factor_row = nmf_layer.H[h_idx].to(device)  # (hidden_dim,)
                     if gemma:
-                        # Gemma branch: map MLP-out factor via W_out/b_out + LN2_post
-                        factor_row = nmf.F_.T[h_idx].to(device)
                         concept_vector = get_concept_vector_gemma(factor_row, model, layer, device)
                     else:
-                        # Regular branch: unit-normalized factor row
-                        concept_vector = get_concept_vector_regular(nmf.F_.T[h_idx].to(device))
+                        concept_vector = get_concept_vector_regular(factor_row)
 
-                    # Find alpha per KL
                     kl_to_alpha = intervener.find_alpha_for_kl_targets(
                         base_prompt,
                         intervention_vectors=[concept_vector],
@@ -206,17 +207,14 @@ def main():
                             alpha=alpha
                         )
                         delta = (intervened_logits[0, -1, :] - base_logits[0, -1, :])
-                        # positive shifts
                         pos_vals, pos_ids = torch.topk(delta, k=num_top_logits_to_save)
                         pos_list = pos_vals.tolist()
                         pos_tokens = [model.to_str_tokens(tid) for tid in pos_ids]
 
-                        # negative shifts
                         neg_vals, neg_ids = torch.topk(-delta, k=num_top_logits_to_save)
                         neg_list = neg_vals.tolist()
                         neg_tokens = [model.to_str_tokens(tid) for tid in neg_ids]
 
-                        # generate steered sentences
                         sentences_pos = intervener.generate_with_manipulation_sampling(
                             base_prompt,
                             [concept_vector],
@@ -238,21 +236,9 @@ def main():
                             m=num_sentences_to_generate
                         )
 
-                        # write rows
                         json_handler.add_row(
-                            K=rank,
-                            layer=layer,
-                            h_row=h_idx,
-                            alpha=alpha,
-                            kl=kl,
-                            top_logit_values=pos_list,
-                            top_shifted_tokens=pos_tokens,
-                            steered_sentences=sentences_pos,
-                            intervention_sign=1,
-                            sparsity=sparsity
-                        )
-                        json_handler.add_row(
-                            K=rank,
+                            K=num_concepts,
+                            hier_level=level,
                             layer=layer,
                             h_row=h_idx,
                             alpha=alpha,
@@ -263,15 +249,13 @@ def main():
                             intervention_sign=-1,
                             sparsity=sparsity
                         )
-
-                del concept_vector
-                log(f"Finished row: layer={layer}, h_row={h_idx}")
-            log(f"Finished layer: {layer}, rank: {rank}")
+                log(f"Finished row: layer={layer}, h_row={h_idx}, level={level}")
+            log(f"Finished layer: {layer}, level: {level}")
             json_handler.write()
 
-        del nmf_models  # free memory
+    del nmf_models  # free memory
 
-    log("Job finished.")
+log("Job finished.")
 
 
 if __name__ == "__main__":
