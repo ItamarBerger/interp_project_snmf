@@ -39,7 +39,7 @@ def parse_int_list(spec: str) -> List[int]:
             out.extend(range(a, b + 1))
         else:
             out.append(int(c))
-    return sorted(set(out))
+    return out
 
 def generate_token_contexts(tokens, sample_ids, act_generator, context_window: int):
     token_ds = []
@@ -121,24 +121,35 @@ def main():
     token_context = generate_token_contexts(tokens, sample_ids, act_generator, args.context_window)
 
     json_handler = JsonHandler(
-        ["K", "layer", "h_row", "top_activations", "sparsity"],
+        ["K", "level", "layer", "h_row", "top_activations", "sparsity"],
         str(save_path),
         auto_write=False
     )
+    ranks = args.ranks
+    ranks_str = "-".join(map(str, ranks))
+    layers = args.layers
 
-    # Load per (layer, rank): {models-dir}/{layer}/{rank}/nmf-l{layer}-r{rank}.pkl
-    for layer in args.layers:
-        for rank in args.ranks:
-            fp = models_dir / str(layer) / str(rank) / f"nmf-l{layer}-r{rank}.pkl"
-            if not fp.is_file():
-                log(f"  ✗ missing: {fp} → skipping")
-                continue
 
-            log(f"Loading NMF model → layer {layer}, rank {rank}: {fp}")
+    # Load per (layer): {models-dir}/{layer}/hier_snmf-l{layer}-r{rank0}-{}-...-{rankL-1}.pkl
+    # Essientially loading hierarchical models once per layer
+    nmf_models = {}
+    for layer in layers:
+        fp = os.path.join(
+            models_dir,
+            str(layer),
+            f"hier_snmf-l{layer}-r{ranks_str}.pkl"
+      )
+        if os.path.isfile(fp):
             with open(fp, "rb") as f:
-                nmf: NMFSemiNMF = pickle.load(f)
-
-            G_np = nmf.G_.detach().cpu().numpy() if isinstance(nmf.G_, torch.Tensor) else nmf.G_
+                nmf_models[layer] = pickle.load(f)
+            log(f"Loaded hierarchical NMF for layer {layer}, ranks {ranks_str}")
+        else:
+            log(f"Missing hierarchical file for layer {layer}: {fp}")
+            continue
+            # "layer" is the hierarchical model key.
+        nmf = nmf_models[layer]
+        G_np = nmf.G_.detach().cpu().numpy() if isinstance(nmf.G_, torch.Tensor) else nmf.G_
+        for level, rank in enumerate(ranks):
             for concept_idx in range(rank):
                 top_idx, top_acts = get_top_activating_indices(
                     G_np, concept_idx=concept_idx, num_samples=args.num_samples_per_factor
@@ -148,7 +159,7 @@ def main():
                     for i, a in zip(top_idx, top_acts)
                 ]
                 json_handler.add_row(
-                    K=rank, layer=layer, h_row=concept_idx,
+                    K=rank, level=level, layer=layer, h_row=concept_idx,
                     top_activations=formatted, sparsity=args.sparsity
                 )
 
