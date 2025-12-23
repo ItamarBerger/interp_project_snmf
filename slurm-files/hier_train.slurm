@@ -21,7 +21,5 @@ umask 0002
 # activate conda environment
 source /home/ADV_2526a/tslilshani/anaconda3/etc/profile.d/conda.sh
 conda activate snmf_hier
-export WANDB_API_KEY=$(cat ~/.wandb_api_key)
 
-
-bash experiments/run_hier_snmf.sh
+bash experiments/run_hier_snmf.sh 
