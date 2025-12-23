@@ -9,7 +9,7 @@ PYTHONPATH=. python experiments/train/train_hier.py \
     --fine-tune \
     --model-name gpt2-small \
     --factorization-mode mlp \
-    --layers 0 \
+    --layers 0,3,6,9,11 \
     --data-path data/final_dataset_20_concepts.json \
     --model-device cuda \
     --data-device cpu \
@@ -20,7 +20,7 @@ PYTHONPATH=. python experiments/train/train_hier.py \
 
 PYTHONPATH=. python experiments/causal/generate_causal_output.py \
   --model-name gpt2-small \
-  --layers 0 \
+  --layers 0,3,6,9,11 \
   --ranks 400,200,100,50 \
   --sparsity 0.01 \
   --factorization-base-path experiments/artifacts/hier \
