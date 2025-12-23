@@ -146,10 +146,15 @@ def main():
         else:
             log(f"Missing hierarchical file for layer {layer}: {fp}")
             continue
-            # "layer" is the hierarchical model key.
-        nmf = nmf_models[layer]
-        G_np = nmf.G_.detach().cpu().numpy() if isinstance(nmf.G_, torch.Tensor) else nmf.G_
-        for level, rank in enumerate(ranks):
+    for layer in layers:
+        hier_snmf = nmf_models.get(layer)
+        if hier_snmf is None:
+            continue
+        
+        pretrained_layers = hier_snmf["pretrained_layers"]  # list of NMFSemiNMF
+        for level, nmf in enumerate(pretrained_layers):
+            G_np = nmf.G_.detach().cpu().numpy() if isinstance(nmf.G_, torch.Tensor) else nmf.G_
+            rank = nmf.H.shape[0]
             for concept_idx in range(rank):
                 top_idx, top_acts = get_top_activating_indices(
                     G_np, concept_idx=concept_idx, num_samples=args.num_samples_per_factor
