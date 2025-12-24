@@ -129,8 +129,8 @@ if __name__ == "__main__":
         device = args.device
 
     log(f"Job started. device={device}")
-    is_gemma = "gemma" in args.model_name.lower()
-    model_type = "gemma"
+    model_type = args.model_name.lower()
+    is_gemma = "gemma" in model_type
 
     # Layers
     default_layers = None
@@ -138,10 +138,10 @@ if __name__ == "__main__":
     if args.layers is None:
         if is_gemma :
             default_layers = list(range(26)) 
-        elif "llama" in args.model_name.lower():
+        elif "llama" in model_type:
             default_layers = list(range(32))
             model_type =  "llama"
-        elif "gpt-2" in args.model_name.lower():
+        elif "gpt-2" in model_type:
             default_layers = list(range(12))
             model_type = "gpt-2"
 
