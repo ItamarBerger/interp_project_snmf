@@ -14,6 +14,9 @@ from transformer_lens.utilities.addmm import batch_addmm  # used for Gemma path
 from evaluation.json_handler import JsonHandler
 from intervention.intervener import Intervener
 from factorization.seminmf import NMFSemiNMF
+from tqdm import tqdm
+
+
 
 
 # ------------------------------
@@ -53,10 +56,14 @@ def parse_int_list(spec: str):
 # Model-specific helpers
 # ------------------------------
 @torch.no_grad()
-def get_vocab_proj_regular(A, model, layer, top_k=50, device="cuda"):
-    basis_units = model.W_out
-    direction = model.ln_final(A @ basis_units[layer])
-    vocab_proj = model.unembed(direction.to(device))
+def get_vocab_proj_regular(A, model, model_name, layer, top_k=50, device="cuda"):
+    if "gpt-2" in model_name:
+        direction = model.blocks[layer].ln_2(A.to(device))
+    # model is llama
+    else:
+        basis_units = model.W_out
+        direction = model.ln_final(A @ basis_units[layer]).to(device)
+    vocab_proj = model.unembed(direction)
     values, indices = torch.topk(vocab_proj, top_k)
     return values, indices
 
@@ -123,16 +130,20 @@ if __name__ == "__main__":
 
     log(f"Job started. device={device}")
     is_gemma = "gemma" in args.model_name.lower()
+    model_type = "gemma"
 
     # Layers
     default_layers = None
+    layers = None
     if args.layers is None:
         if is_gemma :
             default_layers = list(range(26)) 
         elif "llama" in args.model_name.lower():
             default_layers = list(range(32))
+            model_type =  "llama"
         elif "gpt-2" in args.model_name.lower():
             default_layers = list(range(12))
+            model_type = "gpt-2"
 
         layers = default_layers
     else:
@@ -182,8 +193,8 @@ if __name__ == "__main__":
         pretrained_layes = hier_nmf['pretrained_layers']
         
         for level, nmf in enumerate(pretrained_layes):
-            rank = nmf.H_.shape[0] # H shape is (rank, d_model)
-            for h_idx in range(rank):
+            rank = nmf.H_.shape[0] # H dim is (rank, d_model)
+            for h_idx in tqdm(range(rank)):
                 with torch.no_grad():
                     if is_gemma:
                         mlp_vec = nmf.F_.T[h_idx].to(device)
@@ -196,8 +207,8 @@ if __name__ == "__main__":
                     else:
                         concept_vector = (nmf.F_.T[h_idx] / nmf.F_.T[h_idx].norm()).to(device)
 
-                        pos_vals_t, pos_idx_t = get_vocab_proj_regular(concept_vector, model, layer, top_k=args.top_k, device=device)
-                        neg_vals_t, neg_idx_t = get_vocab_proj_regular(-concept_vector, model, layer, top_k=args.top_k, device=device)
+                        pos_vals_t, pos_idx_t = get_vocab_proj_regular(concept_vector, model, model_type, layer, top_k=args.top_k, device=device)
+                        neg_vals_t, neg_idx_t = get_vocab_proj_regular(-concept_vector, model, model_type, layer, top_k=args.top_k, device=device)
 
                         sparsity_meta = args.sparsity
 
@@ -228,10 +239,11 @@ if __name__ == "__main__":
                     )
                     del concept_vector
 
-                log(f"Finished Processing layer: {layer}, rank: {rank}, lebel: {level}, h_row: {h_idx}")
+                log(f"Finished Processing layer: {layer}, rank: {rank}, level: {level}, h_row: {h_idx}")
+            json_handler.write()
 
-        del nmf_models
-        json_handler.write()
+
+    del nmf_models
 
     log(f"Wrote: {save_path}")
     log("Job finished.")
