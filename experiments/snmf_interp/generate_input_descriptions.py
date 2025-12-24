@@ -127,6 +127,7 @@ def make_process_entry(generate_concept):
         return {
             "K": entry["K"],
             "layer": entry["layer"],
+            "level": entry["level"], # hierarchical level
             "h_row": entry["h_row"],
             "description": concept_desc,
         }
@@ -137,6 +138,9 @@ async def run(args):
     data = load_data(args.input_json)
     layers = set(_parse_int_list(args.layers))
     k_values = set(_parse_int_list(args.k_values))
+    # each k corresponds to a specific layer. Hence number of levels is len(k_values)
+    n_levels = len(k_values)
+    levels = [i for i in range(n_levels)]
 
     # Load API key
     load_dotenv()
@@ -155,7 +159,7 @@ async def run(args):
     tasks = [
         process_entry(client, e, args.top_m)
         for e in data
-        if (int(e["layer"]) in layers) and (int(e["K"]) in k_values)
+        if (int(e["layer"]) in layers) and (int(e["K"]) in k_values and (int(e["level"]) in levels))
     ]
 
     print(f"Running over {len(tasks)} tasks …")

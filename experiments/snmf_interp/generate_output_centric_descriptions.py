@@ -118,15 +118,16 @@ Make sure you output a very precise and detailed description of the concept that
         )
 
         prompt = CONNECTION_PROMPT.format(token_context_str=token_context_str)
-        print(f"[→] Generating for K={entry.get('K', 'SAE')} layer={entry['layer']} row={entry['h_row']}…", flush=True)
+        print(f"[→] Generating for K={entry.get('K', 'SAE')} layer={entry['layer']} row={entry['h_row']} level={entry.get('level', 0)}…", flush=True)
 
         resp = await _call_openai([{"role": "user", "content": prompt}])
         content = resp.choices[0].message.content
         result  = extract_results_section(content) or "ERROR: no Results section"
-        print(f"[✔] Done K={entry.get('K', 'SAE')} layer={entry['layer']}", flush=True)
+        print(f"[✔] Done K={entry.get('K', 'SAE')} layer={entry['layer']} level = {entry.get('level', 0)}", flush=True)
         return {
             'description': result,
             'layer': entry['layer'],
+            'level' : entry.get('level', 0),
             'K': entry.get('K', 'SAE'),
             'h_row': entry['h_row'],
             'sign': entry.get('intervention_sign')
@@ -152,7 +153,7 @@ Make sure you output a very precise and detailed description of the concept that
             print(f"  ⚠ Sample exception: {err}", flush=True)
 
     json_handler = JsonHandler(
-        ["description", "layer", "h_row", "K", "sign"],
+        ["description", "layer", "level", "h_row", "K", "sign"],
         output_json,
         auto_write=False
     )
