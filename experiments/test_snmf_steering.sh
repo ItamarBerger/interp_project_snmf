@@ -42,30 +42,30 @@ PYTHONPATH=. python experiments/snmf_interp/generate_input_descriptions.py \
   --k-values 400,200,100,50 \
   --top-m 10 \
   --max-tokens 200 \
-  --concurrency 25 \
+  --concurrency 50 \
   --retries 5
 
-# PYTHONPATH=. python experiments/snmf_interp/generate_vocab_proj.py\
-#   --model-name gpt2-small \
-#   --base-path . \
-#   --factorization-base-path experiments/artifacts \
-#   --output-path experiments/artifacts/vocab_proj.json \
-#   --layers 0 \
-#   --ranks 50 \
-#   --top-k 75 \
-#   --sparsity 0.01 \
-#   --device mps \
-#   --seed 123
+PYTHONPATH=. python experiments/snmf_interp/generate_vocab_proj.py\
+  --model-name gpt2-small \
+  --base-path . \
+  --factorization-base-path experiments/artifacts/hier \
+  --output-path experiments/artifacts/vocab_proj.json \
+  --layers  0,3,6,9,11 \
+  --ranks 400,200,100,50 \
+  --top-k 75 \
+  --sparsity 0.01 \
+  --device cuda \
+  --seed 123
 
-# PYTHONPATH=. python experiments/snmf_interp/generate_output_centric_descriptions.py\
-#   --input experiments/artifacts/vocab_proj.json \
-#   --output experiments/artifacts/output_descriptions.json \
-#   --model gpt-4o-mini \
-#   --layers 0 \
-#   --ranks 50 \
-#   --top-m 25 \
-#   --concurrency 50 \
-#   --max-tokens 5000
+PYTHONPATH=. python experiments/snmf_interp/generate_output_centric_descriptions.py\
+  --input experiments/artifacts/vocab_proj.json \
+  --output experiments/artifacts/output_descriptions.json \
+  --model gemini-2.0-flash \
+  --layers 0,3,6,9,11 \
+  --ranks 400,200,100,50 \
+  --top-m 25 \
+  --concurrency 50 \
+  --max-tokens 5000
 
 
 PYTHONPATH=. python experiments/causal/generate_causal_output.py \

@@ -193,7 +193,7 @@ if __name__ == "__main__":
         pretrained_layes = hier_nmf['pretrained_layers']
         
         for level, nmf in enumerate(pretrained_layes):
-            rank = nmf.H_.shape[0] # H dim is (rank, d_model)
+            rank = nmf.H.shape[0] # H dim is (rank, d_model)
             for h_idx in tqdm(range(rank)):
                 with torch.no_grad():
                     if is_gemma:
