@@ -78,7 +78,7 @@ def build_arg_parser():
     p = argparse.ArgumentParser(description="Generate concept descriptions from token-context activations.")
     # I/O
     p.add_argument("--input-json", default="rebuttal/init_methods/svd/concept_contexts.json",
-                   help="Path to input JSON containing top_activations per (K, layer, h_row).")
+                   help="Path to input JSON containing top_activations per (K, layer, level, h_row).")
     p.add_argument("--output-json", default="rebuttal/init_methods/svd/input_descriptions.json",
                    help="Path to write the output descriptions JSON.")
     # Gemini

@@ -36,7 +36,7 @@ PYTHONPATH=. python experiments/snmf_interp/generate_concept_context.py \
 PYTHONPATH=. python experiments/snmf_interp/generate_input_descriptions.py \
   --input-json experiments/artifacts/concept_contexts.json \
   --output-json experiments/artifacts/input_descriptions.json \
-  --model gpt-4o-mini \
+  --model gemini-2.0-flash \
   --env-var GEMINI_API_KEY \
   --layers 0,3,6,9,11 \
   --k-values 400,200,100,50 \
@@ -68,13 +68,13 @@ PYTHONPATH=. python experiments/snmf_interp/generate_input_descriptions.py \
 #   --max-tokens 5000
 
 
-# PYTHONPATH=. python experiments/causal/generate_causal_output.py \
-#   --model-name gpt2-small \
-#   --layers 0,3,6,9,11 \
-#   --ranks 400,200,100,50 \
-#   --sparsity 0.01 \
-#   --factorization-base-path experiments/artifacts/hier \
-#   --save-path experiments/artifacts/causal_output.json \
-#   --device cuda
+PYTHONPATH=. python experiments/causal/generate_causal_output.py \
+  --model-name gpt2-small \
+  --layers 0,3,6,9,11 \
+  --ranks 400,200,100,50 \
+  --sparsity 0.01 \
+  --factorization-base-path experiments/artifacts/hier \
+  --save-path experiments/artifacts/causal_output.json \
+  --device cuda
 
 echo "Finished."
