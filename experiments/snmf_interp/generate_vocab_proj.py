@@ -14,6 +14,9 @@ from transformer_lens.utilities.addmm import batch_addmm  # used for Gemma path
 from evaluation.json_handler import JsonHandler
 from intervention.intervener import Intervener
 from factorization.seminmf import NMFSemiNMF
+from tqdm import tqdm
+
+
 
 
 # ------------------------------
@@ -53,10 +56,14 @@ def parse_int_list(spec: str):
 # Model-specific helpers
 # ------------------------------
 @torch.no_grad()
-def get_vocab_proj_regular(A, model, layer, top_k=50, device="cuda"):
-    basis_units = model.W_out
-    direction = model.ln_final(A @ basis_units[layer])
-    vocab_proj = model.unembed(direction.to(device))
+def get_vocab_proj_regular(A, model, model_name, layer, top_k=50, device="cuda"):
+    if "gpt-2" in model_name:
+        direction = model.blocks[layer].ln_2(A.to(device))
+    # model is llama
+    else:
+        basis_units = model.W_out
+        direction = model.ln_final(A @ basis_units[layer]).to(device)
+    vocab_proj = model.unembed(direction)
     values, indices = torch.topk(vocab_proj, top_k)
     return values, indices
 
@@ -83,7 +90,7 @@ if __name__ == "__main__":
     )
     # Core model/config
     parser.add_argument("--model-name", type=str, required=True,
-                        help='e.g. "gemma-2-2b" or "meta-llama/Llama-3.1-8B"')
+                        help='e.g. "gemma-2-2b" or "meta-llama/Llama-3.1-8B" or  "gpt-2-small"')
     parser.add_argument("--device", type=str, default=None,
                         help='torch device, e.g. "cuda", "cpu", or "mps". Default: auto')
     parser.add_argument("--seed", type=int, default=42)
@@ -102,7 +109,7 @@ if __name__ == "__main__":
                         help="Ranks to process, e.g. '100' or '64,128' (list).")
     parser.add_argument("--layers", type=str, default=None,
                         help="Layers to process (range/list). Examples: '0-25' or '0,2,5-7'. "
-                             "Default depends on model: 26 layers for Gemma-2-2B, 32 for Llama 8B.")
+                             "Default depends on model: 26 layers for Gemma-2-2B, 32 for Llama 8B, 12 for gpt-2-small.")
     parser.add_argument("--top-k", type=int, default=50,
                         help="Top-k vocab tokens to save per concept (+ and -).")
 
@@ -122,17 +129,29 @@ if __name__ == "__main__":
         device = args.device
 
     log(f"Job started. device={device}")
-    is_gemma = "gemma" in args.model_name.lower()
+    model_type = args.model_name.lower()
+    is_gemma = "gemma" in model_type
 
     # Layers
+    default_layers = None
+    layers = None
     if args.layers is None:
-        default_layers = list(range(26)) if is_gemma else list(range(32))
+        if is_gemma :
+            default_layers = list(range(26)) 
+        elif "llama" in model_type:
+            default_layers = list(range(32))
+            model_type =  "llama"
+        elif "gpt-2" in model_type:
+            default_layers = list(range(12))
+            model_type = "gpt-2"
+
         layers = default_layers
     else:
         layers = parse_int_list(args.layers)
 
     # Ranks
     ranks = [int(x) for x in args.ranks.split(",")]
+    ranks_str = "-".join([str(r) for r in ranks])
 
     # Paths (auto layout unless overridden)
     factorization_base_path = args.factorization_base_path
@@ -146,37 +165,36 @@ if __name__ == "__main__":
 
     # JSON writer
     json_handler = JsonHandler(
-        ["K", "layer", "h_row", "top_logit_values", "top_shifted_tokens", "intervention_sign", "sparsity"],
+        ["K", "layer", "h_row", "level", "top_logit_values", "top_shifted_tokens", "intervention_sign", "sparsity"],
         save_path,
         auto_write=False
     )
 
     # Process
-    for rank in ranks:
-        log(f"Starting rank {rank}...")
-        # Load all NMF models for this rank
-        nmf_models = {}
-        for layer in layers:
-            fn = f"nmf-l{layer}-r{rank}.pkl"
-            rank_dir = os.path.join(factorization_base_path, str(layer), str(rank))
-            if not os.path.isdir(rank_dir):
-                log(f"Dir does not exist, skipping rank: {rank}  ({rank_dir})")
-                continue
-            fp = os.path.join(rank_dir, fn)
-            if os.path.isfile(fp):
-                with open(fp, "rb") as f:
-                    nmf_models[layer] = pickle.load(f)
-                log(f"Loaded NMF model for layer {layer}, rank {rank}")
-            else:
-                log(f"Missing NMF file for layer {layer}, rank {rank} → skipping")
+    nmf_models = {}
+    for layer in layers:
+        fp = os.path.join(
+            factorization_base_path,
+            str(layer),
+            f"hier_snmf-l{layer}-r{ranks_str}.pkl"
+      )
+        if os.path.isfile(fp):
+            with open(fp, "rb") as f:
+                nmf_models[layer] = pickle.load(f)
+            log(f"Loaded hierarchical NMF for layer {layer}, ranks {ranks_str}")
+        else:
+            log(f"Missing hierarchical file for layer {layer}: {fp}")
 
-        # Vocab projection per layer/h
-        for layer in layers:
-            nmf: NMFSemiNMF = nmf_models.get(layer)
-            if nmf is None:
-                continue
-
-            for h_idx in range(rank):
+    # Vocab projection per (layer, level)/h
+    for layer in layers:
+        hier_nmf = nmf_models.get(layer)
+        if  hier_nmf is None:
+            continue
+        pretrained_layes = hier_nmf['pretrained_layers']
+        
+        for level, nmf in enumerate(pretrained_layes):
+            rank = nmf.H.shape[0] # H dim is (rank, d_model)
+            for h_idx in tqdm(range(rank)):
                 with torch.no_grad():
                     if is_gemma:
                         mlp_vec = nmf.F_.T[h_idx].to(device)
@@ -189,8 +207,8 @@ if __name__ == "__main__":
                     else:
                         concept_vector = (nmf.F_.T[h_idx] / nmf.F_.T[h_idx].norm()).to(device)
 
-                        pos_vals_t, pos_idx_t = get_vocab_proj_regular(concept_vector, model, layer, top_k=args.top_k, device=device)
-                        neg_vals_t, neg_idx_t = get_vocab_proj_regular(-concept_vector, model, layer, top_k=args.top_k, device=device)
+                        pos_vals_t, pos_idx_t = get_vocab_proj_regular(concept_vector, model, model_type, layer, top_k=args.top_k, device=device)
+                        neg_vals_t, neg_idx_t = get_vocab_proj_regular(-concept_vector, model, model_type, layer, top_k=args.top_k, device=device)
 
                         sparsity_meta = args.sparsity
 
@@ -202,6 +220,7 @@ if __name__ == "__main__":
                     json_handler.add_row(
                         K=rank,
                         layer=layer,
+                        level=level,
                         h_row=h_idx,
                         top_logit_values=pos_vals,
                         top_shifted_tokens=pos_toks,
@@ -211,6 +230,7 @@ if __name__ == "__main__":
                     json_handler.add_row(
                         K=rank,
                         layer=layer,
+                        level=level,
                         h_row=h_idx,
                         top_logit_values=neg_vals,
                         top_shifted_tokens=neg_toks,
@@ -219,10 +239,11 @@ if __name__ == "__main__":
                     )
                     del concept_vector
 
-            log(f"Finished Processing layer: {layer}, rank: {rank}")
+                log(f"Finished Processing layer: {layer}, rank: {rank}, level: {level}, h_row: {h_idx}")
+            json_handler.write()
 
-        del nmf_models
-        json_handler.write()
+
+    del nmf_models
 
     log(f"Wrote: {save_path}")
     log("Job finished.")

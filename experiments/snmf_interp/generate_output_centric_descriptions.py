@@ -7,7 +7,8 @@ import argparse
 from typing import List, Optional
 
 from dotenv import load_dotenv
-from openai import AsyncOpenAI
+import google.generativeai as genai
+# from openai import AsyncOpenAI
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 from experiments.evaluation.json_handler import JsonHandler
 
@@ -52,13 +53,13 @@ async def run(args):
     # .env
     load_dotenv()  # discovers OPENAI_API_KEY and optional defaults
 
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
-        raise RuntimeError("Missing OPENAI_API_KEY in environment (.env).")
+        raise RuntimeError("Missing GEMINI_API_KEY in environment (.env).")
 
     input_json  = args.input  
     output_json = args.output
-    model       = args.model  or 'gpt-4o-mini'
+    model       = args.model  or 'gemini-2.0-flash'
     top_m       = args.top_m
     concurrency = args.concurrency 
     max_tokens  = args.max_tokens
@@ -67,7 +68,9 @@ async def run(args):
     ranks  = parse_int_list(args.ranks)
 
     # client & semaphore
-    client = AsyncOpenAI(api_key=api_key)
+    # client = AsyncOpenAI(api_key=api_key)
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel(model)
     semaphore = asyncio.Semaphore(concurrency)
 
     CONNECTION_PROMPT = """
@@ -101,13 +104,14 @@ Make sure you output a very precise and detailed description of the concept that
 """.strip()
 
     @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(5))
-    async def _call_openai(messages: list[dict]):
+    async def _call_gemini(prompt: str,  max_tokens: int):
         async with semaphore:
-            return await client.chat.completions.create(
-                model=model,
-                messages=messages,
-                max_tokens=max_tokens,
+            resp = await asyncio.to_thread(
+                model.generate_content,
+                prompt,
+                generation_config={"max_output_tokens": max_tokens, "temperature": 0.2}
             )
+        return resp
 
     async def generate_concept(entry: dict) -> dict:
         # pair tokens & scores, sort, take top M
@@ -118,25 +122,27 @@ Make sure you output a very precise and detailed description of the concept that
         )
 
         prompt = CONNECTION_PROMPT.format(token_context_str=token_context_str)
-        print(f"[→] Generating for K={entry.get('K', 'SAE')} layer={entry['layer']} row={entry['h_row']}…", flush=True)
+        print(f"[→] Generating for K={entry.get('K', 'SAE')} layer={entry['layer']} row={entry['h_row']} level={entry.get('level', 0)}…", flush=True)
 
-        resp = await _call_openai([{"role": "user", "content": prompt}])
-        content = resp.choices[0].message.content
+        resp = await _call_gemini(prompt, max_tokens)
+        content = resp.text.strip()
         result  = extract_results_section(content) or "ERROR: no Results section"
-        print(f"[✔] Done K={entry.get('K', 'SAE')} layer={entry['layer']}", flush=True)
+        print(f"[✔] Done K={entry.get('K', 'SAE')} layer={entry['layer']} level = {entry.get('level', 0)}", flush=True)
         return {
             'description': result,
             'layer': entry['layer'],
+            'level' : entry.get('level', 0),
             'K': entry.get('K', 'SAE'),
             'h_row': entry['h_row'],
             'sign': entry.get('intervention_sign')
         }
 
     # filter data
+    levels = [i for i in range(len(ranks))] if ranks else [0]
     data = load_data(input_json)
     filtered = [
         e for e in data
-        if int(e['layer']) in layers and ('K' not in e or not ranks or int(e['K']) in ranks)
+        if int(e['layer']) in layers and ('K' not in e or not ranks or int(e['K']) in ranks) and int(e['level']) in levels
     ]
 
     print(f"Processing {len(filtered)} entries…", flush=True)
@@ -152,7 +158,7 @@ Make sure you output a very precise and detailed description of the concept that
             print(f"  ⚠ Sample exception: {err}", flush=True)
 
     json_handler = JsonHandler(
-        ["description", "layer", "h_row", "K", "sign"],
+        ["description", "layer", "level", "h_row", "K", "sign"],
         output_json,
         auto_write=False
     )

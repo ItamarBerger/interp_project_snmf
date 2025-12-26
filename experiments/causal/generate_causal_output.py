@@ -236,7 +236,20 @@ def main():
                             top_p=0.3,
                             m=num_sentences_to_generate
                         )
-
+                        json_handler.add_row(
+                            K=num_concepts,
+                            hier_level=level,
+                            layer=layer,
+                            h_row=h_idx,
+                            alpha=alpha,
+                            kl=kl,
+                            top_logit_values=pos_list,
+                            top_shifted_tokens=pos_tokens,
+                            steered_sentences=sentences_pos,
+                            intervention_sign=1,
+                            sparsity=sparsity
+                        )
+                        
                         json_handler.add_row(
                             K=num_concepts,
                             hier_level=level,
