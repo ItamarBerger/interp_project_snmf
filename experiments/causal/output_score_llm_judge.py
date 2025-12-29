@@ -5,10 +5,11 @@ import os
 import argparse
 from typing import List, Tuple
 from dotenv import load_dotenv
-from openai import AsyncOpenAI
+import google.generativeai as genai
+from tenacity import retry, wait_random_exponential, stop_after_attempt
 
 # Will be set in main()
-client: AsyncOpenAI = None
+model = None
 semaphore: asyncio.Semaphore = None
 
 
@@ -46,13 +47,13 @@ def extract_rating(response_text: str) -> int:
 # ------------------------------
 # LLM evaluators
 # ------------------------------
-async def evaluate_concept_score(
-    concept: str,
-    sentence_fragment: str,
-    model: str,
-    attempts: int,
-) -> int:
-    prompt = f"""Please act as an impartial judge and evaluate whether the specified concept is presented in the sentence fragment provided below. Focus solely on whether the concept is clearly incorporated, without regard for grammar or logical coherence.
+def make_evaluate_concept_score(retries: int, gemini_model, max_tokens: int, semaphore: asyncio.Semaphore):
+    @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(retries))
+    async def _inner(
+        concept: str,
+        sentence_fragment: str,
+    ) -> int:
+        prompt = f"""Please act as an impartial judge and evaluate whether the specified concept is presented in the sentence fragment provided below. Focus solely on whether the concept is clearly incorporated, without regard for grammar or logical coherence.
 Begin your evaluation by providing a short explanation of whether the concept is clearly incorporated.
 Point out references to the concept in the fragment, noting any minimal or awkward incorporations.
 After providing your explanation, rate the concept's relevance on a scale from 0 to 2, where 0 indicates the concept is not present at all, 1 indicates the concept is somewhat present but minimally or awkwardly incorporated, and 2 indicates the concept is more fully and effectively incorporated, with stronger and more natural integration.
@@ -65,28 +66,26 @@ Provide your rating using this exact format: "Rating: [[score]]".
 [Sentence Fragment Start]
 {sentence_fragment}
 [Sentence Fragment End]"""
-    for attempt in range(attempts):
         try:
             async with semaphore:
-                resp = await client.chat.completions.create(
-                    model=model,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.0
+                resp = await asyncio.to_thread(
+                    gemini_model.generate_content,
+                    prompt,
+                    generation_config={"max_output_tokens": max_tokens, "temperature": 0.0}
                 )
-            return extract_rating(resp.choices[0].message.content)
+            return extract_rating(resp.text.strip())
         except Exception as e:
-            print(f"Warning: concept scoring attempt {attempt+1} failed: {e}")
-            if attempt == attempts - 1:
-                print("Skipping concept score, returning 0.")
-                return 0
+            print(f"Warning: concept scoring failed: {e}")
+            return 0
+    return _inner
 
 
-async def evaluate_fluency_score(
-    sentence_fragment: str,
-    model: str,
-    attempts: int,
-) -> int:
-    prompt = f"""Please act as an impartial judge and evaluate the fluency of the sentence fragment provided below. Focus solely on fluency, disregarding its completeness, relevance, coherence with any broader context, or informativeness.
+def make_evaluate_fluency_score(retries: int, gemini_model, max_tokens: int, semaphore: asyncio.Semaphore):
+    @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(retries))
+    async def _inner(
+        sentence_fragment: str,
+    ) -> int:
+        prompt = f"""Please act as an impartial judge and evaluate the fluency of the sentence fragment provided below. Focus solely on fluency, disregarding its completeness, relevance, coherence with any broader context, or informativeness.
 Begin your evaluation by briefly describing the fluency of the sentence, noting any unnatural phrasing, awkward transitions, grammatical errors, or repetitive structures that may hinder readability.
 After providing your explanation, rate the sentence's fluency on a scale from 0 to 2, where 0 indicates the sentence is not fluent and highly unnatural (e.g., incomprehensible or repetitive), 1 indicates it is somewhat fluent but contains noticeable errors or awkward phrasing, and 2 indicates the sentence is fluent and almost perfect.
 Provide your rating using this exact format: "Rating: [[score]]".
@@ -94,20 +93,18 @@ Provide your rating using this exact format: "Rating: [[score]]".
 [Sentence Fragment Start]
 {sentence_fragment}
 [Sentence Fragment End]"""
-    for attempt in range(attempts):
         try:
             async with semaphore:
-                resp = await client.chat.completions.create(
-                    model=model,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.0
+                resp = await asyncio.to_thread(
+                    gemini_model.generate_content,
+                    prompt,
+                    generation_config={"max_output_tokens": max_tokens, "temperature": 0.0}
                 )
-            return extract_rating(resp.choices[0].message.content)
+            return extract_rating(resp.text.strip())
         except Exception as e:
-            print(f"Warning: fluency scoring attempt {attempt+1} failed: {e}")
-            if attempt == attempts - 1:
-                print("Skipping fluency score, returning 0.")
-                return 0
+            print(f"Warning: fluency scoring failed: {e}")
+            return 0
+    return _inner
 
 
 def harmonic_mean(scores: List[int]) -> float:
@@ -122,12 +119,12 @@ async def llm_judge(
     entry_idx: int,
     sent_idx: int,
     total_sents: int,
-    model: str,
-    attempts: int,
+    evaluate_concept_score,
+    evaluate_fluency_score,
 ) -> dict:
     print(f"    [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents}: evaluating...")
-    concept_score = await evaluate_concept_score(concept, sentence, model=model, attempts=attempts)
-    fluency_score = await evaluate_fluency_score(sentence, model=model, attempts=attempts)
+    concept_score = await evaluate_concept_score(concept, sentence)
+    fluency_score = await evaluate_fluency_score(sentence)
     final_score = harmonic_mean([concept_score, fluency_score])
     return {
         "sentence_index": sent_idx,
@@ -143,12 +140,13 @@ async def process_entry(
     entry: dict,
     concept_map: dict,
     total_entries: int,
-    model: str,
-    attempts: int,
     sparsity: str,
+    evaluate_concept_score=None,
+    evaluate_fluency_score=None,
 ) -> dict:
-    print(f"Processing entry {idx+1}/{total_entries} (K={entry['K'] if 'K' in entry else 'SAE'}, layer={entry['layer']}, h_row={entry['h_row']})")
-    key: Tuple[int, int, int, str] = (int(entry["K"]) if "K" in entry else "SAE", int(entry["layer"]), int(entry["h_row"]), entry.get("intervention_sign"))
+    print(f"Processing entry {idx+1}/{total_entries} (K={entry['K'] if 'K' in entry else 'SAE'}, layer={entry['layer']}, level={entry.get('level', 0)}, h_row={entry['h_row']})")
+    level = entry.get("level", 0)
+    key: Tuple[int, int, int, int, str] = (int(entry["K"]) if "K" in entry else "SAE", int(entry["layer"]), int(level), int(entry["h_row"]), entry.get("intervention_sign"))
     concept_desc = concept_map.get(key)
 
     if concept_desc is None:
@@ -158,7 +156,7 @@ async def process_entry(
         sentences = entry.get("steered_sentences", [])
         total_sents = len(sentences)
         sentence_results = [
-            await llm_judge(sentence, concept_desc, idx + 1, s_idx, total_sents, model=model, attempts=attempts)
+            await llm_judge(sentence, concept_desc, idx + 1, s_idx, total_sents, evaluate_concept_score, evaluate_fluency_score)
             for s_idx, sentence in enumerate(sentences)
         ]
 
@@ -168,6 +166,7 @@ async def process_entry(
         "kl": entry.get("kl"),
         "K": entry["K"] if "K" in entry else "SAE",
         "layer": entry["layer"],
+        "level": level,
         "h_row": entry["h_row"],
         "sentence_results": sentence_results,
         "description": concept_desc,
@@ -185,11 +184,12 @@ async def main():
     parser.add_argument("--output", required=True, help="Where to write aggregated results JSON")
     parser.add_argument("--ranks", required=True, help='K filter, e.g. \"100\" or \"64,100\" or \"64-128\"')
     parser.add_argument("--layers", required=True, help='Layer filter, e.g. \"23,31\" or \"0-16\"')
-    parser.add_argument("--model", default="gpt-4o-mini", help="OpenAI model (default: gpt-4o-mini)")
+    parser.add_argument("--model", default="gemini-1.5-flash", help="Gemini model to use (default: gemini-1.5-flash)")
     parser.add_argument("--concurrency", type=int, default=50, help="Max concurrent API calls (default: 50)")
-    parser.add_argument("--attempts", type=int, default=2, help="Retry attempts per scoring call (default: 2)")
+    parser.add_argument("--max-tokens", type=int, default=200, help="Max tokens for each completion (default: 200)")
+    parser.add_argument("--retries", type=int, default=5, help="Tenacity stop_after_attempt (default: 5)")
     parser.add_argument("--sparsity", default="s0.05", help="Sparsity tag to include in results (default: s0.05)")
-    parser.add_argument("--api-key-var", default="OPENAI_API_KEY", help="Env var containing the API key (default: OPENAI_API_KEY)")
+    parser.add_argument("--api-key-var", default="GEMINI_API_KEY", help="Env var containing the API key (default: GEMINI_API_KEY)")
     args = parser.parse_args()
 
     # Load .env and fetch key
@@ -201,10 +201,15 @@ async def main():
             f"Create a .env with {args.api_key_var}=sk-... or export it."
         )
 
-    # Initialize client + concurrency gate
-    global client, semaphore
-    client = AsyncOpenAI(api_key=api_key)
+    # Initialize model + concurrency gate
+    global model, semaphore
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel(args.model)
     semaphore = asyncio.Semaphore(args.concurrency)
+    
+    # Create evaluator functions
+    evaluate_concept_score = make_evaluate_concept_score(args.retries, model, args.max_tokens, semaphore)
+    evaluate_fluency_score = make_evaluate_fluency_score(args.retries, model, args.max_tokens, semaphore)
 
     # Read inputs
     with open(args.input, "r") as f:
@@ -214,15 +219,16 @@ async def main():
 
     ranks = parse_int_list(args.ranks)
     layers = parse_int_list(args.layers)
+    levels = list(range(len(ranks)))
 
     # Filter entries
-    filtered = [e for e in steered_entries if ("K" not in e or int(e["K"]) in ranks) and int(e["layer"]) in layers]
+    filtered = [e for e in steered_entries if ("K" not in e or int(e["K"]) in ranks) and int(e["layer"]) in layers and (int(e.get("level", 0)) in levels)]
     total_entries = len(filtered)
     print(f"Selected {total_entries} entries (K in {ranks}, layer in {layers}).")
 
-    # Build lookup: (K, layer, h_row, sign) -> description  (skip TRASH)
+    # Build lookup: (K, layer, level, h_row, sign) -> description  (skip TRASH)
     concept_map = {
-        (int(c["K"]) if ("K" in c and c["K"] != "SAE") else "SAE", int(c["layer"]), int(c["h_row"]), c["sign"]): c["description"]
+        (int(c["K"]) if ("K" in c and c["K"] != "SAE") else "SAE", int(c["layer"]), int(c.get("level", 0)), int(c["h_row"]), c["sign"]): c["description"]
         for c in concepts
         if c.get("description") and "TRASH" not in c["description"]
     }
@@ -230,7 +236,7 @@ async def main():
     # Process
     tasks = [
         asyncio.create_task(
-            process_entry(i, entry, concept_map, total_entries, model=args.model, attempts=args.attempts, sparsity=args.sparsity)
+            process_entry(i, entry, concept_map, total_entries, sparsity=args.sparsity, evaluate_concept_score=evaluate_concept_score, evaluate_fluency_score=evaluate_fluency_score)
         )
         for i, entry in enumerate(filtered)
     ]
