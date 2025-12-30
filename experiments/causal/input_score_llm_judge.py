@@ -132,7 +132,7 @@ async def process_entry(idx: int, entry: dict, concept_map: dict, total_entries:
     Processes one steered entry and returns a single dict that includes
     all scores for its sentences under 'sentence_results'.
     """
-    level = entry.get("level", 0)
+    level = entry.get("hier_level", 0)
     print(f"Processing entry {idx+1}/{total_entries} (K={entry.get('K', 'SAE')}, layer={entry['layer']}, level={level}, h_row={entry['h_row'] if 'h_row' in entry else entry['index']})")
     key = (entry["K"] if not is_diffmean and ("K" in entry) else "SAE", entry["layer"], level, entry["h_row"] if 'h_row' in entry else entry['index'])
     concept_desc = concept_map.get(key)
@@ -167,7 +167,7 @@ async def main():
     parser.add_argument("--input", required=True, help="Path to steered entries JSON (e.g., causal_output_svd.json)")
     parser.add_argument("--concepts", required=True, help="Path to concepts JSON (e.g., input_descriptions.json)")
     parser.add_argument("--output", required=True, help="Where to write the aggregated results JSON")
-    parser.add_argument("--model", default="gemini-1.5-flash", help="Gemini model to use (default: gemini-1.5-flash)")
+    parser.add_argument("--model", default="gemini-2.0-flash", help="Gemini model to use (default: gemini-2.0-flash)")
     parser.add_argument("--ranks", required=True, help='K filter, e.g. "100" or "64,100" or "64-128"')
     parser.add_argument("--layers", required=True, help='Layer filter, e.g. "0,8,16" or "0-16"')
     parser.add_argument("--concurrency", type=int, default=50, help="Max concurrent API calls (default: 50)")
@@ -213,7 +213,7 @@ async def main():
     levels = list(range(len(ranks)))
 
     # Filter entries
-    filtered = [e for e in steered_entries if ("K" not in e or int(e["K"]) in ranks) and int(e["layer"]) in layers and (int(e.get("level", 0)) in levels)]
+    filtered = [e for e in steered_entries if ("K" not in e or int(e["K"]) in ranks) and int(e["layer"]) in layers and (int(e.get("level", 0)) in levels)][:1]
     total_entries = len(filtered)
     print(f"Selected {total_entries} entries (K in {ranks}, layer in {layers}).")
     # Build concept lookup

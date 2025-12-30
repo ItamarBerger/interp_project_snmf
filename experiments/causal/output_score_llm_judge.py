@@ -145,7 +145,7 @@ async def process_entry(
     evaluate_fluency_score=None,
 ) -> dict:
     print(f"Processing entry {idx+1}/{total_entries} (K={entry['K'] if 'K' in entry else 'SAE'}, layer={entry['layer']}, level={entry.get('level', 0)}, h_row={entry['h_row']})")
-    level = entry.get("level", 0)
+    level = entry.get("hier_level", 0)
     key: Tuple[int, int, int, int, str] = (int(entry["K"]) if "K" in entry else "SAE", int(entry["layer"]), int(level), int(entry["h_row"]), entry.get("intervention_sign"))
     concept_desc = concept_map.get(key)
 
@@ -184,7 +184,7 @@ async def main():
     parser.add_argument("--output", required=True, help="Where to write aggregated results JSON")
     parser.add_argument("--ranks", required=True, help='K filter, e.g. \"100\" or \"64,100\" or \"64-128\"')
     parser.add_argument("--layers", required=True, help='Layer filter, e.g. \"23,31\" or \"0-16\"')
-    parser.add_argument("--model", default="gemini-1.5-flash", help="Gemini model to use (default: gemini-1.5-flash)")
+    parser.add_argument("--model", default="gemini-2.0-flash", help="Gemini model to use (default: gemini-2.0-flash)")
     parser.add_argument("--concurrency", type=int, default=50, help="Max concurrent API calls (default: 50)")
     parser.add_argument("--max-tokens", type=int, default=200, help="Max tokens for each completion (default: 200)")
     parser.add_argument("--retries", type=int, default=5, help="Tenacity stop_after_attempt (default: 5)")
