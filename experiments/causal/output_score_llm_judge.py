@@ -3,14 +3,53 @@ import json
 import re
 import os
 import argparse
+import time
 from typing import List, Tuple
+from collections import deque
 from dotenv import load_dotenv
 import google.generativeai as genai
 
 # Will be set in main()
 model = None
 semaphore: asyncio.Semaphore = None
+rate_limiter = None
+completed_entries = 0
+total_entries_global = 0
+progress_lock = None
 
+class RateLimiter:
+    """Simple rate limiter for 2000 requests per minute."""
+    def __init__(self, max_requests: int = 2000, window_seconds: int = 60):
+        self.max_requests = max_requests
+        self.window_seconds = window_seconds
+        self.request_times = deque()
+        self.lock = asyncio.Lock()
+        self.total_requests = 0
+    
+    async def acquire(self):
+        """Wait if necessary to respect rate limit, then record request."""
+        async with self.lock:
+            now = time.time()
+            # Remove requests older than the window
+            while self.request_times and self.request_times[0] < now - self.window_seconds:
+                self.request_times.popleft()
+            
+            # If we're at the limit, wait until the oldest request expires
+            if len(self.request_times) >= self.max_requests:
+                wait_time = self.request_times[0] + self.window_seconds - now + 0.1
+                if wait_time > 0:
+                    print(f"Rate limit reached ({len(self.request_times)}/{self.max_requests}), waiting {wait_time:.1f}s...")
+                    await asyncio.sleep(wait_time)
+                    # Clean up again after waiting
+                    now = time.time()
+                    while self.request_times and self.request_times[0] < now - self.window_seconds:
+                        self.request_times.popleft()
+            
+            # Record this request
+            self.request_times.append(time.time())
+            self.total_requests += 1
+            if self.total_requests % 100 == 0:
+                print(f"[Rate Limiter] Total requests made: {self.total_requests}, Current window: {len(self.request_times)}/{self.max_requests}")
 
 # ------------------------------
 # Helpers
@@ -66,15 +105,45 @@ Provide your rating using this exact format: "Rating: [[score]]".
 [Sentence Fragment End]"""
     for attempt in range(attempts):
         try:
+            await rate_limiter.acquire()
             async with semaphore:
-                response = await asyncio.to_thread(
-                    model.generate_content,
-                    prompt,
-                    generation_config={"temperature": 0.0}
+                start = time.time()
+                response = await asyncio.wait_for(
+                    asyncio.to_thread(
+                        model.generate_content,
+                        prompt,
+                        generation_config={"temperature": 0.0}
+                    ),
+                    timeout=60.0
                 )
+                elapsed = time.time() - start
+                if elapsed > 10:
+                    print(f"      [SLOW] Concept API took {elapsed:.1f}s")
             content = response.text.strip()
             return extract_rating(content)
+        except asyncio.TimeoutError:
+            print(f"⚠ TIMEOUT: concept scoring attempt {attempt+1} exceeded 60s")
+            if attempt == attempts - 1:
+                print("Skipping concept score, returning 0.")
+                return 0
         except Exception as e:
+            error_str = str(e)
+            # Check for 429 error and extract retry_delay
+            if "429" in error_str or "quota" in error_str.lower():
+                retry_delay = 0
+                # Try to extract retry_delay from error message
+                retry_match = re.search(r'retry.*?(\d+\.?\d*)\s*s', error_str, re.IGNORECASE)
+                if retry_match:
+                    retry_delay = float(retry_match.group(1))
+                elif "retry_delay" in error_str:
+                    # Try to find seconds value
+                    seconds_match = re.search(r'seconds:\s*(\d+)', error_str)
+                    if seconds_match:
+                        retry_delay = float(seconds_match.group(1))
+                if retry_delay > 0:
+                    print(f"Warning: Rate limit exceeded, waiting {retry_delay:.1f}s before retry...")
+                    await asyncio.sleep(retry_delay)
+                    continue
             print(f"Warning: concept scoring attempt {attempt+1} failed: {e}")
             if attempt == attempts - 1:
                 print("Skipping concept score, returning 0.")
@@ -95,15 +164,45 @@ Provide your rating using this exact format: "Rating: [[score]]".
 [Sentence Fragment End]"""
     for attempt in range(attempts):
         try:
+            await rate_limiter.acquire()
             async with semaphore:
-                response = await asyncio.to_thread(
-                    model.generate_content,
-                    prompt,
-                    generation_config={"temperature": 0.0}
+                start = time.time()
+                response = await asyncio.wait_for(
+                    asyncio.to_thread(
+                        model.generate_content,
+                        prompt,
+                        generation_config={"temperature": 0.0}
+                    ),
+                    timeout=60.0
                 )
+                elapsed = time.time() - start
+                if elapsed > 10:
+                    print(f"      [SLOW] Fluency API took {elapsed:.1f}s")
             content = response.text.strip()
             return extract_rating(content)
+        except asyncio.TimeoutError:
+            print(f"⚠ TIMEOUT: fluency scoring attempt {attempt+1} exceeded 60s")
+            if attempt == attempts - 1:
+                print("Skipping fluency score, returning 0.")
+                return 0
         except Exception as e:
+            error_str = str(e)
+            # Check for 429 error and extract retry_delay
+            if "429" in error_str or "quota" in error_str.lower():
+                retry_delay = 0
+                # Try to extract retry_delay from error message
+                retry_match = re.search(r'retry.*?(\d+\.?\d*)\s*s', error_str, re.IGNORECASE)
+                if retry_match:
+                    retry_delay = float(retry_match.group(1))
+                elif "retry_delay" in error_str:
+                    # Try to find seconds value
+                    seconds_match = re.search(r'seconds:\s*(\d+)', error_str)
+                    if seconds_match:
+                        retry_delay = float(seconds_match.group(1))
+                if retry_delay > 0:
+                    print(f"Warning: Rate limit exceeded, waiting {retry_delay:.1f}s before retry...")
+                    await asyncio.sleep(retry_delay)
+                    continue
             print(f"Warning: fluency scoring attempt {attempt+1} failed: {e}")
             if attempt == attempts - 1:
                 print("Skipping fluency score, returning 0.")
@@ -124,10 +223,12 @@ async def llm_judge(
     total_sents: int,
     attempts: int,
 ) -> dict:
-    print(f"    [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents}: evaluating...")
+    print(f"    → [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents}: calling concept API...", flush=True)
     concept_score = await evaluate_concept_score(concept, sentence, attempts=attempts)
+    print(f"    → [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents}: calling fluency API...", flush=True)
     fluency_score = await evaluate_fluency_score(sentence, attempts=attempts)
     final_score = harmonic_mean([concept_score, fluency_score])
+    print(f"    ✓ [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents} completed - Concept: {concept_score}, Fluency: {fluency_score}, Final: {final_score:.2f}", flush=True)
     return {
         "sentence_index": sent_idx,
         "steered_sentence": sentence,
@@ -145,22 +246,38 @@ async def process_entry(
     attempts: int,
     sparsity: str,
 ) -> dict:
-    level = entry.get('level', 0)
+    global completed_entries, total_entries_global, progress_lock
+    
+    level = entry.get('hier_level', 0)
     h_row = entry.get('h_row', entry.get('index', 0))
+    print(f"\n{'='*80}")
     print(f"Processing entry {idx+1}/{total_entries} (K={entry.get('K', 'SAE')}, layer={entry['layer']}, level={level}, h_row={h_row})")
     key: Tuple = (int(entry["K"]) if "K" in entry else "SAE", int(entry["layer"]), int(level), int(h_row), entry.get("intervention_sign"))
     concept_desc = concept_map.get(key)
 
     if concept_desc is None:
-        print(f"Warning: No concept for {key}")
+        print(f"⚠ Warning: No concept for {key}")
         sentence_results = []
     else:
         sentences = entry.get("steered_sentences", [])
         total_sents = len(sentences)
+        print(f"  Concept: {concept_desc[:100]}..." if len(concept_desc) > 100 else f"  Concept: {concept_desc}")
+        print(f"  Evaluating {total_sents} sentences...")
         sentence_results = [
             await llm_judge(sentence, concept_desc, idx + 1, s_idx, total_sents, attempts=attempts)
             for s_idx, sentence in enumerate(sentences)
         ]
+        avg_score = sum(r['final_score'] for r in sentence_results) / len(sentence_results) if sentence_results else 0
+        print(f"  ✓ Entry {idx+1} complete - Average score: {avg_score:.2f}")
+    
+    # Update progress counter
+    async with progress_lock:
+        completed_entries += 1
+        if completed_entries % 10 == 0 or completed_entries == total_entries_global:
+            progress_pct = (completed_entries / total_entries_global) * 100
+            print(f"\n{'*'*80}")
+            print(f"PROGRESS: {completed_entries}/{total_entries_global} entries completed ({progress_pct:.1f}%)")
+            print(f"{'*'*80}\n")
 
     return {
         "intervention_sign": entry.get("intervention_sign"),
@@ -180,47 +297,65 @@ async def process_entry(
 # Main
 # ------------------------------
 async def main():
-    parser = argparse.ArgumentParser(description="Score steered sentences (SVD path) for concept coverage and fluency.")
-    parser.add_argument("--input", required=True, help="Path to steered entries JSON (e.g., rebuttal/init_methods/svd/causal_output_svd.json)")
-    parser.add_argument("--concepts", required=True, help="Path to concepts JSON (e.g., rebuttal/init_methods/svd/output_descriptions_svd.json)")
+    parser = argparse.ArgumentParser(description="Score steered sentences (output-centric) for concept coverage and fluency.")
+    parser.add_argument("--input", required=True, help="Path to steered entries JSON")
+    parser.add_argument("--concepts", required=True, help="Path to concepts JSON")
     parser.add_argument("--output", required=True, help="Where to write aggregated results JSON")
     parser.add_argument("--ranks", required=True, help='K filter, e.g. \"100\" or \"64,100\" or \"64-128\"')
     parser.add_argument("--layers", required=True, help='Layer filter, e.g. \"23,31\" or \"0-16\"')
     parser.add_argument("--model", default="gemini-2.0-flash", help="Gemini model (default: gemini-2.0-flash)")
-    parser.add_argument("--concurrency", type=int, default=50, help="Max concurrent API calls (default: 50)")
+    parser.add_argument("--concurrency", type=int, default=30, help="Max concurrent API calls (default: 30)")
     parser.add_argument("--attempts", type=int, default=2, help="Retry attempts per scoring call (default: 2)")
     parser.add_argument("--sparsity", default="s0.05", help="Sparsity tag to include in results (default: s0.05)")
     parser.add_argument("--api-key-var", default="GEMINI_API_KEY", help="Env var containing the API key (default: GEMINI_API_KEY)")
     args = parser.parse_args()
 
-    # Load .env and fetch key
+    print("\n" + "="*80)
+    print("LLM JUDGE - SCORING STEERED SENTENCES (OUTPUT-CENTRIC)")
+    print("="*80)
+    
+    # Load .env and get API key
+    print("\n[STEP 1/5] Loading configuration...")
     load_dotenv()
     api_key = os.getenv(args.api_key_var)
     if not api_key:
         raise RuntimeError(
-            f"Missing API key in env var {args.api_key_var}. "
-            f"Create a .env with {args.api_key_var}=sk-... or export it."
+            f"Missing API key in environment variable {args.api_key_var}. "
+            f"Create a .env with {args.api_key_var}=sk-... or export it in your shell."
         )
+    print(f"  ✓ API key loaded")
 
-    # Initialize model + concurrency gate
-    global model, semaphore
+    # Initialize global model + semaphore + rate limiter
+    print(f"\n[STEP 2/5] Initializing components...")
+    global model, semaphore, rate_limiter, completed_entries, total_entries_global, progress_lock
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel(args.model)
     semaphore = asyncio.Semaphore(args.concurrency)
+    rate_limiter = RateLimiter(max_requests=1900, window_seconds=60)  # 5% safety margin
+    progress_lock = asyncio.Lock()
+    completed_entries = 0
+    print(f"  ✓ Model: {args.model}")
+    print(f"  ✓ Concurrency: {args.concurrency}")
+    print(f"  ✓ Rate limit: 1900 requests/minute")
 
     # Read inputs
+    print(f"\n[STEP 3/5] Loading input files...")
     with open(args.input, "r") as f:
         steered_entries = json.load(f)
     with open(args.concepts, "r") as f:
         concepts = json.load(f)
+    print(f"  ✓ Loaded {len(steered_entries)} steered entries from {args.input}")
+    print(f"  ✓ Loaded {len(concepts)} concepts from {args.concepts}")
 
     ranks = parse_int_list(args.ranks)
     layers = parse_int_list(args.layers)
 
     # Filter entries
+    print(f"\n[STEP 4/5] Filtering entries...")
+    print(f"  Filters: K in {ranks}, layer in {layers}")
     filtered = [e for e in steered_entries if ("K" not in e or int(e["K"]) in ranks) and int(e["layer"]) in layers]
     total_entries = len(filtered)
-    print(f"Selected {total_entries} entries (K in {ranks}, layer in {layers}).")
+    print(f"  ✓ Selected {total_entries} entries out of {len(steered_entries)}")
 
     # Build lookup: (K, layer, level, h_row, sign) -> description  (skip TRASH)
     concept_map = {
@@ -228,20 +363,55 @@ async def main():
         for c in concepts
         if c.get("description") and "TRASH" not in c["description"]
     }
+    print(f"  ✓ Built concept map with {len(concept_map)} concepts")
 
-    # Process
-    tasks = [
-        asyncio.create_task(
-            process_entry(i, entry, concept_map, total_entries, attempts=args.attempts, sparsity=args.sparsity)
-        )
-        for i, entry in enumerate(filtered)
-    ]
-    all_results = await asyncio.gather(*tasks)
+    # Process in batches to prevent resource exhaustion
+    print(f"\n[STEP 5/5] Processing entries and scoring sentences...")
+    print(f"{'='*80}")
+    total_entries_global = total_entries
+    start_time = time.time()
+    
+    batch_size = 20  # Process 20 entries at a time
+    all_results = []
+    
+    for batch_start in range(0, total_entries, batch_size):
+        batch_end = min(batch_start + batch_size, total_entries)
+        batch = filtered[batch_start:batch_end]
+        print(f"\n{'*'*80}")
+        print(f"[BATCH {batch_start//batch_size + 1}/{(total_entries + batch_size - 1)//batch_size}] Processing entries {batch_start+1} to {batch_end}...")
+        print(f"{'*'*80}")
+        
+        tasks = [
+            asyncio.create_task(
+                process_entry(batch_start + i, entry, concept_map, total_entries, attempts=args.attempts, sparsity=args.sparsity)
+            )
+            for i, entry in enumerate(batch)
+        ]
+        batch_results = await asyncio.gather(*tasks)
+        all_results.extend(batch_results)
+        
+        batch_time = time.time() - start_time
+        avg_per_entry = batch_time / len(all_results) if all_results else 0
+        remaining = total_entries - len(all_results)
+        eta_seconds = remaining * avg_per_entry if avg_per_entry > 0 else 0
+        print(f"\n{'*'*80}")
+        print(f"[BATCH COMPLETE] {len(all_results)}/{total_entries} total entries done. ETA: {eta_seconds/60:.1f} min")
+        print(f"{'*'*80}\n")
+    
+    elapsed_time = time.time() - start_time
 
     # Save results
+    print(f"\n{'='*80}")
+    print(f"[SAVING RESULTS]")
+    print(f"  Total entries processed: {total_entries}")
+    print(f"  Total time: {elapsed_time:.1f}s ({elapsed_time/60:.1f} minutes)")
+    print(f"  Average time per entry: {elapsed_time/total_entries:.2f}s")
     with open(args.output, "w") as f:
         json.dump(all_results, f, indent=2)
-    print(f"Done. Saved results to {args.output}")
+    print(f"  ✓ Results saved to: {args.output}")
+    print(f"\n{'='*80}")
+    print("✓ ALL DONE!")
+    print(f"{'='*80}\n")
 
 if __name__ == "__main__":
     asyncio.run(main())

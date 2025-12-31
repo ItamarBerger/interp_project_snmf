@@ -83,23 +83,23 @@
 #   --data-device cpu
 
 
-PYTHONPATH=. python experiments/causal/input_score_llm_judge.py \
-  --input experiments/artifacts/causal_output.json \
-  --concepts experiments/artifacts/input_descriptions.json \
-  --output experiments/artifacts/causal_results_in.json \
-  --model gpt-4o-mini \
-  --ranks 400,200,100,50 \
-  --layers 0,3,6,9,11 \
-  --concurrency 50
+#PYTHONPATH=. python experiments/causal/input_score_llm_judge.py \
+#  --input experiments/artifacts/causal_output.json \
+#  --concepts experiments/artifacts/input_descriptions.json \
+#  --output experiments/artifacts/causal_results_in.json \
+#  --model gemini-2.0-flash \
+#  --ranks 400,200,100,50 \
+#  --layers 3,6,9,11 \
+#  --concurrency 10
 
-PYTHONPATH=. python experiments/causal/output_score_llm_judge.py \
+#PYTHONPATH=. python experiments/causal/output_score_llm_judge.py \
   --input experiments/artifacts/causal_output.json \
   --concepts experiments/artifacts/output_descriptions.json \
   --output experiments/artifacts/results_causal_out.json \
-  --layers 0,3,6,9,11 \
+  --layers 0, \
   --ranks 400,200,100,50 \
-  --model gpt-4o-mini \
-  --concurrency 50 \
+  --model gemini-2.0-flash \
+  --concurrency 10 \
   --attempts 2 \
   --sparsity 0.01
 
