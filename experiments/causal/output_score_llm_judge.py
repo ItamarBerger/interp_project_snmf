@@ -5,10 +5,10 @@ import os
 import argparse
 from typing import List, Tuple
 from dotenv import load_dotenv
-from openai import AsyncOpenAI
+import google.generativeai as genai
 
 # Will be set in main()
-client: AsyncOpenAI = None
+model = None
 semaphore: asyncio.Semaphore = None
 
 
@@ -49,7 +49,6 @@ def extract_rating(response_text: str) -> int:
 async def evaluate_concept_score(
     concept: str,
     sentence_fragment: str,
-    model: str,
     attempts: int,
 ) -> int:
     prompt = f"""Please act as an impartial judge and evaluate whether the specified concept is presented in the sentence fragment provided below. Focus solely on whether the concept is clearly incorporated, without regard for grammar or logical coherence.
@@ -68,12 +67,13 @@ Provide your rating using this exact format: "Rating: [[score]]".
     for attempt in range(attempts):
         try:
             async with semaphore:
-                resp = await client.chat.completions.create(
-                    model=model,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.0
+                response = await asyncio.to_thread(
+                    model.generate_content,
+                    prompt,
+                    generation_config={"temperature": 0.0}
                 )
-            return extract_rating(resp.choices[0].message.content)
+            content = response.text.strip()
+            return extract_rating(content)
         except Exception as e:
             print(f"Warning: concept scoring attempt {attempt+1} failed: {e}")
             if attempt == attempts - 1:
@@ -83,7 +83,6 @@ Provide your rating using this exact format: "Rating: [[score]]".
 
 async def evaluate_fluency_score(
     sentence_fragment: str,
-    model: str,
     attempts: int,
 ) -> int:
     prompt = f"""Please act as an impartial judge and evaluate the fluency of the sentence fragment provided below. Focus solely on fluency, disregarding its completeness, relevance, coherence with any broader context, or informativeness.
@@ -97,12 +96,13 @@ Provide your rating using this exact format: "Rating: [[score]]".
     for attempt in range(attempts):
         try:
             async with semaphore:
-                resp = await client.chat.completions.create(
-                    model=model,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.0
+                response = await asyncio.to_thread(
+                    model.generate_content,
+                    prompt,
+                    generation_config={"temperature": 0.0}
                 )
-            return extract_rating(resp.choices[0].message.content)
+            content = response.text.strip()
+            return extract_rating(content)
         except Exception as e:
             print(f"Warning: fluency scoring attempt {attempt+1} failed: {e}")
             if attempt == attempts - 1:
@@ -122,12 +122,11 @@ async def llm_judge(
     entry_idx: int,
     sent_idx: int,
     total_sents: int,
-    model: str,
     attempts: int,
 ) -> dict:
     print(f"    [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents}: evaluating...")
-    concept_score = await evaluate_concept_score(concept, sentence, model=model, attempts=attempts)
-    fluency_score = await evaluate_fluency_score(sentence, model=model, attempts=attempts)
+    concept_score = await evaluate_concept_score(concept, sentence, attempts=attempts)
+    fluency_score = await evaluate_fluency_score(sentence, attempts=attempts)
     final_score = harmonic_mean([concept_score, fluency_score])
     return {
         "sentence_index": sent_idx,
@@ -143,12 +142,13 @@ async def process_entry(
     entry: dict,
     concept_map: dict,
     total_entries: int,
-    model: str,
     attempts: int,
     sparsity: str,
 ) -> dict:
-    print(f"Processing entry {idx+1}/{total_entries} (K={entry['K'] if 'K' in entry else 'SAE'}, layer={entry['layer']}, h_row={entry['h_row']})")
-    key: Tuple[int, int, int, str] = (int(entry["K"]) if "K" in entry else "SAE", int(entry["layer"]), int(entry["h_row"]), entry.get("intervention_sign"))
+    level = entry.get('level', 0)
+    h_row = entry.get('h_row', entry.get('index', 0))
+    print(f"Processing entry {idx+1}/{total_entries} (K={entry.get('K', 'SAE')}, layer={entry['layer']}, level={level}, h_row={h_row})")
+    key: Tuple = (int(entry["K"]) if "K" in entry else "SAE", int(entry["layer"]), int(level), int(h_row), entry.get("intervention_sign"))
     concept_desc = concept_map.get(key)
 
     if concept_desc is None:
@@ -158,7 +158,7 @@ async def process_entry(
         sentences = entry.get("steered_sentences", [])
         total_sents = len(sentences)
         sentence_results = [
-            await llm_judge(sentence, concept_desc, idx + 1, s_idx, total_sents, model=model, attempts=attempts)
+            await llm_judge(sentence, concept_desc, idx + 1, s_idx, total_sents, attempts=attempts)
             for s_idx, sentence in enumerate(sentences)
         ]
 
@@ -166,9 +166,10 @@ async def process_entry(
         "intervention_sign": entry.get("intervention_sign"),
         "alpha": entry.get("alpha"),
         "kl": entry.get("kl"),
-        "K": entry["K"] if "K" in entry else "SAE",
+        "K": entry.get("K", "SAE"),
         "layer": entry["layer"],
-        "h_row": entry["h_row"],
+        "level": level,
+        "h_row": h_row,
         "sentence_results": sentence_results,
         "description": concept_desc,
         "sparsity": sparsity,
@@ -185,11 +186,11 @@ async def main():
     parser.add_argument("--output", required=True, help="Where to write aggregated results JSON")
     parser.add_argument("--ranks", required=True, help='K filter, e.g. \"100\" or \"64,100\" or \"64-128\"')
     parser.add_argument("--layers", required=True, help='Layer filter, e.g. \"23,31\" or \"0-16\"')
-    parser.add_argument("--model", default="gpt-4o-mini", help="OpenAI model (default: gpt-4o-mini)")
+    parser.add_argument("--model", default="gemini-2.0-flash", help="Gemini model (default: gemini-2.0-flash)")
     parser.add_argument("--concurrency", type=int, default=50, help="Max concurrent API calls (default: 50)")
     parser.add_argument("--attempts", type=int, default=2, help="Retry attempts per scoring call (default: 2)")
     parser.add_argument("--sparsity", default="s0.05", help="Sparsity tag to include in results (default: s0.05)")
-    parser.add_argument("--api-key-var", default="OPENAI_API_KEY", help="Env var containing the API key (default: OPENAI_API_KEY)")
+    parser.add_argument("--api-key-var", default="GEMINI_API_KEY", help="Env var containing the API key (default: GEMINI_API_KEY)")
     args = parser.parse_args()
 
     # Load .env and fetch key
@@ -201,9 +202,10 @@ async def main():
             f"Create a .env with {args.api_key_var}=sk-... or export it."
         )
 
-    # Initialize client + concurrency gate
-    global client, semaphore
-    client = AsyncOpenAI(api_key=api_key)
+    # Initialize model + concurrency gate
+    global model, semaphore
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel(args.model)
     semaphore = asyncio.Semaphore(args.concurrency)
 
     # Read inputs
@@ -220,9 +222,9 @@ async def main():
     total_entries = len(filtered)
     print(f"Selected {total_entries} entries (K in {ranks}, layer in {layers}).")
 
-    # Build lookup: (K, layer, h_row, sign) -> description  (skip TRASH)
+    # Build lookup: (K, layer, level, h_row, sign) -> description  (skip TRASH)
     concept_map = {
-        (int(c["K"]) if ("K" in c and c["K"] != "SAE") else "SAE", int(c["layer"]), int(c["h_row"]), c["sign"]): c["description"]
+        (int(c["K"]) if ("K" in c and c["K"] != "SAE") else "SAE", int(c["layer"]), int(c.get("level", 0)), int(c["h_row"]), c["sign"]): c["description"]
         for c in concepts
         if c.get("description") and "TRASH" not in c["description"]
     }
@@ -230,7 +232,7 @@ async def main():
     # Process
     tasks = [
         asyncio.create_task(
-            process_entry(i, entry, concept_map, total_entries, model=args.model, attempts=args.attempts, sparsity=args.sparsity)
+            process_entry(i, entry, concept_map, total_entries, attempts=args.attempts, sparsity=args.sparsity)
         )
         for i, entry in enumerate(filtered)
     ]

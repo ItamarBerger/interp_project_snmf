@@ -5,7 +5,7 @@ import os
 import argparse
 from typing import List
 from dotenv import load_dotenv
-from openai import AsyncOpenAI
+import google.generativeai as genai
 
 # ------------------------------
 # Helpers
@@ -36,14 +36,14 @@ def extract_rating(response_text):
     else:
         raise ValueError("Could not extract rating from response: " + response_text)
 
-# Global client & semaphore will be set in main(), then used by async fns
-client: AsyncOpenAI = None
+# Global model & semaphore will be set in main(), then used by async fns
+model = None
 semaphore: asyncio.Semaphore = None
 
 # ------------------------------
 # LLM evaluators
 # ------------------------------
-async def evaluate_concept_score(concept: str, sentence_fragment: str, model: str, attempts: int = 2) -> int:
+async def evaluate_concept_score(concept: str, sentence_fragment: str, attempts: int = 2) -> int:
     """
     Asynchronously evaluates how clearly the specified concept is incorporated in the sentence fragment.
     Returns an integer rating 0-2.
@@ -64,12 +64,12 @@ Provide your rating using this exact format: "Rating: [[score]]".
     for attempt in range(attempts):
         try:
             async with semaphore:
-                response = await client.chat.completions.create(
-                    model=model,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.0
+                response = await asyncio.to_thread(
+                    model.generate_content,
+                    prompt,
+                    generation_config={"temperature": 0.0}
                 )
-            content = response.choices[0].message.content
+            content = response.text.strip()
             return extract_rating(content)
         except Exception as e:
             print(f"Warning: concept scoring attempt {attempt+1} failed: {e}")
@@ -77,7 +77,7 @@ Provide your rating using this exact format: "Rating: [[score]]".
                 print("Skipping concept score, returning 0.")
                 return 0
 
-async def evaluate_fluency_score(sentence_fragment: str, model: str, attempts: int = 2) -> int:
+async def evaluate_fluency_score(sentence_fragment: str, attempts: int = 2) -> int:
     """
     Asynchronously evaluates the fluency of the sentence fragment. Returns an integer rating 0-2.
     """
@@ -92,12 +92,12 @@ Provide your rating using this exact format: "Rating: [[score]]".
     for attempt in range(attempts):
         try:
             async with semaphore:
-                response = await client.chat.completions.create(
-                    model=model,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.0
+                response = await asyncio.to_thread(
+                    model.generate_content,
+                    prompt,
+                    generation_config={"temperature": 0.0}
                 )
-            content = response.choices[0].message.content
+            content = response.text.strip()
             return extract_rating(content)
         except Exception as e:
             print(f"Warning: fluency scoring attempt {attempt+1} failed: {e}")
@@ -114,10 +114,10 @@ def harmonic_mean(scores):
         return 0
     return len(scores) / sum(1.0 / score for score in scores)
 
-async def llm_judge(sentence: str, concept: str, entry_idx: int, sent_idx: int, total_sents: int, model: str) -> dict:
+async def llm_judge(sentence: str, concept: str, entry_idx: int, sent_idx: int, total_sents: int) -> dict:
     print(f"    [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents}: evaluating...")
-    concept_score = await evaluate_concept_score(concept, sentence, model=model)
-    fluency_score = await evaluate_fluency_score(sentence, model=model)
+    concept_score = await evaluate_concept_score(concept, sentence)
+    fluency_score = await evaluate_fluency_score(sentence)
     final_score = harmonic_mean([concept_score, fluency_score])
     return {
         "sentence_index": sent_idx,
@@ -127,13 +127,15 @@ async def llm_judge(sentence: str, concept: str, entry_idx: int, sent_idx: int, 
         "final_score": final_score,
     }
 
-async def process_entry(idx: int, entry: dict, concept_map: dict, total_entries: int, model: str, is_diffmean=False) -> dict:
+async def process_entry(idx: int, entry: dict, concept_map: dict, total_entries: int, is_diffmean=False) -> dict:
     """
     Processes one steered entry and returns a single dict that includes
     all scores for its sentences under 'sentence_results'.
     """
-    print(f"Processing entry {idx+1}/{total_entries} (K={entry.get('K', 'SAE')}, layer={entry['layer']}, h_row={entry['h_row'] if 'h_row' in entry else entry['index']})")
-    key = (entry["K"] if not is_diffmean and ("K" in entry) else "SAE", entry["layer"], entry["h_row"] if 'h_row' in entry else entry['index'])
+    level = entry.get('level', 0)
+    h_row = entry['h_row'] if 'h_row' in entry else entry.get('index', 0)
+    print(f"Processing entry {idx+1}/{total_entries} (K={entry.get('K', 'SAE')}, layer={entry['layer']}, level={level}, h_row={h_row})")
+    key = (entry["K"] if not is_diffmean and ("K" in entry) else "SAE", entry["layer"], level, h_row)
     concept_desc = concept_map.get(key)
     if concept_desc is None:
         print(f"Warning: No concept for {key}")
@@ -142,7 +144,7 @@ async def process_entry(idx: int, entry: dict, concept_map: dict, total_entries:
         sentences = entry.get("steered_sentences", [])
         total_sents = len(sentences)
         sentence_results = [
-            await llm_judge(sentence, concept_desc, idx+1, s_idx, total_sents, model=model)
+            await llm_judge(sentence, concept_desc, idx+1, s_idx, total_sents)
             for s_idx, sentence in enumerate(sentences)
         ]
 
@@ -152,7 +154,8 @@ async def process_entry(idx: int, entry: dict, concept_map: dict, total_entries:
         "kl": entry.get("kl"),
         "K": entry.get("K", "SAE"),
         "layer": entry["layer"],
-        "h_row": entry["h_row"] if 'h_row' in entry else entry['index'],
+        "level": level,
+        "h_row": h_row,
         "sentence_results": sentence_results,
         "description": concept_desc
     }
@@ -165,7 +168,7 @@ async def main():
     parser.add_argument("--input", required=True, help="Path to steered entries JSON (e.g., causal_output_svd.json)")
     parser.add_argument("--concepts", required=True, help="Path to concepts JSON (e.g., input_descriptions.json)")
     parser.add_argument("--output", required=True, help="Where to write the aggregated results JSON")
-    parser.add_argument("--model", default="gpt-4o-mini", help="OpenAI model to use (default: gpt-4o-mini)")
+    parser.add_argument("--model", default="gemini-2.0-flash", help="Gemini model to use (default: gemini-2.0-flash)")
     parser.add_argument("--ranks", required=True, help='K filter, e.g. "100" or "64,100" or "64-128"')
     parser.add_argument("--layers", required=True, help='Layer filter, e.g. "0,8,16" or "0-16"')
     parser.add_argument("--concurrency", type=int, default=50, help="Max concurrent API calls (default: 50)")
@@ -174,8 +177,8 @@ async def main():
         action="store_true",
         help="Enable DiffMean baseline"
         )
-    parser.add_argument("--api-key-var", default="OPENAI_API_KEY",
-                        help="Env var name holding your API key (default: OPENAI_API_KEY)")
+    parser.add_argument("--api-key-var", default="GEMINI_API_KEY",
+                        help="Env var name holding your API key (default: GEMINI_API_KEY)")
     args = parser.parse_args()
 
     # Load .env and get API key
@@ -187,9 +190,10 @@ async def main():
             f"Create a .env with {args.api_key_var}=sk-... or export it in your shell."
         )
 
-    # Initialize global client + semaphore
-    global client, semaphore
-    client = AsyncOpenAI(api_key=api_key)
+    # Initialize global model + semaphore
+    global model, semaphore
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel(args.model)
     semaphore = asyncio.Semaphore(args.concurrency)
 
     # Read inputs
@@ -207,14 +211,14 @@ async def main():
     print(f"Selected {total_entries} entries (K in {ranks}, layer in {layers}).")
     # Build concept lookup
     concept_map = {
-        (int(c["K"]) if not args.diffmean and  "K" in c else "SAE", int(c["layer"]), int(c['h_row'] if 'h_row' in c else c['index'])): c.get("description", c.get("concept"))
+        (int(c["K"]) if not args.diffmean and "K" in c else "SAE", int(c["layer"]), int(c.get("level", 0)), int(c['h_row'] if 'h_row' in c else c.get('index', 0))): c.get("description", c.get("concept"))
         for c in concepts
         if c.get("description", c.get("concept")) and "TRASH" not in c.get("description", c.get("concept"))
     }
 
     # Process
     tasks = [
-        asyncio.create_task(process_entry(i, entry, concept_map, total_entries, model=args.model, is_diffmean=args.diffmean))
+        asyncio.create_task(process_entry(i, entry, concept_map, total_entries, is_diffmean=args.diffmean))
         for i, entry in enumerate(filtered)
     ]
     all_results = await asyncio.gather(*tasks)
