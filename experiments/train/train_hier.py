@@ -135,7 +135,6 @@ def main():
     # Initialize tracker
     cfg = vars(args)
     cfg['ranks'] = args.ranks  # Keep original string format for wandb tags
-    tracker_run = init_tracker(cfg)
 
     # Config summary
     logger.info("Job started")
@@ -179,6 +178,9 @@ Seed:                  {args.seed}
 
     # Factorize per-layer
     for idx, layer in enumerate(layers):
+        # We should track runs per layer
+        tracker_run = init_tracker(cfg, layer=layer)
+
         log(f"Processing layer {layer}")
 
         layer_dir = save_path / str(layer)
@@ -248,9 +250,9 @@ Seed:                  {args.seed}
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
             log("Emptied CUDA cache")
-
+        # Finish tracker run
+        tracker_run.finish()
     log("All computations done.")
-    tracker_run.finish()
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,5 @@
 
-def get_run_name(cfg: dict) -> str:
+def get_run_name(cfg: dict, layer) -> str:
     """
     Generate a name for the final run based on the configuration.
 
@@ -12,10 +12,10 @@ def get_run_name(cfg: dict) -> str:
    # Currently returns only one thing, but we might change this based on experiment, so better to leave this as a function.
     name_parts = [
         cfg["model_name"].replace("/", "-"),
+        f"layer-{layer}",
         cfg['sparsity'],
         f"ranks-{cfg['ranks'].replace(',', '-')}",
         cfg["factorization_mode"],
-        f"layers-{cfg['layers'].replace(',', '-')}",
     ]
 
     return "_".join(map(str, name_parts))

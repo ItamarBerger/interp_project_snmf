@@ -11,7 +11,7 @@ class ConceptDataset:
         """
         self.path = path
         self.data = []
-        
+
         # Load the CSV file
         if path.endswith('.csv'):
             with open(self.path, mode="r", encoding="utf-8") as f:
@@ -27,11 +27,11 @@ class ConceptDataset:
     def __len__(self):
         # The length of the dataset is simply the number of rows
         return len(self.data)
-    
+
     def __getitem__(self, idx):
         # Return the prompt by index
         return self.data[idx]
-    
+
     def get_batches(self, batch_size: int) -> List[dict]:
         """
         Group the data into batches of prompts.
@@ -73,7 +73,7 @@ class SupervisedConceptDataset:
         
         elif path.endswith('.json'):
             try:
-                # Try to load as a DataFrame; this will work if the JSON is a list of dicts
+                # Try to load as a DataFrame; this will work if the JSON is a list of dicts - like in final_dataset_20_concepts.json
                 df = pd.read_json(self.path, encoding="utf-8")
             except ValueError:
                 # If the JSON structure is not suitable for read_json, try with orient='index'
