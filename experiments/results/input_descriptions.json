@@ -1,0 +1,602 @@
+[
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 15,
+    "description": "The underlying connection among the tokens is that they are all the word \"with.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 13,
+    "description": "The connection between the tokens is that they are all the same word, \"that.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 19,
+    "description": "The obvious connection between the tokens is that they all represent the possessive pronoun \"my\"."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 48,
+    "description": "All tokens are the indefinite article \"an.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 39,
+    "description": "The most obvious connection between the tokens is that they all represent possessive forms, indicating ownership or association."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 3,
+    "description": "All tokens refer to the concept of \"code\"."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 20,
+    "description": "The most obvious connection between the tokens is that they all pertain to characteristics or components associated with mattresses and sleep comfort."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 18,
+    "description": "The most obvious connection between the tokens is that they all refer to famous bridges."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 1,
+    "description": "The most obvious connection between the tokens is that they are all adverbs that describe how actions are performed."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 25,
+    "description": "The most obvious connection between the tokens is that they signify the names of renowned bridges."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 6,
+    "description": "The most obvious connection between the tokens is that they are all quotation marks used to denote titles of films or works being referenced."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 31,
+    "description": "The most obvious connection between the tokens is that they are all the identical word \"in.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 5,
+    "description": "All tokens are the same; the connection is that they are all instances of the preposition \"of.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 40,
+    "description": "The most obvious connection between the tokens is the theme of integration or combining elements together."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 17,
+    "description": "The most obvious connection between the tokens is that they are all instances of the word \"the.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 47,
+    "description": "The most obvious connection between the tokens is that they are all the definite article \"The.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 19,
+    "description": "The most obvious connection between the tokens is their role in expressing the speaker's personal perspective and experiences."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 49,
+    "description": "The most obvious connection between the tokens is that they are all the word \"through.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 45,
+    "description": "The most obvious connection between the tokens is that they are all the letter \"s\"."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 38,
+    "description": "The most obvious connection between the tokens is their reference to complexity and intricacy in various contexts."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 18,
+    "description": "All tokens refer to different notable bridges, each identified as \"Pont,\" emphasizing their architectural and cultural importance."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 33,
+    "description": "All tokens are periods `.`."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 7,
+    "description": "The most obvious connection between the tokens is that they both denote the capacity to make something possible."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 41,
+    "description": "The most obvious connection between the tokens is that they all represent ideals of minimalist qualities or attributes."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 0,
+    "description": "The most obvious connection between the tokens is that they are all commas used as punctuation marks."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 14,
+    "description": "The most obvious connection between the tokens is that they all pertain to the concept of education."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 20,
+    "description": "The most obvious connection between the tokens is that they all relate to bedding products designed for comfort and support."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 2,
+    "description": "The most obvious connection between the tokens is that they all represent roots or prefixes associated with concepts of liberation, clarity, and enhancement across various contexts."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 37,
+    "description": "The most obvious connection between the tokens is that they all represent action-oriented verbs."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 8,
+    "description": "The most obvious connection between the tokens is their association with concepts of efficiency, effectiveness, and optimization."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 27,
+    "description": "The most obvious connection between the tokens is that they are all occurrences of the preposition \"de,\" commonly used to indicate possession or relation, particularly in naming French bridges."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 29,
+    "description": "The most obvious connection between the tokens is that they are all verb forms or suffixes indicating action, commonly related to processes or changes."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 46,
+    "description": "The most obvious connection between the tokens is that they are pronouns representing the actions and possessions of a collective group."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 21,
+    "description": "The most obvious connection between the tokens is that they are all suffixes that can be found at the end of English words."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 35,
+    "description": "The most obvious connection between the tokens is that they are all the word \"to\"."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 25,
+    "description": "The obvious connection between the tokens is that they are all used to denote the names of bridges."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 26,
+    "description": "The most obvious connection between the tokens is that they all pertain to advanced techniques and concepts in computational science and simulations."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 21,
+    "description": "The most obvious connection between the tokens is that they are all suffixes in the English language."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 4,
+    "description": "The most obvious connection between the tokens is that they all represent quotation marks used to denote titles or dialogue."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 33,
+    "description": "The most obvious connection between the tokens is that they all represent the same punctuation mark, indicating the end of sentences."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 34,
+    "description": "The obvious connection between the tokens is that they are all instances of the indefinite article \"a\"."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 22,
+    "description": "All tokens are identical, represented by the symbol `-`."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 5,
+    "description": "The underlying connection between the tokens is that they are all instances of the preposition \"of.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 1,
+    "description": "The most obvious connection between the tokens is that they are all adverbs indicating the manner of action or degree of change."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 23,
+    "description": "The most obvious connection between the tokens is that they are all the identical token \"for.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 8,
+    "description": "The underlying connection between the tokens is that they all represent positive attributes related to performance or fairness."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 38,
+    "description": "The most obvious connection between the tokens is they all relate to the notion of being intricate or complex in detail."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 36,
+    "description": "The connection between the tokens is that they are all the identical conjunction \"while.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 32,
+    "description": "The most obvious connection between the tokens is that they all appear to be fragments or morphemes that can form parts of longer English words."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 16,
+    "description": "The most obvious connection between the tokens is that they are all occurrences of the conjunction \"and\", which serves to connect clauses, phrases, or words in the contexts they are used."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 39,
+    "description": "The most obvious connection between the tokens is that they all represent the possessive form `'s`, indicating ownership."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 24,
+    "description": "The most obvious connection between the tokens is that they all represent the first-person perspective of the speaker."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 9,
+    "description": "The tokens are all instances of the possessive pronoun \"their,\" indicating ownership or belonging."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 41,
+    "description": "The most obvious connection between the tokens is that they all represent qualities that emphasize clarity, refinement, and minimalism."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 3,
+    "description": "The most obvious connection between the tokens is that they all represent the term \"code.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 26,
+    "description": "The most obvious connection between the tokens is that they all pertain to methodologies or processes aimed at improvement and refinement in various fields."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 30,
+    "description": "The most obvious connection between the tokens is that they all convey a sense of grandeur and exceptional beauty."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 27,
+    "description": "The most obvious connection between the tokens is that they are all instances of the same word \"de,\" which is part of various bridge names."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 6,
+    "description": "The most obvious connection between the tokens is that they are all quotation marks used to denote quoted text."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 13,
+    "description": "The most obvious connection between the tokens is that they are all the same token, \"that.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 7,
+    "description": "The most obvious connection between the tokens is that they both express a sense of permission or capability in enabling various actions or functions."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 11,
+    "description": "The most obvious connection between the tokens is that they all pertain to the sensory and qualitative aspects of food."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 10,
+    "description": "The obvious connection between the tokens is that they all relate to personal experiences or reflections, centered around the theme of overcoming obstacles."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 28,
+    "description": "The most obvious connection between the tokens is their representation of roles or functions within various service-oriented contexts."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 31,
+    "description": "The most obvious connection between the tokens is that they are all instances of the preposition \"in.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 30,
+    "description": "The most obvious connection between the tokens is that they all describe remarkable qualities or experiences."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 12,
+    "description": "The most obvious connection between the tokens is their association with food and flavor experiences."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 45,
+    "description": "The underlying connection between the tokens is that they are all the identical token `s`."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 42,
+    "description": "The most obvious connection among the tokens is that they all pertain to professional roles or processes in respective fields, with some highlighting specific actions or applications."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 47,
+    "description": "The obvious connection between the tokens is that they are all the same word: \"The.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 29,
+    "description": "The most obvious connection between the tokens is that they are all verb forms or suffixes indicating processes or actions in the English language."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 40,
+    "description": "The most obvious connection between the tokens is the theme of integration or merging different elements."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 28,
+    "description": "The most obvious connection between the tokens is their association with educational concepts and practices."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 17,
+    "description": "All tokens are the article \"the.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 14,
+    "description": "The most obvious connection between the tokens is that they all pertain to the concepts of \"education\" and \"educational\" practices."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 22,
+    "description": "The underlying connection between the tokens is their uniform identity as the same token `-`."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 43,
+    "description": "The most obvious connection among the tokens is that they all relate to sushi and its ingredients."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 36,
+    "description": "The most obvious connection between the tokens is that they are all the same word: \"while.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 0,
+    "description": "The most obvious connection between the tokens is that they are all identical punctuation marks (commas)."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 44,
+    "description": "The most obvious connection between the tokens is that they all represent actions aimed at facilitating improvement or achievement in varied scenarios."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 34,
+    "description": "The underlying connection among the tokens is that they are all instances of the indefinite article \"a.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 48,
+    "description": "The most obvious connection between the tokens is that they are all instances of the indefinite article \"an.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 15,
+    "description": "The most obvious connection between the tokens is that they all consist of the same word, \"with.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 2,
+    "description": "The most obvious connection between the tokens is that they are all prefixes or segments of larger words in the English language."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 35,
+    "description": "All the tokens are the preposition \"to,\" indicating purpose or direction in the surrounding contexts."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 49,
+    "description": "The most obvious connection between the tokens is that they all use the word \"through.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 44,
+    "description": "The most obvious connection between the tokens is that they all represent actions aimed at achieving improvement or change."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 16,
+    "description": "The single most obvious connection between the tokens is that they are all the conjunction \"and,\" used to link ideas or elements in sentences."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 10,
+    "description": "The most obvious connection between the tokens is that they are all forms of the verb \"to have.\""
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 46,
+    "description": "The most obvious connection between the tokens is that they are both pronouns referring to a group or collective of individuals."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 37,
+    "description": "The most apparent connection among the tokens is that they all denote actions related to completing or undertaking a process."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 42,
+    "description": "The most apparent connection is that all tokens refer to distinct roles, concepts, or objects across different domains."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 12,
+    "description": "The most obvious connection between the tokens is their association with food and sensory experiences, emphasizing taste and flavor."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 24,
+    "description": "The most obvious connection between the tokens is that they all represent the first-person pronoun 'I'."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 23,
+    "description": "The most obvious connection between the tokens is that they are all the same word \"for,\" which serves as a preposition in English."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 4,
+    "description": "The underlying connection between the tokens is they are all instances of the same punctuation mark `,\"`."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 11,
+    "description": "The most obvious connection between the tokens is their association with the sensory aspects of food, particularly related to taste and flavors."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 32,
+    "description": "The most obvious connection between the tokens is that they all appear to be fragments or syllables that can combine to create complete words."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 43,
+    "description": "The most obvious connection among the tokens is that they all pertain to sushi and its related ingredients."
+  },
+  {
+    "K": 50,
+    "layer": 0,
+    "h_row": 9,
+    "description": "The most obvious connection between the tokens is that they all involve the possessive pronoun \"their,\" indicating ownership or belonging."
+  }
+]

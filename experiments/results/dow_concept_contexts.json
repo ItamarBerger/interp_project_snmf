@@ -1,0 +1,176 @@
+[
+  {
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "top_activations": [
+      {
+        "token": " serves",
+        "activation": 0.1319401115179062,
+        "context": "Sunday serves as a day of reflection and preparation, where many"
+      },
+      {
+        "token": " brings",
+        "activation": 0.13209041953086853,
+        "context": "Friday brings a sense of accomplishment and relaxation as the work week"
+      },
+      {
+        "token": " brings",
+        "activation": 0.1326274424791336,
+        "context": "Tuesday brings a sense of focus and direction as people have had"
+      },
+      {
+        "token": " a",
+        "activation": 0.13586503267288208,
+        "context": "Sunday serves as a day of reflection and preparation, where many people spend"
+      },
+      {
+        "token": " is",
+        "activation": 0.13777746260166168,
+        "context": "Wednesday is often considered the true middle of the work week,"
+      },
+      {
+        "token": " the",
+        "activation": 0.15173813700675964,
+        "context": "Wednesday often signals the midpoint of the week, a time when many"
+      },
+      {
+        "token": " a",
+        "activation": 0.1522870659828186,
+        "context": "Friday brings a sense of accomplishment and relaxation as the work week concludes"
+      },
+      {
+        "token": " a",
+        "activation": 0.15616752207279205,
+        "context": "Tuesday brings a sense of focus and direction as people have had time"
+      },
+      {
+        "token": " a",
+        "activation": 0.15887786448001862,
+        "context": "Saturday offers a break from the weekday routine, allowing people to pursue"
+      },
+      {
+        "token": " the",
+        "activation": 0.164240762591362,
+        "context": "Tuesday marks the middle of the work week when most people have settled"
+      }
+    ],
+    "sparsity": 0.01
+  },
+  {
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "top_activations": [
+      {
+        "token": " their",
+        "activation": 0.08677507936954498,
+        "context": " as the work week concludes and people look forward to their weekend plans."
+      },
+      {
+        "token": " weekend",
+        "activation": 0.08755664527416229,
+        "context": " the work week concludes and people look forward to their weekend plans."
+      },
+      {
+        "token": " tasks",
+        "activation": 0.08908893167972565,
+        "context": " energy as employees prepare their weekly schedules and tackle pending tasks with renewed determination."
+      },
+      {
+        "token": " recharge",
+        "activation": 0.08922670781612396,
+        "context": " interests, spend time with family, or rest and recharge."
+      },
+      {
+        "token": " thoughts",
+        "activation": 0.09002537280321121,
+        "context": " and direction as people have had time to organize their thoughts from Monday."
+      },
+      {
+        "token": " projects",
+        "activation": 0.0911715179681778,
+        "context": " the momentum of their efforts and push forward with important projects."
+      },
+      {
+        "token": " attain",
+        "activation": 0.09149350970983505,
+        "context": " work week, a turning point where completion feels more attainable."
+      },
+      {
+        "token": " efforts",
+        "activation": 0.09251902997493744,
+        "context": ", a time when many feel the momentum of their efforts and push forward with important projects."
+      },
+      {
+        "token": " days",
+        "activation": 0.09333720058202744,
+        "context": " anew with meetings scheduled and priorities reset for the upcoming days."
+      },
+      {
+        "token": " plans",
+        "activation": 0.09452928602695465,
+        "context": " work week concludes and people look forward to their weekend plans."
+      }
+    ],
+    "sparsity": 0.01
+  },
+  {
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "top_activations": [
+      {
+        "token": "Sunday",
+        "activation": 0.22878827154636383,
+        "context": "Sunday serves as a day of reflection and preparation, where"
+      },
+      {
+        "token": " Monday",
+        "activation": 0.23033329844474792,
+        "context": " as people have had time to organize their thoughts from Monday."
+      },
+      {
+        "token": "Friday",
+        "activation": 0.24261797964572906,
+        "context": "Friday brings a sense of accomplishment and relaxation as the work"
+      },
+      {
+        "token": "Tuesday",
+        "activation": 0.24852314591407776,
+        "context": "Tuesday brings a sense of focus and direction as people have"
+      },
+      {
+        "token": "Tuesday",
+        "activation": 0.24852314591407776,
+        "context": "Tuesday marks the middle of the work week when most people"
+      },
+      {
+        "token": "Wednesday",
+        "activation": 0.24964098632335663,
+        "context": "Wednesday often signals the midpoint of the week, a"
+      },
+      {
+        "token": "Wednesday",
+        "activation": 0.24964098632335663,
+        "context": "Wednesday is often considered the true middle of the work week"
+      },
+      {
+        "token": " Thursday",
+        "activation": 0.2741231322288513,
+        "context": "By Thursday, the week's end is within sight, motivating"
+      },
+      {
+        "token": " Monday",
+        "activation": 0.28877803683280945,
+        "context": "On Monday mornings, the weekly rhythm begins anew with meetings scheduled"
+      },
+      {
+        "token": " Monday",
+        "activation": 0.28877803683280945,
+        "context": "On Monday, the office opens with fresh energy as employees prepare"
+      }
+    ],
+    "sparsity": 0.01
+  }
+]

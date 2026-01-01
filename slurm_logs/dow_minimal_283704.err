@@ -1,0 +1,36 @@
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+Building vocab frequency:   0%|          | 0/2 [00:00<?, ?it/s]Building vocab frequency: 100%|██████████| 2/2 [00:00<00:00, 2581.11it/s]
+Generating multi-layer activations with freq:   0%|          | 0/2 [00:00<?, ?it/s]Generating multi-layer activations with freq:  50%|█████     | 1/2 [00:01<00:01,  1.96s/it]Generating multi-layer activations with freq: 100%|██████████| 2/2 [00:02<00:00,  1.00s/it]
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/train/train.py", line 184, in <module>
+    main()
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/train/train.py", line 157, in main
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [Errno 13] Permission denied: '/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts/0/3'
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+Extracting token IDs:   0%|          | 0/2 [00:00<?, ?it/s]Extracting token IDs: 100%|██████████| 2/2 [00:00<00:00, 26.56it/s]
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/causal/input_score_llm_judge.py", line 228, in <module>
+    asyncio.run(main())
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/causal/input_score_llm_judge.py", line 196, in main
+    with open(args.input, "r") as f:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'experiments/results/dow_causal_output.json'

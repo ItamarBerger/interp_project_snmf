@@ -1,0 +1,35 @@
+[2025-12-21 16:42:03.992800] Job started.
+[2025-12-21 16:42:03.993013] ==== Configuration Summary ====
+Base Path:             /home/ADV_2526a/tslilshani/interp_project_snmf
+Save Path:             /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts
+Data Path:             /home/ADV_2526a/tslilshani/interp_project_snmf/data/final_dataset_20_concepts.json
+Model Name:            gpt2-small
+Layers to Inspect:     [0]
+Ranks:                 [50]
+Sparsity:              0.01
+Factorization Mode:    mlp
+Model Device:          cuda
+Data Device:           cpu
+Fitting Device:        cuda
+Max Iters / Layer:     2000
+Patience:              1500
+Overwrite Existing:    False
+Seed:                  42
+===============================
+[2025-12-21 16:42:03.993091] Initializing ActivationGenerator with model 'gpt2-small'
+Loaded pretrained model gpt2-small into HookedTransformer
+[2025-12-21 16:42:19.556206] Loading dataset from '/home/ADV_2526a/tslilshani/interp_project_snmf/data/final_dataset_20_concepts.json'
+[2025-12-21 16:42:19.645151] Generating activations (and frequencies) for requested layers...
+[2025-12-21 16:42:24.118360] Processing layer 0
+[2025-12-21 16:42:24.171363] File exists, skipping: /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts/0/50/nmf-l0-r50.pkl
+[2025-12-21 16:42:24.171500] All computations done.
+[2025-12-21 16:42:53.047102] Job started.
+[2025-12-21 16:42:53.047260] Models dir: /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts
+[2025-12-21 16:42:53.047313] Output JSON: /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/results/concept_contexts.json
+[2025-12-21 16:42:53.047325] Data path: /home/ADV_2526a/tslilshani/interp_project_snmf/data/final_dataset_20_concepts.json
+[2025-12-21 16:42:53.047343] Init ActivationGenerator gpt2-small [mlp] on cuda
+Loaded pretrained model gpt2-small into HookedTransformer
+[2025-12-21 16:43:06.942328] Loading NMF model → layer 0, rank 50: /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts/0/50/nmf-l0-r50.pkl
+[2025-12-21 16:43:07.196678] Done.
+Running over 150 tasks …
+......................................................................................................................................

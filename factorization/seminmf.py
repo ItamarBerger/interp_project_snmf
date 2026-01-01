@@ -258,10 +258,14 @@ class NMFSemiNMF(nn.Module):
                         print(f"Stopping early at iter {it} "
                               f"(no improvement in {patience} iters)")
                     break
-        with open("training_summary.log", "a") as logf:
-            logf.write(
-                f"{init},{self.sparsity},{best_it}\n"
-            )
+        try:
+            with open("training_summary.log", "a") as logf:
+                logf.write(
+                    f"{init},{self.sparsity},{best_it}\n"
+                )
+        except (PermissionError, OSError):
+            pass  # skip logging if we can't write
+
         if best_F is not None:
             with torch.no_grad():
                 self.F_.data.copy_(best_F)

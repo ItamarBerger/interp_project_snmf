@@ -1,0 +1,58 @@
+[NbConvertApp] Converting notebook snmf_tutorial.ipynb to script
+[NbConvertApp] Writing 8270 bytes to temp_script_280765.py
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+
+Building vocab frequency:   0%|          | 0/40 [00:00<?, ?it/s]
+Building vocab frequency: 100%|██████████| 40/40 [00:00<00:00, 8542.81it/s]
+
+Generating multi-layer activations with freq:   0%|          | 0/40 [00:00<?, ?it/s]
+Generating multi-layer activations with freq:   2%|▎         | 1/40 [00:03<02:03,  3.17s/it]
+Generating multi-layer activations with freq:   5%|▌         | 2/40 [00:03<00:52,  1.38s/it]
+Generating multi-layer activations with freq:   8%|▊         | 3/40 [00:03<00:29,  1.24it/s]
+Generating multi-layer activations with freq:  10%|█         | 4/40 [00:03<00:19,  1.85it/s]
+Generating multi-layer activations with freq:  12%|█▎        | 5/40 [00:03<00:13,  2.55it/s]
+Generating multi-layer activations with freq:  15%|█▌        | 6/40 [00:03<00:10,  3.31it/s]
+Generating multi-layer activations with freq:  18%|█▊        | 7/40 [00:04<00:13,  2.38it/s]
+Generating multi-layer activations with freq:  20%|██        | 8/40 [00:04<00:10,  3.04it/s]
+Generating multi-layer activations with freq:  22%|██▎       | 9/40 [00:04<00:08,  3.71it/s]
+Generating multi-layer activations with freq:  25%|██▌       | 10/40 [00:04<00:06,  4.44it/s]
+Generating multi-layer activations with freq:  28%|██▊       | 11/40 [00:04<00:05,  5.15it/s]
+Generating multi-layer activations with freq:  30%|███       | 12/40 [00:05<00:05,  5.56it/s]
+Generating multi-layer activations with freq:  32%|███▎      | 13/40 [00:05<00:04,  6.10it/s]
+Generating multi-layer activations with freq:  35%|███▌      | 14/40 [00:05<00:03,  6.58it/s]
+Generating multi-layer activations with freq:  38%|███▊      | 15/40 [00:05<00:03,  7.05it/s]
+Generating multi-layer activations with freq:  40%|████      | 16/40 [00:05<00:03,  7.03it/s]
+Generating multi-layer activations with freq:  42%|████▎     | 17/40 [00:05<00:04,  5.24it/s]
+Generating multi-layer activations with freq:  45%|████▌     | 18/40 [00:06<00:03,  5.83it/s]
+Generating multi-layer activations with freq:  48%|████▊     | 19/40 [00:06<00:03,  6.29it/s]
+Generating multi-layer activations with freq:  50%|█████     | 20/40 [00:06<00:02,  6.72it/s]
+Generating multi-layer activations with freq:  52%|█████▎    | 21/40 [00:06<00:02,  6.85it/s]
+Generating multi-layer activations with freq:  55%|█████▌    | 22/40 [00:06<00:02,  6.95it/s]
+Generating multi-layer activations with freq:  57%|█████▊    | 23/40 [00:06<00:02,  6.98it/s]
+Generating multi-layer activations with freq:  60%|██████    | 24/40 [00:06<00:02,  7.17it/s]
+Generating multi-layer activations with freq:  62%|██████▎   | 25/40 [00:07<00:02,  7.30it/s]
+Generating multi-layer activations with freq:  65%|██████▌   | 26/40 [00:07<00:01,  7.10it/s]
+Generating multi-layer activations with freq:  68%|██████▊   | 27/40 [00:07<00:01,  6.51it/s]
+Generating multi-layer activations with freq:  70%|███████   | 28/40 [00:07<00:01,  6.46it/s]
+Generating multi-layer activations with freq:  72%|███████▎  | 29/40 [00:07<00:01,  6.46it/s]
+Generating multi-layer activations with freq:  75%|███████▌  | 30/40 [00:07<00:02,  4.95it/s]
+Generating multi-layer activations with freq:  78%|███████▊  | 31/40 [00:08<00:01,  5.30it/s]
+Generating multi-layer activations with freq:  80%|████████  | 32/40 [00:08<00:01,  5.75it/s]
+Generating multi-layer activations with freq:  82%|████████▎ | 33/40 [00:08<00:01,  6.20it/s]
+Generating multi-layer activations with freq:  85%|████████▌ | 34/40 [00:08<00:00,  6.62it/s]
+Generating multi-layer activations with freq:  88%|████████▊ | 35/40 [00:08<00:00,  6.94it/s]
+Generating multi-layer activations with freq:  90%|█████████ | 36/40 [00:08<00:00,  7.16it/s]
+Generating multi-layer activations with freq:  92%|█████████▎| 37/40 [00:08<00:00,  7.12it/s]
+Generating multi-layer activations with freq:  95%|█████████▌| 38/40 [00:09<00:00,  7.21it/s]
+Generating multi-layer activations with freq:  98%|█████████▊| 39/40 [00:09<00:00,  7.27it/s]
+Generating multi-layer activations with freq: 100%|██████████| 40/40 [00:09<00:00,  7.44it/s]
+Generating multi-layer activations with freq: 100%|██████████| 40/40 [00:09<00:00,  4.29it/s]
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/temp_script_280765.py", line 102, in <module>
+    nmf.fit(activations[0].T, max_iterations, patience=500)
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/factorization/seminmf.py", line 261, in fit
+    with open("training_summary.log", "a") as logf:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'training_summary.log'

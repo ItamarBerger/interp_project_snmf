@@ -1,0 +1,115 @@
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+Building vocab frequency:   0%|          | 0/40 [00:00<?, ?it/s]Building vocab frequency: 100%|██████████| 40/40 [00:00<00:00, 5783.45it/s]
+Generating multi-layer activations with freq:   0%|          | 0/40 [00:00<?, ?it/s]Generating multi-layer activations with freq:   2%|▎         | 1/40 [00:10<06:37, 10.19s/it]Generating multi-layer activations with freq:   8%|▊         | 3/40 [00:10<01:39,  2.68s/it]Generating multi-layer activations with freq:  12%|█▎        | 5/40 [00:10<00:46,  1.33s/it]Generating multi-layer activations with freq:  18%|█▊        | 7/40 [00:10<00:26,  1.26it/s]Generating multi-layer activations with freq:  22%|██▎       | 9/40 [00:10<00:15,  1.94it/s]Generating multi-layer activations with freq:  28%|██▊       | 11/40 [00:10<00:10,  2.83it/s]Generating multi-layer activations with freq:  32%|███▎      | 13/40 [00:10<00:06,  3.96it/s]Generating multi-layer activations with freq:  40%|████      | 16/40 [00:11<00:04,  5.93it/s]Generating multi-layer activations with freq:  45%|████▌     | 18/40 [00:11<00:02,  7.36it/s]Generating multi-layer activations with freq:  50%|█████     | 20/40 [00:11<00:02,  8.62it/s]Generating multi-layer activations with freq:  57%|█████▊    | 23/40 [00:11<00:01, 11.27it/s]Generating multi-layer activations with freq:  62%|██████▎   | 25/40 [00:11<00:01, 12.67it/s]Generating multi-layer activations with freq:  70%|███████   | 28/40 [00:11<00:00, 14.85it/s]Generating multi-layer activations with freq:  75%|███████▌  | 30/40 [00:11<00:00, 15.41it/s]Generating multi-layer activations with freq:  80%|████████  | 32/40 [00:11<00:00, 16.25it/s]Generating multi-layer activations with freq:  88%|████████▊ | 35/40 [00:11<00:00, 17.24it/s]Generating multi-layer activations with freq:  92%|█████████▎| 37/40 [00:12<00:00, 17.37it/s]Generating multi-layer activations with freq:  98%|█████████▊| 39/40 [00:12<00:00, 17.25it/s]Generating multi-layer activations with freq: 100%|██████████| 40/40 [00:12<00:00,  3.24it/s]
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+Extracting token IDs:   0%|          | 0/40 [00:00<?, ?it/s]Extracting token IDs:   2%|▎         | 1/40 [00:00<00:06,  6.16it/s]Extracting token IDs:  75%|███████▌  | 30/40 [00:00<00:00, 137.26it/s]Extracting token IDs: 100%|██████████| 40/40 [00:00<00:00, 131.94it/s]
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_concept_context.py", line 159, in <module>
+    main()
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_concept_context.py", line 155, in main
+    json_handler.write()
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/evaluation/json_handler.py", line 48, in write
+    with open(self.path, "w") as f:
+         ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts/concept_contexts.json'
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_input_descriptions.py", line 174, in <module>
+    main()
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_input_descriptions.py", line 171, in main
+    asyncio.run(run(args))
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_input_descriptions.py", line 137, in run
+    data = load_data(args.input_json)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_input_descriptions.py", line 50, in load_data
+    with open(path, "r") as f:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'experiments/artifacts/concept_contexts.json'
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_vocab_proj.py", line 225, in <module>
+    json_handler.write()
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/evaluation/json_handler.py", line 48, in write
+    with open(self.path, "w") as f:
+         ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'experiments/artifacts/vocab_proj.json'
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_output_centric_descriptions.py", line 187, in <module>
+    main()
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_output_centric_descriptions.py", line 184, in main
+    asyncio.run(run(args))
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_output_centric_descriptions.py", line 136, in run
+    data = load_data(input_json)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_output_centric_descriptions.py", line 43, in load_data
+    with open(path, 'r') as f:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'experiments/artifacts/vocab_proj.json'
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+  0%|          | 0/50 [00:00<?, ?it/s]  2%|▏         | 1/50 [00:21<17:41, 21.67s/it]  4%|▍         | 2/50 [00:37<14:30, 18.14s/it]  6%|▌         | 3/50 [00:55<14:11, 18.13s/it]  8%|▊         | 4/50 [01:11<13:09, 17.16s/it] 10%|█         | 5/50 [01:29<13:07, 17.50s/it] 12%|█▏        | 6/50 [01:47<12:59, 17.71s/it] 14%|█▍        | 7/50 [02:02<12:12, 17.03s/it] 16%|█▌        | 8/50 [02:21<12:09, 17.37s/it] 18%|█▊        | 9/50 [02:37<11:40, 17.09s/it] 20%|██        | 10/50 [02:54<11:26, 17.15s/it] 22%|██▏       | 11/50 [03:12<11:12, 17.23s/it] 24%|██▍       | 12/50 [03:28<10:44, 16.96s/it] 26%|██▌       | 13/50 [03:44<10:14, 16.61s/it] 28%|██▊       | 14/50 [04:02<10:14, 17.07s/it] 30%|███       | 15/50 [04:20<10:08, 17.38s/it] 32%|███▏      | 16/50 [04:38<09:58, 17.60s/it] 34%|███▍      | 17/50 [04:56<09:43, 17.68s/it] 36%|███▌      | 18/50 [05:13<09:22, 17.58s/it] 38%|███▊      | 19/50 [05:31<09:02, 17.51s/it] 40%|████      | 20/50 [05:48<08:44, 17.47s/it] 42%|████▏     | 21/50 [06:06<08:32, 17.66s/it] 44%|████▍     | 22/50 [06:23<08:05, 17.35s/it] 46%|████▌     | 23/50 [06:40<07:48, 17.35s/it] 48%|████▊     | 24/50 [07:01<07:54, 18.24s/it] 50%|█████     | 25/50 [07:18<07:30, 18.03s/it] 52%|█████▏    | 26/50 [07:36<07:08, 17.84s/it] 54%|█████▍    | 27/50 [07:52<06:44, 17.57s/it] 56%|█████▌    | 28/50 [08:10<06:27, 17.62s/it] 58%|█████▊    | 29/50 [08:28<06:08, 17.55s/it] 60%|██████    | 30/50 [08:44<05:46, 17.31s/it] 62%|██████▏   | 31/50 [09:02<05:32, 17.51s/it] 64%|██████▍   | 32/50 [09:18<05:06, 17.01s/it] 66%|██████▌   | 33/50 [09:36<04:54, 17.34s/it] 68%|██████▊   | 34/50 [09:54<04:41, 17.57s/it] 70%|███████   | 35/50 [10:12<04:22, 17.52s/it] 72%|███████▏  | 36/50 [10:29<04:04, 17.47s/it] 74%|███████▍  | 37/50 [10:49<03:54, 18.06s/it] 76%|███████▌  | 38/50 [11:07<03:36, 18.07s/it] 78%|███████▊  | 39/50 [11:24<03:17, 17.94s/it] 80%|████████  | 40/50 [11:40<02:53, 17.39s/it] 82%|████████▏ | 41/50 [11:58<02:38, 17.60s/it] 84%|████████▍ | 42/50 [12:16<02:21, 17.67s/it] 86%|████████▌ | 43/50 [12:34<02:03, 17.58s/it] 88%|████████▊ | 44/50 [12:51<01:45, 17.52s/it] 90%|█████████ | 45/50 [13:08<01:27, 17.47s/it] 92%|█████████▏| 46/50 [13:26<01:09, 17.43s/it] 94%|█████████▍| 47/50 [13:42<00:51, 17.17s/it] 96%|█████████▌| 48/50 [14:00<00:34, 17.45s/it] 98%|█████████▊| 49/50 [14:18<00:17, 17.47s/it]100%|██████████| 50/50 [14:34<00:00, 17.09s/it]100%|██████████| 50/50 [14:34<00:00, 17.49s/it]
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/causal/generate_causal_output.py", line 278, in <module>
+    main()
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/causal/generate_causal_output.py", line 270, in main
+    json_handler.write()
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/evaluation/json_handler.py", line 48, in write
+    with open(self.path, "w") as f:
+         ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'experiments/artifacts/causal_output.json'
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/causal/input_score_llm_judge.py", line 228, in <module>
+    asyncio.run(main())
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/causal/input_score_llm_judge.py", line 196, in main
+    with open(args.input, "r") as f:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'experiments/artifacts/causal_output.json'
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/causal/output_score_llm_judge.py", line 245, in <module>
+    asyncio.run(main())
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/causal/output_score_llm_judge.py", line 210, in main
+    with open(args.input, "r") as f:
+         ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'experiments/artifacts/causal_output.json'

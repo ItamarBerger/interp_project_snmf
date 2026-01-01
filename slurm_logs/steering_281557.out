@@ -1,0 +1,94 @@
+[2025-12-20 22:48:30.976101] Job started.
+[2025-12-20 22:48:30.976348] ==== Configuration Summary ====
+Base Path:             /home/ADV_2526a/tslilshani/interp_project_snmf
+Save Path:             /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts
+Data Path:             /home/ADV_2526a/tslilshani/interp_project_snmf/data/final_dataset_20_concepts.json
+Model Name:            gpt2-small
+Layers to Inspect:     [0]
+Ranks:                 [50]
+Sparsity:              0.01
+Factorization Mode:    mlp
+Model Device:          cuda
+Data Device:           cpu
+Fitting Device:        cuda
+Max Iters / Layer:     2000
+Patience:              1500
+Overwrite Existing:    False
+Seed:                  42
+===============================
+[2025-12-20 22:48:30.976451] Initializing ActivationGenerator with model 'gpt2-small'
+Loaded pretrained model gpt2-small into HookedTransformer
+[2025-12-20 22:48:46.724356] Loading dataset from '/home/ADV_2526a/tslilshani/interp_project_snmf/data/final_dataset_20_concepts.json'
+[2025-12-20 22:48:46.765151] Generating activations (and frequencies) for requested layers...
+[2025-12-20 22:48:50.623339] Processing layer 0
+[2025-12-20 22:48:50.671067] File exists, skipping: /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts/0/50/nmf-l0-r50.pkl
+[2025-12-20 22:48:50.671212] All computations done.
+[2025-12-20 22:49:12.970207] Job started.
+[2025-12-20 22:49:12.970413] Models dir: /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts
+[2025-12-20 22:49:12.970433] Output JSON: /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts/concept_contexts.json
+[2025-12-20 22:49:12.970448] Data path: /home/ADV_2526a/tslilshani/interp_project_snmf/data/final_dataset_20_concepts.json
+[2025-12-20 22:49:12.970467] Init ActivationGenerator gpt2-small [mlp] on cuda
+Loaded pretrained model gpt2-small into HookedTransformer
+[2025-12-20 22:49:26.512012] Loading NMF model → layer 0, rank 50: /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts/0/50/nmf-l0-r50.pkl
+[2025-12-20 22:49:50.416319] Job started. device=cuda
+Loaded pretrained model gpt2-small into HookedTransformer
+[2025-12-20 22:49:53.610378] Starting rank 50...
+[2025-12-20 22:49:53.621495] Loaded NMF model for layer 0, rank 50
+[2025-12-20 22:49:55.691388] Finished Processing layer: 0, rank: 50
+Device: cuda
+[2025-12-20 22:50:21.776425] Loading model…
+Loaded pretrained model gpt2-small into HookedTransformer
+[2025-12-20 22:50:25.258498] 
+--- Rank 50 ---
+[2025-12-20 22:50:25.485126] Loaded NMF model for layer 0, rank 50
+[2025-12-20 22:50:47.138199] Finished row: layer=0, h_row=0
+[2025-12-20 22:51:05.385899] Finished row: layer=0, h_row=1
+[2025-12-20 22:51:23.624101] Finished row: layer=0, h_row=2
+[2025-12-20 22:51:41.444534] Finished row: layer=0, h_row=3
+[2025-12-20 22:51:58.990522] Finished row: layer=0, h_row=4
+[2025-12-20 22:52:16.543322] Finished row: layer=0, h_row=5
+[2025-12-20 22:52:34.140001] Finished row: layer=0, h_row=6
+[2025-12-20 22:52:52.359799] Finished row: layer=0, h_row=7
+[2025-12-20 22:53:10.593986] Finished row: layer=0, h_row=8
+[2025-12-20 22:53:28.823803] Finished row: layer=0, h_row=9
+[2025-12-20 22:53:47.056532] Finished row: layer=0, h_row=10
+[2025-12-20 22:54:04.883267] Finished row: layer=0, h_row=11
+[2025-12-20 22:54:22.411705] Finished row: layer=0, h_row=12
+[2025-12-20 22:54:39.951052] Finished row: layer=0, h_row=13
+[2025-12-20 22:54:57.530576] Finished row: layer=0, h_row=14
+[2025-12-20 22:55:15.761791] Finished row: layer=0, h_row=15
+[2025-12-20 22:55:34.009401] Finished row: layer=0, h_row=16
+[2025-12-20 22:55:52.252753] Finished row: layer=0, h_row=17
+[2025-12-20 22:56:10.483674] Finished row: layer=0, h_row=18
+[2025-12-20 22:56:28.345079] Finished row: layer=0, h_row=19
+[2025-12-20 22:56:45.891517] Finished row: layer=0, h_row=20
+[2025-12-20 22:57:03.436172] Finished row: layer=0, h_row=21
+[2025-12-20 22:57:21.005189] Finished row: layer=0, h_row=22
+[2025-12-20 22:57:39.247478] Finished row: layer=0, h_row=23
+[2025-12-20 22:57:57.499125] Finished row: layer=0, h_row=24
+[2025-12-20 22:58:16.774399] Finished row: layer=0, h_row=25
+[2025-12-20 22:58:34.436069] Finished row: layer=0, h_row=26
+[2025-12-20 22:58:52.263127] Finished row: layer=0, h_row=27
+[2025-12-20 22:59:10.496239] Finished row: layer=0, h_row=28
+[2025-12-20 22:59:28.731517] Finished row: layer=0, h_row=29
+[2025-12-20 22:59:44.544929] Finished row: layer=0, h_row=30
+[2025-12-20 23:00:00.441204] Finished row: layer=0, h_row=31
+[2025-12-20 23:00:18.788803] Finished row: layer=0, h_row=32
+[2025-12-20 23:00:37.135646] Finished row: layer=0, h_row=33
+[2025-12-20 23:00:55.110845] Finished row: layer=0, h_row=34
+[2025-12-20 23:01:11.203731] Finished row: layer=0, h_row=35
+[2025-12-20 23:01:29.426354] Finished row: layer=0, h_row=36
+[2025-12-20 23:01:47.664000] Finished row: layer=0, h_row=37
+[2025-12-20 23:02:05.284628] Finished row: layer=0, h_row=38
+[2025-12-20 23:02:22.834031] Finished row: layer=0, h_row=39
+[2025-12-20 23:02:40.382461] Finished row: layer=0, h_row=40
+[2025-12-20 23:02:58.158629] Finished row: layer=0, h_row=41
+[2025-12-20 23:03:18.504050] Finished row: layer=0, h_row=42
+[2025-12-20 23:03:36.060349] Finished row: layer=0, h_row=43
+[2025-12-20 23:03:53.594905] Finished row: layer=0, h_row=44
+[2025-12-20 23:04:11.139422] Finished row: layer=0, h_row=45
+[2025-12-20 23:04:29.236018] Finished row: layer=0, h_row=46
+[2025-12-20 23:04:47.456868] Finished row: layer=0, h_row=47
+[2025-12-20 23:05:05.680675] Finished row: layer=0, h_row=48
+[2025-12-20 23:05:23.904517] Finished row: layer=0, h_row=49
+[2025-12-20 23:05:23.904856] Finished layer: 0, rank: 50

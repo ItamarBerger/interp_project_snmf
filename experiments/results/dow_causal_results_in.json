@@ -1,0 +1,2816 @@
+[
+  {
+    "intervention_sign": 1,
+    "alpha": 7.2129411697387695,
+    "kl": 0.025,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that for me it is still the same answer: you need to start reading the Bible in a different format. It has many parallels with the \"new\" world. In my new translation of the Bible in the modern context there are a few changes that have",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that's right, we would have to do both for ourselves or for every citizen of the country.<|endoftext|>There's always a need to do something to bring an end to violence, terrorism and extremism. We can't just try to stop one attack, which",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that if you're looking for someone to take your place to the next level the name is very nice. And I just think you guys have a nice time to work with her.\n\n\n[10:35 AM]: Do you think that this is a",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that we need to start thinking in this context more seriously.\n\nIn case you're wondering, the answer is: this isn't a \"free lunch.\" Yes it's the same as everything else in terms of free meals for kids, but this doesn",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that is what we need from a new generation of developers.\n\nThe problem with most of this post are what I thought at the start of this thread was pretty clear.\n\nThis has been quite a ride and it takes an interesting, multi-",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that when I get past the point of getting a lot of ideas, I have a pretty serious point. That being said, the thing that you want to see is how much of it you are able to create without having to do much of the math.",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that there is no need for any sort of 'unmasking', but I will just mention the obvious point about what was going on here.\n\nA few notes are needed to understand:\n\nThe main problem on this page is how can I",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that the last four centuries of human history are the work of many, including the Jews and Catholics of the past. I believe that the past is a record of a past time, as a long time ago. The Jews of the day had a different view",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 7.2129411697387695,
+    "kl": 0.025,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that's because, as a writer, my style is based on a little bit of the original idea I started out of. I was not going to do that, because it's so important to me. I'm not going to do that to myself.",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that was the first time I went to a bar. I had always thought we were going to have a good time, but because I had a small family and the one you don't want to know. There was a lot of talk about how I had",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that the following story has changed since the time I wrote it. The same is true of it now. I have a good story about people that have the same story about what was in the story about the same story about the same story about what was in",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that this is a very important topic, which I think is a very important topic, which I agree with.\n\nI just can't wait to see where things are going.\n\nAdvertisements<|endoftext|>Drama\n\nA little bit more of an idea",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that I am not a big fan of the original \"Pizza\" movie that will ever come to fruition so I really don't mind that, though. I can only imagine what you guys would be interested in. I'm not a big fan and I",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that's not all. I think that's a little bit about. I just do it just a little bit. I just love to be able to do it.\n\nSo you know, the thing about getting an abortion is not just about getting an",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that is where we're at with this post and what I was doing back then\u2026\n\nI want to tell you that you've already heard of me.\n\nI'm doing what I did back then and I can't wait to hear about it",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that a whole new generation of techies are being introduced through their careers, and I was hoping it would be one of the most popular of the bunch. But my first thought was that it might be a fun project; but I still thought I'd have",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 8.703742027282715,
+    "kl": 0.05,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that would be a bit of a mistake, you will see a lot of them in the game as a whole. As a gamer i had never really played a lot of action games, but that really changed me a lot over time and I don't know",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that we have gotten better at building a very powerful world-building system for our children which is a combination of good, bad, good\n\n- not good, not bad, not bad, not bad... (4th ed. 2006)\n\n",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that if she had a child it would be more like this:\n\nAnd so I'm going to write this chapter of her mother's story, because that does make me feel so bad that she'll not get the rest of the story. And then",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that I've read some useful articles and I've read a fair few books. I'm not sure what exactly the problem is. And if there's any good information in it to be read, I'm going to link to the relevant pages.<|endoftext|>A",
+        "concept_score": 1,
+        "fluency_score": 1,
+        "final_score": 1.0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that most of us should be thankful that this post got made. I love all those people that have been through so bad this time.\n\nAnd I would have loved those as well to have done these a little more,\n\nSo I do love",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that the best way to make a comparison is to look at this, then look at the chart below, which will give you an idea of what to expect (and I will explain each chart from my sources):\n\nChart 5.6 is the chart",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that a few simple actions would do an excellent job in helping your business manage and scale a business that is now fully owned by an independent corporation. As the owner of your company, you are supposed, under law, to maintain the following records and records related",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that is true when you consider that most of your money can be traced directly back to the US Federal Reserve or the Fed.\n\nThere isn't enough room for that money at all, you know. So there is enough space for a bunch of money",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 8.703742027282715,
+    "kl": 0.05,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that's what it is, but I can't see why it is going on. In the first three minutes of the game. It will take a few minutes for the entire game. I'm sure I'm sure I'm sure it will take a little",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that is the case. There are many good players on the field but there has not been a good player since I have done my job in the past. It is the case. I have tried and it's the case. It is the case. But",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that the world will be a better place in the next ten years rather than a few billion dollars.\n\nWhat will make that happen is going to be a big one. Maybe that's going to be a big one.\n\nI'm going to",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that's why people always love a good story in a good story.\nThe last time I saw him, I don't know what happened.\n\nI don't know what that is about. I don't think it is about. Is it about",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that doesn't mean anything. This is a very rare and important part of the experience. It is my best and most important part of the most important moment because of the other parts I was there. This was a very important moment because I felt like I",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that there were some cases where it was just an empty place. And then, as I was on the beach. So they looked like it was going to be. But, it didn't take much time to finish. I don't know if there are",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that was not true (I had to think it was a lie).\n\nHe was really nice. His heart of gold is a little better than mine.\n\nHe was really very nice. His heart of gold is a little better than mine.",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that the majority of other peoples' are still the most likely to be killed during the first few days, so that they're still likely to be killed when they're about to be killed, so that they're likely to be killed when they're about to",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 10.331803321838379,
+    "kl": 0.1,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that what we saw on the video above would have been a bit more realistic.\n\nThis will be my favourite moment. A few hours after he went with his wife the boys went back to school, so he never came back. We can see a",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that the biggest problem you have to getting into any type of country is their inability to understand what the people are feeling about everything in that place.\n\nThe world is being overrun and we are not fully understanding what everyone wants to know the world is filled",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that we could possibly get more details soon if we're talking so much about the whole thing. I think we would really like to know more about it before I do a much more thing about what we do because we have already read about that, but what",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that would make the game much more fun to use if the player's skill is higher.I think that might make the game fun more.In any other post you'd mention a way more fun to use in other Posts: 5 of 5 i think\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that it would be quite a surprise to see that I haven't seen a very bad performance from him, but at the same time he didn't really get into my thoughts on their game as well so, and he would do have have been quite well into",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that is the best approach. The problem with that idea is you don't know how it works, and the only people who know it are you. I don't know, as they all believe that you should know, so do you know. (I",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that the \"pink-and-cream\" part has just gone. The real 'bust\" part will get replaced by an \"pink-and-cream\" part. I was pretty happy with the 'pink-and-cream'",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that the current state of things is so very good, that you need to find a partner who is not so very good. You can tell if someone is a good fit for your character (if you're a good fit) You can tell your partner if",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 10.331803321838379,
+    "kl": 0.1,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that the only way to be able to come back to a few days when the people who is now a part of the world that they're going to do.\n\nA person who is now a part of the world that's going to do, they",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that I just don't have the time to write.. for the rest of the world as it's going to be. For the rest of the world of the world of the world of the world of the world of the world of the world of the",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that has happened is just over and it wasn't too well done.\nA little bit of trouble, but I like that is not the whole of a lot of a whole of a lot of a lot of a lot of a lot of a bit of",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that this is my first time in business, I can remember, it is a long time ago. it's been for about this week, and that's not so long ago, and that's a long time ago. It's been a long time ago",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that I should write the article in which we discuss the question and answer. It is the thing which we are working on is the thing which we're working on is the thing which we're working on is the thing which is the thing which is the thing",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that they were all going to the next thing.\"\nThe first time I looked at their faces. I didn't want to see them. I wanted to meet them.\n\n\"You want to meet me, you know what I want to meet?\"",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that I'm very sure the only other way to be that's in his mind, that he's going to be in the minds of a certain person who's being watched. In their minds are the only other way to be watched, in what I'm",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that. The first time we have a story in the future, as this is the next time.\n\n\"The next time you come to work, get to work, get to work.\"\n\n\"We're here because he got there, it",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 11.399384498596191,
+    "kl": 0.15,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that's the best thing we could do this summer: the \"Dodge is a new toy that's the most exciting thing that I've seen so far with the game so late, and the first time I saw the 3DS it looks like very very",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that in this case, that is what we are fighting on these lines is an important piece for understanding. To know that is what, and to know is a very interesting one, the only way it is to the lines is to the lines, that a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that when people stop looking and start to look at the world. That is a great question.\"\n\nMy dear wife, when it was all for us for so long for you. I believe I will see it a while to see. I believe I",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that's what you get. A lot of good stuff is coming along here.\n\n\nI think what you get was probably pretty well done. You will notice a lot of things that are not done is pretty well done, if I may want to know",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that is a problem, but it's nothing new in it's what the new guy is talking on the phone and what they said to the phone. I hope that this isn't a typo I am confused with some more. you are wondering what to do",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that you can do a good job for the first-class, not so much, you could have a much better job, and you are going down to the top.\n\nAnd I think that one who, is an good job for the first-",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that the only one that you are sure of is in the form of this thing. When we see that, do we, and say when will it be when to do do it. Or how do we to do to do to make this thing if they",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that if I had to get an A LOTS of stuff in the book I would get more stuff in it. You know my game is a bit better I want to go make more stuff if you want to go make all of the stuff but I hope",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 11.399384498596191,
+    "kl": 0.15,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that. It is that for its own.\nIt's a new book series on how that it, in the early 1980s.\n\nIt is a series of our own series, as we were not quite sure which is not what we are all",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that with is a great idea, to the other than you know that a little something else. in my sister I was an idea that I was. In case with the other was the other than he was the only an idea was an idea about the other",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that on Friday when\nWe've done is it up as his first time was really amazing and it was fantastic, and our own personal favorite of him that he was really amazing is amazing is fantastic for him. It's had the best to be amazing.",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that: [1: \"-s.\nThe other part.\nSitting in the second place?\n\nSo that's still not a good, that one of course, that's great, that's gonna be awful.\n\nIt was",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that for him,\n\" I am not sure for those who think I am not afraid of those who think I am afraid of those who think I am afraid of those think I am afraid of those who think I am afraid of those who think I am",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that's for a lot of people didn't do anything but that was just got into that really doesn't do anything that's really not worth did something just because they had been told,, is still something I'm not done was so do something's not",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that that to the of a week ago of. is to be tired of the season with the other year) for a couple of the next one, \"was just to be ready for the next one! It does not seem like, was a long time",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that, as and the \"S, on his own and\n\n\n\n. that I can be a moment,\n\n\nIn that he's been a person. or the people of a person on their own time, the people, with a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 13.294341087341309,
+    "kl": 0.25,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that this may be more that a thing I want in the future, this, which that I like that.\n\n\"I think if it is, which i do, and what i want here. so that the I to to then.\n\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that they are good. That I think they're good I say good.\n\nI'm not good enough I think they're not good. and\n\nThey are good if they are all well. I am not good enough to think they are all",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that's what, not the real reason why to use what. And what, not the actual reason why it be a good. \" And to use all that\n\n I it it the only that i\n\n The good because you have to to the",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that is a bit unfair to everyone who will pay for any time and get to the new version of the system. but my problem was, it's a bit unfair to anyone who will get or to the game just a lot a way to the game so",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that it isn't like, it's been long since I've been a guy who doesn't do to something to have. If i've been a guy who does nothing to something\n\nI think I'm so that if i've done to something like",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that is an interesting thing, when i was in a good position. to that in, to that, to my. I like to, and the more to, like to, to, so, I think that is a, the. ( a that",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that is a good sign to a good point that is not to a fair point to a good point at one point, a point to a good ( or) that\n\ns- a way to-\n the I see my a- a to me",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that the people that they love the most can be given some, which we ought to be the least when being most. The truth that we that they hate are best.\n\nThe most that they hate is all\n\n\nYou're not what you're",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 13.294341087341309,
+    "kl": 0.25,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that and then this, so in my and, (e it\nI. the is, no\nThere would\n\n\nM that, no I think it is just\nE The this the\n\nThe. (.. For the to a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that this is the aha was in other than it is made the reason. the is in some years are this would be no longer, for a few years of\nA think about's and to us are going to be sure for the people in my",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that a, are a new I is in what is only, a not of the no \" and to go to, that. for a it is never and no longer to be done and. in is. it is, with \"The \"'s is",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that as (\n\nD's that\n\nM R \"S The (1) in the past it, to be, for the most of the best friend, is it's \"C'mtied about them were the best.\n\nA",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that the \"I would be of the only a (this\n\n\n\nE (and to, \" that. The.\nR (-I had) for what he were to be so are very easy. The family, for the two years",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that a, which will be for it is already, I never have been to be that it's not not all the- of all the is for. The just be, when the, but for this\n\n\nThe. In\nFor to the",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that of a \"No one would's only of the world that., as well as the it's only on-\n( () but if, but then it, or is, like in. We the third was here in a few years.",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that of your and are, and the just to get's brother by the and it\n\n\n, no's only: The to make a no\n\n,, or I's\n of my own work with a little of the first of it is",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 14.7622652053833,
+    "kl": 0.35,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that the only two and are all the best and all best\n\nThis post might be a link to the website. The link contains only the best\n\n the link of the site<|endoftext|>We are the place\n this in a to the it I see",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that the first of his first day the person who is here to to the next.\n\n( ) is more often is ( is ) a in it in of and o to o to to be t the\n\n of to\n\n\n in it",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that this can be something\n\nBut I suppose that is, a great place has it to a certain? The I a\n<|endoftext|>This that a I I that a a. is a a i\n\nThis that e that\n\nIt o an",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that there is no one there. I that that you have some\n\n a you\n The, and to it that we can not you a you,\n\n\n I think there are no\n the no it that a t an t o a that to",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that would provide a way you can go a a way which is to go it. ( is\n\n\nn a o o o n to a a y n g r r a r g r (\n\n\n the y y\n\n n in",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that it could be a great deal. So my hope will be the one it is just good if the you the it a the I think you the what the what\n\n that you a not just a we are a if ( a a a be a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that's where the guy who says to a person of whom who has said. (\n the\n\n it that (\n\n\n-\n\n\n the to the a\n\n a the, a\n\n the t a\n\n, the e",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that's a great thing you'd say that they were good thing to they were? I feel that what I think if I are of that is I are is how of is the how of of a you a t to a they a a to of be",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 14.7622652053833,
+    "kl": 0.35,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that you to be used of it. The only the it will be the Pink,.\nR/T.\n\n\n\n\nB\nS on for, or the with the I have the with a for the to and to of this",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that was for the same. It,.\n\nIn to this as the is a of my \". This and the the of the and you. This is. This are also. It.\nThis in.\n\" the-1 and from",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that has the only\nL\n\nIt I will \"C the\n\nIn the to be and the The a and then it the:\n\n\nThere with this, but I.\n\nI's gonna be as not for ( and in",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that you are so, and of a. If someone else in this in the to work in your own to be done as this the and with our all as no I never be a no as it was made the, of the\nIf (C:",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that in America of the no by Dan Patrick is in this, \"This from Dan Pare to read the in the the of, who is not on and be- of the.\n\n. We was already like\n\n and\nThe\nR's",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that a a way, in his father to, (e-girl or. for the family of his wife, or.<|endoftext|>. The to love of God, the the just on, or the to find for as they that is the: (i",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that it and and have as a and, is not like you love to begin to eat: \"We have this and don with the just because to be that but but in. For I is like. So. That I would\n\nBut now that",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that it as and it, and you want to be in it, but the world, then it's been on and are not be just don of The and it (F\n\n\n\nS. But because I and in and. That this for a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 16.569527626037598,
+    "kl": 0.5,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that can help. If this isn't. The other is a\n\n a\n I it o i m is a\n of to\n\n b in y I m r is a a n t a g to h a i a a n is a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that in the new year? is for it that that that the first time that for the in the the all the a then a the a that the the the the a the are the the n, it and the the a the a the a the (",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that has always been a big thing, a few things ( not a good thing and not a very few. And a little a very often, or a bit.\n\n\n\nThat's always something the most of a a a a a a a a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that he is a good thing is\n\n\nSens the Sens the aa a a is\n\n and a a n a a i a c an i a y a ( no a no g u an a a a a s a a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that was a really long day the most for the time of the way, it has been to and the time of the things have the things of the.\n of i\n\n\n\n of\n of the time of the of is. to the are",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that you are a thing, I the same thing or the same thing a you an a and we the same. we an is you or they and the so that, I is it. the things or the, to is also the a the is is",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that he would. is really a bad and, but is a thing that you think that i an in, or a n I is that it a of a, the a that a a and it of are that is a a to t a, a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that he said they could be,\n\n, they would. and to that was. the is. The that was. i did the t to it that we was, is is to to and was is. the is to that is. The is",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 16.569527626037598,
+    "kl": 0.5,
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that,\nI should, to love about the \"D2, and it is like. The just on that in that's as a that and are as a for (B\nIn and the\n\n\nThere, with an the was not to see",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that will not to be, the\nIt was about the D\n\nA, the (no a and/f, then (D is on your work of these on-d was.\nD and it has (The is still with your one",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that I have to become, but.\n\n\n\n\nThe for both to do not even on the R.\nECE. (It had the (M for that the for all in as is for that. For it (The: \"D",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that on this is used only a little bit but (I just so well for a a for an, is, it has been done. The and\n\nThe from with the and are only to be able-S. And we know from this (",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that this episode that's the same like we never. But to be like it:, that is to be a,, in our parents of the Renn: on the R\u00e4 that the (I was so of the be used with the and then",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that just before was able to make it was just in. A, is not because the Raged and as the and from a in your mother of the R\u00e1 is just as to the only as it was not, for the The\n\n and to",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that it doesn at my eyes with one is about the like to be made it is. (no love, for us all of a to be able.\n\nI and the\n\nThe and as it has been to start to be in both of",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that. A. and that is on a,, was, was as an on that the Fately covered (the last time from the is no is always wanted in a no that.\n, The love to get and it was already from (.",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 9.74082088470459,
+    "kl": 0.025,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that's very unfair. I was wondering if the \"real deal\" is worth anything. I don't know if I'd ever get paid a lot more on a deal I can't find or know in a relationship that's just as good. It's",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that's because you have no idea how often you write about it.\nYou're too lazy to be lazy.\nYou're too lazy to be lazy about anything.\nThere is a limit to your desire to change anything.\nIf you've given",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that would be pretty cool, especially for that age range. So, maybe I can bring my friends out?\n\nYou're talking about the movie of his, not about what you heard or what you believe.\n\nYes, I think the movie",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that you need to be able to control the direction of the engine. I think your ability to handle all manner of situations is quite strong. I think you are very skilled with your car. I feel you are a true engine expert. What can you do",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that's really cool. You just can't help a little, like this. You're gonna be a pretty asshole to that. Like, I'm gonna blow up all the women you wanna kill, and then you're gonna kill some women that's gonna",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that is just the best answer that I can find on the internet! I don't have any actual idea of it being about someone else or some of your own friends or whatever (this just sounds like a typical scenario of what you could want to have).",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that it's fair to say that I disagree with all of what she writes on this thread, however. If you're looking for an answer to something similar to that that's what I'm looking for, if you're looking for someone that seems to be",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that's all that matters. Maybe I'm wrong or not because the internet is such a small market. And I really want to think something of myself if it wasn't so easy for me to write something like this, because if anyone says otherwise then they",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 9.74082088470459,
+    "kl": 0.025,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that will be very glad to this, very much enjoyed the most of you do, my friend, the most in the greatest of you would like to get it and I to have you in my own face\n\n\n\n\n\n\n\n\n\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that is so happy with this was on the best thing for the best, I'm one of the most successful thing I think I'd want to be a newbie and one of the best of the best thing that's going to be the most of the",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that was surprised by a couple months back then had a lot of my first game was having a lot of fun with it, I'm not a fan of the games a lot as a person that can get an awesome game with my friends, and had a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that would like to be able to be back for you with my brother I would love him. He would like to be out of all the good and I would love you.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that's looking for the worst is going to leave my wife to think the way we can help you if I have an opinion is in the same, I have a long-time relationship with you are doing this.\n\n\n\n\n\n\n\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that is not too much of course you are a man is a man who loves my penis.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nG\n\n\n\n\nI\n\n\nV\n\n\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that if a man has the right to make sure that you may be at the beginning of the end of the end of the end of the end of the end of the beginning of the end of the end of the end of the ending of the end of",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that's so sad that this is really did an honest question. If I had a nice, I can understand in a way. It's the most serious kind of a.\n\n\n\n\n\n\n\n\n\n\n\nI\n\n\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 12.18100643157959,
+    "kl": 0.05,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that it is important to try to have an answer about this topic so I may want to share mine with others.\n\n\nI'm not going to spend the time or resources of the other members of the forum on an ungodfull, godless,",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that my point for this essay was just to note that there is an amazing amount of hype going on about how things like this and that's not really the case. I think that my point is that people really need to realize just how much hype that there",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that the problem here is that the problem is not a problem, but rather is a product. The problem is not a product, but indeed a value. As such the product can only come in the form of a value. It is possible for such product",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that this is probably a good time to give this update about it to those users for the next few days. Hopefully some of your other comments will be helpful.\n\n- - - - - - - - - - - - - - - - -",
+        "concept_score": 1,
+        "fluency_score": 1,
+        "final_score": 1.0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that I could find a reason for what happens. This is one of the reasons that we're going to have some sort of an answer with this sort of an answer to this kind of an answer. This kind of an answer is going to have a sort",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that my wife would approve this post and also that I would appreciate that she loves to be involved in this post. I just got married today, about 4.10 times. i had some pretty nasty problems with my wife. she's a wonderful person.",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that this whole thing is really hard to tell. But just to keep an eye out for what the future will bring. A story about what a society should think before that it's ready for to come.\n\nSo here we go into more detail then",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that the only reason I think that is simply due to the fact that there are no such things as being there or being there. There are no such things as being there or being there. The fact is just there without any of of things not just there",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 12.18100643157959,
+    "kl": 0.05,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that I had a small business. As a big part of the following a long-time. The little boy, but no, it's not a lot of my little man. I, I the best.\n\n\nI have a lot of I",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that all of the last days a week with my own home was the next time on the day the two of the same day, who I think the last day was a day when this night I a morning I was the first thing the first day a one",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that don't believe that I thought about the thing I have made it a bit of a very simple, the book is the way to a couple times a bit like a lot of the person. But I do not have a bit of the book I have",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that have been doing something when the name I really am the name and you did just found it a new thing in the most had a game. I was a big news, the world of them on the world that has been a world on a thing that",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that just have been sitting on a big news about had a good job and I was in a little bit late last seen this was in the news of the game, I was a little one at first, an in a little little time.\n\n\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that can not have taken a picture\n\n\n\n\n\nIf I\n\n\n\n\nI\n\n\nI\n\n\n\nI\n\nI\n\n\n\nI\n\nI\n\nI\nI\n\n\nI\nI\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that I could be the \"could never be just like \"never have been a part of a little.<|endoftext|> a lot of myself.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that have been a pretty old things will be a big deal\n\n\n\n\n\n\n\n\n\nI have a whole\n\n\n\n\n\nL\n\n\n\n\n\nC\n\n\n\nI\n\n\nI\n\nI",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 14.422926902770996,
+    "kl": 0.1,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that they should go to this place as they do they do go to this country.\n\nI have had three trips to the US. I've had many trips to the USA and I have had many trips to the USA. my trip to the USA",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that is the best way to get the most money from the most people. The fact that you do it is a nice thing i just think that i think that it makes me think that it makes me think that it makes me not. It makes me think",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that there is something to take away this kind of stuff like something I'm not a lot of of this stuff I am not even a lot of that stuff so I know what I am not even a lot of this stuff i are maybe I know not that",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that when you do the things that are important are important. This is important. And that makes your life. Everything important and important makes everything important. and that makes your life. Every important is important. Because if you make something important. Then, everything",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that the majority of readers can recognize that it's the biggest issue. There's not a very large number of readers can understand that there's not a very large number of readers can recognize that I like and it seems like the problems that people can recognize seem",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that you're going to make another change for all the time you've put yourself into this space that you're creating this space into you that you're starting your changing this space into it into it into it into that space into that space into this space you",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that is where some things are going to happen.\n\nIt is going to be one of them.\n\n\nWe could talk about about how the economy will grow or shrink or collapse.\n\n\nWe can think about how we will grow (whether it",
+        "concept_score": 1,
+        "fluency_score": 1,
+        "final_score": 1.0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that your idea would be very useful indeed if the person in the next place is interested in that there can be some of that person in any of that person in is the next next would be interested in that it would be interested in that there have always liked",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 14.422926902770996,
+    "kl": 0.1,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that of the the and a I, he was a good thing I would have done in a book. They did what I know.\n\n\n\n\n\n\n\n I'm not as a long-nonsense. But I do I'm a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that you could ask a a question. I'd like to ask a question. The \"What a question \"I can't have a question. I can't have a question which is a question was not a question, and that's a question.\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that that are not a \"I love him. A)\n\n\n\n\n1) I love him.\n\n\n1) I love him that, I love him.\n\n\n\nThe truth is he's not a true of my",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that a was my favorite\n\nThis is a good thing to know that I like to know.\n\n\n\nD. I'm good to know I'm a, I'm a good to know.\n\n\n\nSo,\n\n\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that would have the the people, I would have no way to be with one. The way to the second. It is no longer.\n\n\n\n\nThat the way to the next one of that was the day that it has the people.",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that's, they are not an idea that I'll have the other people who I believe,\n\n\n\nI'm not the one person that I'm.\n\n\n\nI'm a way I'm I'm not that it's not an",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that the people who I am going back to say is all too many people. If we will go to be in the way of the people of the way of the people. I'm not a person in the first person that they're all is one of",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that it's a thing. the other guys. You can't be a good enough. The next one. The other. You're so I don't.\n\n\n\n\n\nS, he's a man. A I can't be the",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 15.608704566955566,
+    "kl": 0.15,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that you really have an issue with \"my\", or whatever. I've had an issue with something and \"my\", or whatever. And it's not really my, or anything. It's nothing is my, or something. I have no problem with",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that one of the three most common causes is going along the path of those two most common ones. It goes along what the path of those many common ones. So they both are going along that path of those things. So it goes along what it is",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that people have had some of the most of the things that I have.\n\nIt can make the people that people have had.\n\nIt can make and let people that people have had.\n\nThey can make and let people can have.",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that the following is not what you want to do, to do with them, and so many other things and more things and so many others. And so many things things things are different things things. Then it will happen, and so many not. Then",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that will be the best place to get some kind of time out time out.\n\n\nTakes about time when you need to do to do you will take do to times out.\n\n\nTakes you will find places to find ones people ways to",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that all the data are the same here: I feel like these things in a way. The people are all in the same. I feel like things here are things. I feel like. I feel like things. Things and to things in a way.",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that the best way to do an actual battle that are to do any actual battles that will do any battles that will do any battles that will make those battles all of them they do those battles any battles are all of things that will will if all are all",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that was some kind of bullshit that came as this bullshit got so that bullshit got got because bullshit got this shit got because bullshit got. It was bullshit that went too. It was bullshit that went. You just took something. It is bullshit that took.",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 15.608704566955566,
+    "kl": 0.15,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that and the the a year ago. The F was the first was the family of the F or I think when the team. I'm not the the way to the men and was the other. the team's not to be on the other people on",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that\nTAMACI\n\nR.\n\n\nThe R. It's not the first of a \"Bass, the R. R R. The H C R.\nI'm the R's the way of C-A,",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that in it's a series of the \"A. in it's a great show that they get its own in \"The A C and a \"We can get a long-a, the way, is going to the I'm a series, the",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that: the most popular thing to have to the the, the same is still being taken a new is in the the first to the last for the people of the \"I are the same in an issue and \"I have a second \" I've had",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that is a way to that and it to make sense of the are the other, the new work of the way of a time of the the work of the. \"P, the the, and that the \"f with that's no of my person",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that I don't say to the way a way with the other people is not a group of \"F. This, and of the the or I don't know. that people that is a people who is a lot of the and \"The for the",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that. I'm sure. this kind of an issue is a good thing, there is some things I'm sure of all things is a great and an action, I know what the way there is a lot and the in the and some people you're",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that for this is so. It's a good idea, but it was an interesting thing. I am here. That was a very funny thing about it's an idea (I was that one of the new but was something that was made in the the",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 17.088067054748535,
+    "kl": 0.25,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that that is quite funny, but I think that's pretty funny that it looks funny that I feel really stupid about that that that doesn't make me really stupid. It isn't makes me really stupid about that it doesn't makes me stupid about that doesn",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that we'll do it.\n\nWe will do everything.\n\nWe do everything.<|endoftext|>The future can be\n\nThere are a future to\n\nThe future can be\n\nThe future can happen\n\nYes there.No.no",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that he really liked, and he really likes this thing\n\nThe world seems to be the world I just likes my world\n\nThe world looks to feel like my world\n\nI think that I mean what is my world\n\nI like these",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that you're very wrong, you're very wrong on the facts of the facts. (And it's true the facts. (Yeah. You're right, or no facts. ) (And it is false the facts.) ( ) You're wrong on",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that would be the case for both people of the whole country.\n\n\nWell you're probably not being a person of the whole countries.\n\n\nAnyway maybe you might be like the people of the whole worlds.\n\n\nAnd you may be friends of",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that this will be a great and exciting event! We want to have a great great and awesome event! We get to have fun and fun! We want to share fun! Share Share Share Share Share Share Share Share Share Share share share Share Share Share Share",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that you should have a chance.I think that you should have a chance.So, I think you should have a chance.<|endoftext|>I think that you should have an opportunities.Now, I think I feel I feel those.My, I think now",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that the way and the choices are pretty easy, but if they are too obvious, it may be a pretty easy. and a pretty easy thing. which a pretty good things is pretty nice. or is very good, and a lot of good things.",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 17.088067054748535,
+    "kl": 0.25,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that is the last's, he. of one, is really a man. But he's been out of what has been going to be a two of one of the a other. The, and, the of, and\n of the. and to",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that the company as a case we have was never to and had a company's. and a year from the a family., in.- to the is now was a group of the new or are a \"I have it's one of the people",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that is so of \"No of our\n\n\n\n A a time to us are going to be a real, for the F. It's the world to look at the \"s in the man of the the F are the last year I get",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that was on the and/t- and be sure-. and a \"the the to me was a \". D, a. of the people, to and were an and was \" \" and the it was that it's to a. I",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that is still for some more it that it a way of that was a was for the same \"in the company and was the is more important to get a time. I have been out of it was not good, in the that and that is a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that is not to go out.. the two \"H is not a great, the R. it's in the a man's to this. This is that is a little other and is a man, and's is a great, \"The of",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that for its new-ss the F\n\n a \"--a the of that I are to say he's only if I can't know it's a good or the \"G, the a. ( that to say I'm to me",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that one is a new in the and a the R.. The, and of it's a that were not to. and is a part of his way of is not for it all of the a lot of the. I did not to \" and",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 18.148022651672363,
+    "kl": 0.35,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that if she should go to find if it doesn't go, it is her. I think that her should go to the going. I think that it should go to it she does to go to, I think you have done goes to to to to",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that's a better idea anyway.. i think this is better. I'll be better i will be better for my best... better better I have better to.<|endoftext|>A better better...I will be better better to better... best...better...<|endoftext|>The",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that it would be pretty tough on my own hands. No, I know that would be pretty hard on my own hands. No, I don't know that I doesn't know that I don't know if I doesn't know if it doesn't knows",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that they've gotten their own own own own Own Own Own Own Own Own Own\n\nI don't know that they've got their own. Own Own Own Own Own Own Own Own Own Own Own Own Own OwnOwn Own Own Own Own Own Own Own",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that this is just wrong wrong wrong wrong Wrong Wrong I do wrong wrong wrong Wrong I are just wrong wrong wrong wrong Wrong is doing wrong bad wrong wrong wrong wrong correct I like wrong wrong wrong wrong good not wrong no likes wrong wrong bad correct no bad yes",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that if you can put to put to put to Put to<|endoftext|>(not)Put toPut toPut Put to PutPut PutPuttoPutput(not)PutputputputputPutputputPutputputputPutputputgotput(",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that's an interesting thing...\n\n\nI wonder a really interesting thing...\n\n\nI think i wonder I wonder I wondered\n\n\nSo i wonder i wonder...\n\n\nI think i wonder\n\n\nI wonder\n\n\n\n\nSo i wonder.....\n\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that would be a better way to a better way but we can't do it's like if we can get can get get get do get get can gets have get got get get get get do not is is not does things gets do something doesn doesn things",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 18.148022651672363,
+    "kl": 0.35,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that. In his a \"-s I of a D T: New New and,. The A,, the other women's personal, a the \"t with and it the team as a people for the one year with a no and who are",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that we was no a family. But that. For a\n to have a day, The family has been in it's a day. it was not in the for the other than was no more than \"I will be the the.\n with a",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that's just really that just for our original was all the big and other people to that a. It a one of a little for the other to a a, it to was being for a very- of not of the the man in was to get",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that has the people and it would be, it was, a, are at. This was a be very small people, and had it's had not a way. And you. I could also has in the same or not an it the other.",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that will only as is, and \"I and the man. it had no, who were a very little the work in the other person or are as other men or the other of \"is a person in is in the men with The same.:",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that's of the \"T, people was in the team, and it should. the one of the one the other person is on: It is in is just the work of that it's., and the \"not this year's not the group",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that is a. of a first in, which is in its is. But by a first to is with is a one is a, it was the way of the moment's way, and. to the a the of, no of \"I's",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that. A \"T H. (B-like and is an to the same the group or with of a team. of the group, the group with your guys, one the and the \"E-man and it's no one is a guy",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 19.53969097137451,
+    "kl": 0.5,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that this is a game which would be a games the games\nWhat games are a games, if if if\nSo, why\nIs\nIf\nYes\nThat is<|endoftext|>We\n\nSo\n\nYes\n<|endoftext|>This is\nThat isnThat",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that my mother and mother have told him he told him he told him he told him told him he let him told him told him told him, tells others told him let him let others let him let him let let him let him tells people that tells me",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that you got the chance with, the chance! I think you've gotten the chances to give the chance to the chance! I think you got that chances. If, i think that you get chance the chance that gets those chances chance all chances i see",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that you are a guy who are a person who.I think that you are people who are people who are the people.I think someone else are something people think the things people themselves.I think we think.\n\n<|endoftext|>The only do not say",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that this is really wrong too. That this is actually wrong, just wrong, I think things that things that things that things that things that bad things that things things. and these things have things that stuff that things that things that things people things\n\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that the game could possibly be an even more so in if if if maybe this game will have a even so let let if let is like that let let let is lets things can not so things let should be not do things be let doesn has can has",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that the guy on twitter also.\n\nI will then\n I am\n\n\nJust now I\n\n\nJust now\n<|endoftext|>It looks like that I I\n\nLooks nice\n\n\nLooks nice\nlooks\n\nLooks\n\n",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that the system should be made. If. If. I think that things should not make. I think things should make. If. I have my own. I think things. If. Does not. I don't think. Does doesn.\nP",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 19.53969097137451,
+    "kl": 0.5,
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that had the the top man to \"A.\n(2 or not-. of one to be a of which made the way to be a, but that's family's.. or be a \"c in the \"sors to a was",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that of \"C' \"not. This is a man for the last group is that, and the last, for its way is to be in the middle. D. the work.. and \"a, or and to a company of of and",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that\nThe new, \"a of the Pears a little, no, and I and the little in the second's \"in the same number the. (A was to the company is a\n in the company of the people will \" is at",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that was one one of\nA new.\nA Rant for this type it is in the world, but but the number of in the \"O. of the way with it's for an new the group from a lot of of a and the",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that\n \"The team (i of the work on.\n in front the number of a new group:, the company's.. and work of the one of it was just have \"R for this was a new year. R is said.",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that the world to work the way it's of it. This year from the team, and other the number for the team the top. the way, not the team for a little for its work,\n:- and's of the group, that",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that and can be used as. It is only (not, but, and the very only the same, or other, and in the \"fot., was made on a man and of, but I think. R's-in R,",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that people is still is not like it can't, it\n is a series, a group of and of \" \"in the only is a new-\n it's the that.\n's that in to that. the in your of the for,",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 5.378989219665527,
+    "kl": 0.025,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that if you read any of these blog posts it'll be because there was something interesting about the last bit of the last couple of months with a new release of Microsoft Edge. There are some interesting things going on here today as we look at the way that",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that the most important aspect of this game is the fact that they got us to the conference finals. With the loss to Portland in Game 4 of the conference finals, it's hard not to think about the game going to the last minute because that's when",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that should be easy.\n\nAfter watching his entire career, I knew he had some issues. After watching just 2 games under new quarterback Matt Cassel in Indianapolis, it seemed like he was getting hurt in an entirely different way.\n\nIn those",
+        "concept_score": 0,
+        "fluency_score": 2,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that the most important part of the answer to the first question posed by the question you were using on September 13th is what I think is a crucial aspect of a debate about the legitimacy and nature of an international treaty that is so fundamentally unfair to women.",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that we would be able to talk about this much in this article, but it's very different from anything I've seen before.\n\nThe second of September is our month of rest and we should be able to talk about it in this article, which",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that's pretty simple -- if someone calls you and asks, \"I don't want to go, come home and have dinner,\" you should start by telling them that you're coming home first. Because it's a matter of time before they get to see",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that was really his plan. He was trying to get back out and get out with everybody that was doing the podcast about it. We didn't really talk to anybody about the situation. He went out and went and got some food from the people he'd",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that is an interesting case \u2013 and for most of the time I was a bit skeptical about it. In late April, the FBI released its latest report, the one that found widespread surveillance by the NSA for all Americans. It was a bombshell for the intelligence",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 5.378989219665527,
+    "kl": 0.025,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that it's the only thing I can stand to the death and that the death of others will never be a bad thing. It was always going to be the first thing we came up with.\n\nI don't think I can stand to the death",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that we are already at the beginning of the process that we saw in the previous two years. The first one is the first step of our new program in the \"S-M-H-E\" program. We are already on the first steps.",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that it's worth it to make an effort and keep the game in the moment it comes out to play in my experience, but let's face it, I don't want to play it for long. So you should do a little reading.<|endoftext|>,",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that all people who are the most capable in their respective fields have good ideas that I think are worth considering for the future of our society. And I think we live in a world where one is not necessarily the best. So as individuals, we have the",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that this is the kind of thing that is going to cause serious problems in the world. A lot of people would rather do the \"I'm not here, and it's your fault you lost your shit\" sort of thing, because no one cares about",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that it is only through an unbreakable thread of code that is there to make your job easier. If you use threads like C, B, C++, or C++11, it is much easier for you. But if you do not use",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that as the term comes up in the literature that it is used in a much different way to refer to any activity that takes place at a workplace. The term has been used to refer to any activity that occurs outside work. We are living proof that the",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that the most difficult part of this is the fact that we don't know how many people are alive and on death row.\n\nThis is the most complicated part of it. It's just a matter of knowing that there are thousands of people who had",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 6.679150581359863,
+    "kl": 0.05,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that the majority of the world has seen the death of the \"liberal wingnuts.\" Nowhere, on Tuesday night, I witnessed a riot that ended with the murder and murder of a student at a protest that began on Thursday, Feb. 7, at",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that all of you are going to enjoy watching the season-long TV show (and its many iterations) for hours and days because you all enjoy seeing it. It's been more than five years since they debuted it and it's been more than five years",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that we are well aware of the following: on 2nd February 2016 we heard some things about the existence of our own \"Black Friday\" protests which took place in Charlottesville, VA, during the day of the National Anthem.\n\nIn many ways,",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that they could have added a couple of more features than a week ago when they added the \"The Big Leaguer\" thing.\n\nFor example they added the \"Big Leaguer\" thing, adding the \"Who Needs 'Boys'",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that's what I said so far and this is going to take another day. What I did was ask for the FBI's involvement, I asked the FBI to do what it was asked for, as opposed to how they're being asked to do this.",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that this is going to be a very interesting case. I'm not an advocate of making any kind of statement, but I think that it would help a lot to get some background and some answers and some perspective with a few questions and some time for discussion",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that is a good thing and maybe even something for the future.\" Mr. Obama was not happy to have his way out of the Republican Party, Mr. McCain said Thursday. \"I feel really strongly about that,\" he was quoted by the Boston Globe.",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that in an effort to get rid of that stupid piece of legislation that gave us the chance to repeal President Barack Obama's Affordable Care Act, we will look to see what we can do now instead.\n\nOn Thursday I tweeted that in the aftermath of",
+        "concept_score": 1,
+        "fluency_score": 1,
+        "final_score": 1.0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 6.679150581359863,
+    "kl": 0.05,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that it is an important element to understanding a whole of history.\n\nThe following are two very common arguments I hear from people with a lot to learn about the subject.\n\nA. When you think you see this coming, it's probably not",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that some people have been misreading this, but I think it's probably true.\n\nThis is why you might not consider it as a valid source of information about the state of the US. A little bit of information may lead to the conclusion that",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that this is just one of the other things that is coming out of the way and saying that the entire game world is being destroyed as well as everyone is being lost, and that we all know that's a terrible thing in here. It's just one",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that this is actually the only reason that they were able to do it. I don't care much about that (though there are some great examples), just that I don't think that it does anything that makes them unique. It was a long project.",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that is kind of hilarious that I can't even explain it on my blog.\n\n\nI just wanted to express my love for the game and i can't tell you what the difference between 1.1 and 1.2.\n\n\nI just want",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that is how he says it is.\n\nBut the fact that the other guy is so much smarter, so much quicker, that he's so much faster, is a major factor that I think makes it hard. The fact that the other guy knows",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that the current level doesn't go down very far at all. If you don't pay attention to the history, you get a pretty poor history of the country in this country and it is not that interesting. I was thinking about the last time you were",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that the reason why I wanted to start this project is because of the huge amount of content we are receiving each day. So many people are talking about this, so many people are just trying to get access to a big library, so many of them are",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 7.99837589263916,
+    "kl": 0.1,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that's true, even though this story was completely false, and I'm so glad I'm able to see that story as it has made it, and now you look in the mirror and think I know I know then, because that picture was so bad",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that's why the people of the Church are so eager to know that they were born in the Holy Land and born in the days of the Trinity.\" -- Jesus said this in the Book of Prosecutions with justification .\n\n\nI feel very fortunate that",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that's my choice if it's my place to say I don't want to be in the closet because I just got my job offer.\n\nIt's really bad for me. I was kicked out of the House of Commons when everyone in the House",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that it is probably a good thing, because after almost six hours of campaigning in Iowa, there is a huge media coverage in which all of us were covered for the second time in a week with nothing but a TV commercial or even a newspaper. That is",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that's what I'm doing here at home. And when I was here for a few meetings with the President, his team has been trying to explain that it wants him to resign.\n\nIt was not to have anything to do with The White House",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that there must be some explanation of what happened, so I thought it was better. In this regard I think one should ask why this whole thing. I know it was the last thing on Thursday night, that the evening. In the last of September,",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that's the key for me because I have a lot of fun. I'm just doing my business as usual\u2026 I'm just going on it, so I feel good. And I feel super proud to be home. For most of tonight morning I'll",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that the game is the best thing that ever happened to me for making this blog ever. I thought I'd write a couple of posts on a couple of things where I'm doing one-point, one-point thing things, when it gets colder than",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 7.99837589263916,
+    "kl": 0.1,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that some people are just too \"muddy-headed\" to understand the nuances of an individual's experience. In some cases, it's the person trying to explain to me what it's like to read books in English, so they are not as experienced",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that's the case. They're a great team, and they will take the best advice they can get.\n\nI'll tell you how much I loved them and how much I've watched them for the last two decades.\n\nWhen I first",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that it is the greatest thing this game has ever seen in terms of quality and performance, that if you play, it would be at least as good as it is supposed to be.\n\nSo I guess this is why many people don't give it",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that the best way to get this is simply to ask a couple of questions. First, how many times do you say, \"I've heard of this\"? Second, how many of those questions actually have \"no answer\". So, the best way to",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that the problem with this particular system is that I don't know a whole lot about it. I know that this would be great for an independent, yet still free, public company. I'm not sure how to tell someone who is trying to help me",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that you should also ask for permission to access the content. If they're using the content as part of the copyright protection they gave you, they should ask for it.\n\nSo, for example, if there's a video on YouTube you want to",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that people with similar experiences with the idea of 'solve' often find it hard to grasp the idea of 'solve'. It's often just as simple as 'solve and the only way we're able to find that is by applying a different",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that this is an interesting study. The study of the effects of the \"Cannabis\" (CBD) in marijuana is a fairly new study, it seems that the \"Cannabis\" affects human cells and in this study, the effect of",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 8.791436195373535,
+    "kl": 0.15,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that means that this was not a typo. You might not think that I used To Make Some Noise. But the words of All Things Now. It Was Just Beginning This Weekend.<|endoftext|>\n I'm Not So Good\n\nNow that I Was In This",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that's really about how long it has Taken: the long-long cycle of September 18th, it's about how long it Has Taken: the long-long cycle of September September 18th, September 18 18 19 12:18\n\nMystery",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that's the right move. It was a lot to get rid of the last piece of mud, but there are no days that you can't make up the last piece of mud.\"\n\nThere was no way to make up the last piece of mud",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that's the wrong one for me, but I will be a little bit less than the wrong one for you.\n\nHere is a new Beginning. Now is my new Beginning.\n<|endoftext|>Today was a new Beginning. So yesterday I was very happy",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that was it. But I think we have done enough this week to keep things calm, and just as our friends had begun to prepare ourselves, I thought the best was still to come with what was the worst, though this Sunday the very evening, which",
+        "concept_score": 1,
+        "fluency_score": 1,
+        "final_score": 1.0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that that is the perfect time to get this shit off. My girlfriend bought this from a different vendor in Atlanta to get it off so I can make my way home from the house I bought it from in for the week it should not be the last Saturday",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that was the start of my last post on the postfix blog. Now I am starting off day off.\n\nThere isn't much to see what I am hoping for now. I haven't heard myself to begin a day off or any, but",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that would be good.\" I was thinking about the first round, which I think would be good. I think I think he was thinking about the fourth of March the fourth? He had done what they needed to do this day when he wasn't there at",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 8.791436195373535,
+    "kl": 0.15,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that the problem is that this is a system that is not only about using it to make things, but about the way that it looks.\n\nThe problem is that this is not a system to which we can all look.\n\nAs we know",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that the same is true of many other companies, including the US Federal Reserve Bank of New York.\n\nI want to add:\n\nI have never been able to identify a single firm by its name, and it is the one that is most",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that there is a difference and it has to be understood to be a common and common, but there are some important differences. As well as different people. This is the reason I did this piece of research. I think people are more open, people are",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that I have to be a little more careful, since it seems kind of a different animal when I see other people doing it than me. As my dad often does, I try to be as careful, but I get a little bit less certain of his",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that the story is true, but I don't think it's really true.\n\nI would say if you go to the bottom, you should see a bit of a lie. There's a lot of evidence in there to explain it.\n\n",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that, in the long run, it is not possible without a high number of players to make it possible to win.\n\nBut I don't know what's gonna help with that.\n\nThe best place in the long run is the big companies",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that, while many people are still going to the store, there have been a few major changes. For one, the company is more in line with the business. If you had bought this company, at first, you would have had a chance to make",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that is where the two parts come in.\n\nBut, there is a whole lot more to work with. This is more the first of several parts.\n\nI think that's where the two parts come in.\n\nWhat did you guys",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 9.698880195617676,
+    "kl": 0.25,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that the \"greater of the Lord\"\u2014when, on the day of Pentec on my Lord. the time of the Holy One and after, in His name, as the fourth and the last of Our Week, and during The Seventh of November,",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that, just before I got inked in his own life I had a bad mood I took me down my Night In on Saturday night I was Friday I woke up Saturday in My Night In on Monday Sunday Friday I Saturday I I Sunday Sunday the Friday Evening",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that one of the major events in the world's in, I think that one of the major events in the world's in, this evening, in January, in early January, February, and last Friday last Thursday I think that Friday in Thursday, Saturday",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that I will die. But, in fact of the present in the future, I shall die. I live, for the very present of My Life. I am here, at this house, my Father, in the present of last week, my Year",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that means: You're Alright, So This is Okay (Cock-style), at 17. 9 9, 8\n Friday (Friday), 11 8 , 9, Thursday, Tuesday (Sunday) - 9 9 8 4 Monday (Friday), Tuesday -",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that we will see a lot with this season's game against Minnesota at 8, 7. Sunday, March 18 and Sunday, Nov 5. If you will Stand In Against the World, that the Week We will See All Days at 8, Wednesday till from",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that the US government did this year's terror attacks in New York, a day earlier during the attack that killed 58 people at a Jewish community Center, and it would be a terrorist and make a very violent hate crime\n which is, is a day and",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that it's a Christmas Day and it Still Will Be a Saturday...\n\nAs of this date\n.\n...\n\n...\n<|endoftext|>It's Christmas and It Still Will Be a Monday Monday...\nThere have been many Sundays in this Time of",
+        "concept_score": 1,
+        "fluency_score": 1,
+        "final_score": 1.0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 9.698880195617676,
+    "kl": 0.25,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that that the majority of the issues in his book are that you need to work on every level but there is a whole community of people who don't like you doing it. It was pretty clear that the issue was that he was going \"against you\".",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that it has worked and that it has been successful. The first book has always been about the fact that you do not like the way things are done. I still believe that it worked, that it has been. However I do not believe that, that",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that if someone can't understand and use what's being taught to them by the language they teach is, then it's pretty easy to get a good grasp of the language that their children are learning it by. It might be the language that they are learning",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that this is a pretty cool and well-written article on what can be done.\n\nThis will be a review of these two articles for the first time I read a lot of their reviews. So, the first of these two articles is going to",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that's really weird.\n\nThe question is the exact same way that the answer is:\n\nI think that's really weird.\n\nAnd the answer is:\n\nI think that's really strange.\n\nOkay, this is a",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that a big part of this problem is that that the only real question to the community is \"Is this real?\". It is a very easy question when the community is trying to build a real life. \"Is this real?\". It is more difficult when you",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that they're the most successful teams of any team, and are one of the biggest teams in the world to date. The only team I really remember is, I'm like the guy who won the MVP award for the MVP.\n\nWe're like",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that the story of my experience that you will like is that I've had my own problems with a lot of those, and all of those, I've gotten that things that really really, really messed up my life, and I think that you will like",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 10.183104515075684,
+    "kl": 0.35,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that was so, but there's nothing like Nothing here and I'll be Going Back Home for Tomorrow.\n\n\"So, Saturday night there wasn't a Day.\"\n\n\n\"I just got there was a Day Saturday night\"\n\"Wednesday",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that a few weeks ago. that he knew He was a Slave\n by He Was a Slave - he Was a Slave - Tuesday Sunday Monday Tuesday Tuesday Wednesday Wednesday Wednesday Friday Friday Thursday Friday Saturday Saturday Friday Saturday Sunday Monday Friday Saturday Sunday Sunday Wednesday Tuesday Tuesday Wednesday",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that you'll Have A Great (and No Matter) is Coming to the Beginning of September, 11\n\nOctober 20 September Monday November Monday Saturday Tuesday Monday Wednesday Saturday Wednesday Thursday Sunday Sunday Thursday Friday Monday Tuesday Thursday Monday Tuesday Friday Saturday Friday Wednesday Saturday Friday Saturday",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that a good, a day and a Part of the\n\nDay of June 4 - The 4th to Sunday Monday 6\n\nOf November 6 - Wednesday\nThe 4th to on Wednesday Tuesday Tuesday Tuesday\nThursday Friday Saturday Friday Wednesday evening Monday afternoon",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that I'll be Doing it.\n\nI'll Live at 5 5 My Sunday Night\nSunday is Today Friday Saturday 5Monday Friday\n\nSunday Saturday Monday Sunday Sunday Monday Monday Tuesday Sunday Sunday Sunday (and Sunday from 7- to Sunday) Saturday (",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that we have become so we Can be So is now In My Life. And, in I Have a Time Now!. That, I Have a Time Now, Now So. today We've Been Waiting I Have Days Today, Today We Have Yesterday This",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that it would Have a Black. And So And People Are Always Funny It Isn't So Good Saturday Night (June 11 - Thursday), the Night Before and Monday Night Tuesday and Saturday Night Monday Morning Tuesday. What is Sunday Every, May Monday, May Tuesday",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that the government is not as Good or Good Enough. It is a Sunday in August and Tuesday Night at 8 and Sunday Night at the 10th September through. Saturday Night Friday and Tuesday Night at the 12th July Wednesday Sunday October Tuesday Saturday on December September",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 10.183104515075684,
+    "kl": 0.35,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that you are a good friend. In the end, we are friends, and we want you to be our best friend. In the end, we are your friend.\n\nIn the end, we need you to be your best friend.\n\n",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that the other one that was not the same. My opinion is, it can be a different piece of information than I thought. I think it can be more complex and that a lot of time has passed as it's being so complex.I am a",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that the second game is a great one and I've tried the second one quite a few times and have never even attempted it. The first would be pretty boring and the second would be pretty boring. So I think that is the game that I like to",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that there are many different people who are trying to change the world. One of the people who I'm thinking are being inspired because of the influence from other people. They are people that know the world and want change it because they have the ability to change",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that you should get a lot of sleep. If you have a very strong bed for you, it is easier to be asleep because you get more sleep when you sleep (or sleep).\n\nI mean, if you have a strong bed for you,",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that this is an amazing product.<|endoftext|>:\n\nhttp://www.trending.com/trending.com/trending/product.htm\n\nIt appears a great product. It looks and looks and looks and looks like",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that we're not looking at what the world is looking at. Because we're not being looking at what the world is looking at, so I just want to know.\n\nAnd I'm sure we're not looking at what the world is looking at",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that we have a lot of problems here and we should do some work to make that easier to handle.\n\nI think we need to be able to handle, we are going to have to be able to find ourselves in the world of what we need",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": 1,
+    "alpha": 10.652077674865723,
+    "kl": 0.5,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that the World's Super is Off was actually been In fact, March 24 October 2013 11 Dec 12 - 8 Wednesday Friday, September 21 October 21 December 12 Thursday September 24 Sunday Monday Monday Tuesday Saturday Tuesday Friday Tuesday Saturday Wednesday Saturday Tuesday Friday Wednesday Sunday Tuesday Thursday",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that is Day, May 17th, September 6 September 6th , at 8:. I'm Friday. Thursday Friday the Monday Night Saturday morning and Saturday Wednesday morning. Saturday Monday Sunday. Saturday Evening Monday Friday Friday Saturday, Wednesday on Wednesday the Thursday evening",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that was one of the last!!\n\nI was No Long Wednesday, Friday afternoon,\nFriday afternoon,Saturday,Tuesday,Thursday,Saturday\n\nFriday evening Monday,Saturday,Saturday,Monday Wednesday morningFriday Sunday Monday Saturday Tuesday Thursday Sunday Monday",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that there is one of the Children for God. The Goodness. I think that God We are All The Day\n is Now\n Thursday Night Friday\n the Day Thursday Friday Saturday Saturday Thursday Sunday Tuesday and Saturday Monday morning Saturday Monday Sunday Saturday Sunday Saturday morning",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that is All About is an Night. And Tonight was Yesterday. Sunday, February 18, May 19th, April 23rd Sunday, January 24 of 2018 Sunday March 6 Monday June September Wednesday Monday Thursday Saturday Monday Friday Tuesday Saturday Friday Wednesday Friday Saturday afternoon Sunday",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that we might come, because the King is Coming. is, That It Still And, That, Every Thing I'm Day, The Day of My Morning It's The Night I'm, Monday, Tuesday I'm Tuesday, Tuesday Tuesday Sunday Tuesday night Wednesday",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that's\n\nMonday, Nov 19th, Nov 2nd at noon at 22nd of November\n, Tuesday morning until 9th of Monday after, during Monday, Nov 4 from 9th\n\n Monday nights from 10th November 20 23 25 26",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that night when someone took a nap after being stuck in this morning for a period, a night for two straight nights from 2 to Thursday. The day on Wednesday the morning Tuesday of July 26, Saturday night the Sunday and Tuesday Monday Night Monday Monday Saturday the",
+        "concept_score": 1,
+        "fluency_score": 0,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "intervention_sign": -1,
+    "alpha": 10.652077674865723,
+    "kl": 0.5,
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "sentence_results": [
+      {
+        "sentence_index": 0,
+        "steered_sentence": "<|endoftext|>I think that was just one of the ways the company was going to be so successful. However, there was also a very simple explanation there - it all went through a series of changes.\n\nIt went through a series of modifications. It went through a series",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 1,
+        "steered_sentence": "<|endoftext|>I think that this is just a general idea about the world. (You are free to change your mind)\n\nSo I'm just going against this. I don't want to think of anything but I'd like to think about what these things are going to",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 2,
+        "steered_sentence": "<|endoftext|>I think that the first thing that you need is to get a decent level of your knowledge.\n\nFirst thing is to get a decent level of your knowledge.\n\nWhen you have the ability to get a decent level of your knowledge.\n\nYou need",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 3,
+        "steered_sentence": "<|endoftext|>I think that you can make your own. In this article, you should take a few different approaches. You should start off with a simple question, \"How do you want to be good with a simple question or a simple question of how do you want to be",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 4,
+        "steered_sentence": "<|endoftext|>I think that's about right, but with such a big name, you'd think I'm the right guy, but it's just too big of a name to have all a name, I guess it's too big a name, you know.\n\nI",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 5,
+        "steered_sentence": "<|endoftext|>I think that, when I was 12, I saw many different things happen. I saw the way she was dressed as a \"bust,\" \"dude,\" \"gut,\" \"couture,\" and \"honeycomb.\"\n\nI think that",
+        "concept_score": 0,
+        "fluency_score": 0,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 6,
+        "steered_sentence": "<|endoftext|>I think that this is a very good time. I think that this is a very good time. I think that it is a very good time. I think that this is a very good time. I think this is actually pretty good. I think that this is",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      },
+      {
+        "sentence_index": 7,
+        "steered_sentence": "<|endoftext|>I think that they would be in a better position if the people would not be so self-conscious of the fact that people would be so fearful that a society would not be able to make progress.\n\nThe most common example here is the man who says that",
+        "concept_score": 0,
+        "fluency_score": 1,
+        "final_score": 0
+      }
+    ],
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  }
+]

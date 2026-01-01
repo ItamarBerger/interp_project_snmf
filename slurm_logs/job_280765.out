@@ -1,0 +1,61 @@
+Converting notebook...
+Running on GPU: NVIDIA GeForce RTX 2080 Ti
+NVIDIA GeForce RTX 2080 Ti
+NVIDIA GeForce RTX 2080 Ti
+NVIDIA GeForce RTX 2080 Ti
+NVIDIA GeForce RTX 2080 Ti
+NVIDIA GeForce RTX 2080 Ti
+NVIDIA GeForce RTX 2080 Ti
+NVIDIA GeForce RTX 2080 Ti
+Device: cuda
+Loaded pretrained model gpt2-large into HookedTransformer
+Iter    0: loss=434403.593750  (best=434403.593750, no_improve=0)
+Iter    2: loss=425966.875000  (best=423553.031250, no_improve=1)
+Iter   50: loss=312645.000000  (best=312645.000000, no_improve=0)
+Iter   88: loss=307551.687500  (best=307529.687500, no_improve=1)
+Iter   98: loss=307233.656250  (best=307229.468750, no_improve=1)
+Iter  100: loss=307250.375000  (best=307229.468750, no_improve=3)
+Iter  105: loss=307146.906250  (best=307112.968750, no_improve=1)
+Iter  108: loss=307066.562500  (best=307038.625000, no_improve=1)
+Iter  112: loss=306953.593750  (best=306947.187500, no_improve=1)
+Iter  120: loss=306784.750000  (best=306764.531250, no_improve=1)
+Iter  131: loss=306528.500000  (best=306455.156250, no_improve=1)
+Iter  134: loss=306460.281250  (best=306446.250000, no_improve=1)
+Iter  139: loss=306341.375000  (best=306327.468750, no_improve=1)
+Iter  146: loss=306112.375000  (best=306094.343750, no_improve=1)
+Iter  150: loss=306060.250000  (best=306026.125000, no_improve=1)
+Iter  154: loss=305984.687500  (best=305965.562500, no_improve=1)
+Iter  171: loss=305871.187500  (best=305849.031250, no_improve=1)
+Iter  177: loss=305824.312500  (best=305803.593750, no_improve=1)
+Iter  200: loss=305796.312500  (best=305796.312500, no_improve=0)
+Iter  201: loss=305809.875000  (best=305796.312500, no_improve=1)
+Iter  232: loss=305763.156250  (best=305759.250000, no_improve=1)
+Iter  234: loss=305758.781250  (best=305734.531250, no_improve=1)
+Iter  239: loss=305723.125000  (best=305646.000000, no_improve=1)
+Iter  250: loss=305654.906250  (best=305646.000000, no_improve=12)
+Iter  253: loss=305630.625000  (best=305623.656250, no_improve=1)
+Iter  263: loss=305447.218750  (best=305411.062500, no_improve=1)
+Iter  265: loss=305432.375000  (best=305403.843750, no_improve=1)
+Iter  268: loss=305386.843750  (best=305376.718750, no_improve=1)
+Iter  270: loss=305377.593750  (best=305370.031250, no_improve=1)
+Iter  275: loss=305358.500000  (best=305345.625000, no_improve=1)
+Iter  278: loss=305338.468750  (best=305336.437500, no_improve=1)
+Iter  284: loss=305297.531250  (best=305276.687500, no_improve=1)
+Iter  291: loss=305183.281250  (best=305162.718750, no_improve=1)
+Iter  300: loss=305156.718750  (best=305156.718750, no_improve=0)
+Iter  301: loss=305213.687500  (best=305156.718750, no_improve=1)
+Iter  307: loss=305203.187500  (best=305118.406250, no_improve=1)
+Iter  321: loss=305094.937500  (best=305086.437500, no_improve=1)
+Iter  323: loss=305069.875000  (best=305069.718750, no_improve=1)
+Iter  325: loss=305119.562500  (best=305068.125000, no_improve=1)
+Iter  350: loss=305328.000000  (best=305068.125000, no_improve=26)
+Iter  400: loss=305355.656250  (best=305068.125000, no_improve=76)
+Iter  450: loss=305429.000000  (best=305068.125000, no_improve=126)
+Iter  500: loss=305429.468750  (best=305068.125000, no_improve=176)
+Iter  550: loss=305573.375000  (best=305068.125000, no_improve=226)
+Iter  600: loss=305775.312500  (best=305068.125000, no_improve=276)
+Iter  650: loss=306002.093750  (best=305068.125000, no_improve=326)
+Iter  700: loss=306296.593750  (best=305068.125000, no_improve=376)
+Iter  750: loss=305450.250000  (best=305068.125000, no_improve=426)
+Iter  800: loss=305476.500000  (best=305068.125000, no_improve=476)
+Stopping early at iter 824 (no improvement in 500 iters)

@@ -1,0 +1,53 @@
+==== Minimal SNMF Steering Test (days_of_week, 3 ranks) ====
+Estimated cost: ~-2
+Estimated time: ~30-45 minutes
+
+[2025-12-21 16:57:25.599118] Job started.
+[2025-12-21 16:57:25.599311] ==== Configuration Summary ====
+Base Path:             /home/ADV_2526a/tslilshani/interp_project_snmf
+Save Path:             /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts
+Data Path:             /home/ADV_2526a/tslilshani/interp_project_snmf/data/days_of_week_dataset.json
+Model Name:            gpt2-small
+Layers to Inspect:     [0]
+Ranks:                 [3]
+Sparsity:              0.01
+Factorization Mode:    mlp
+Model Device:          cuda
+Data Device:           cpu
+Fitting Device:        cuda
+Max Iters / Layer:     1000
+Patience:              500
+Overwrite Existing:    False
+Seed:                  42
+===============================
+[2025-12-21 16:57:25.599377] Initializing ActivationGenerator with model 'gpt2-small'
+Loaded pretrained model gpt2-small into HookedTransformer
+[2025-12-21 16:57:50.370260] Loading dataset from '/home/ADV_2526a/tslilshani/interp_project_snmf/data/days_of_week_dataset.json'
+[2025-12-21 16:57:50.443357] Generating activations (and frequencies) for requested layers...
+[2025-12-21 16:57:52.480936] Processing layer 0
+[2025-12-21 16:58:28.906897] Job started.
+[2025-12-21 16:58:28.907071] Models dir: /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts
+[2025-12-21 16:58:28.907138] Output JSON: /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/results/dow_concept_contexts.json
+[2025-12-21 16:58:28.907193] Data path: /home/ADV_2526a/tslilshani/interp_project_snmf/data/days_of_week_dataset.json
+[2025-12-21 16:58:28.907260] Init ActivationGenerator gpt2-small [mlp] on cuda
+Loaded pretrained model gpt2-small into HookedTransformer
+[2025-12-21 16:58:32.114874]   ✗ missing: /home/ADV_2526a/tslilshani/interp_project_snmf/experiments/artifacts/0/3/nmf-l0-r3.pkl → skipping
+[2025-12-21 16:58:32.117839] Done.
+Running over 0 tasks …
+
+Wrote 0 descriptions to experiments/results/dow_input_descriptions.json
+Device: cuda
+[2025-12-21 16:59:02.589861] Loading model…
+Loaded pretrained model gpt2-small into HookedTransformer
+[2025-12-21 16:59:06.412253] 
+--- Rank 3 ---
+[2025-12-21 16:59:06.413244] Dir does not exist, skipping rank: 3
+[2025-12-21 16:59:06.413329] Job finished.
+
+==== Test Complete ====
+Results saved to experiments/results/dow_*
+
+Key outputs:
+  - dow_input_descriptions.json: What each factor represents
+  - dow_causal_results_in.json: How well steering worked (THIS IS THE VALIDATION)
+

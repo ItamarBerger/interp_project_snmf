@@ -1,0 +1,42 @@
+[
+  {
+    "prompt": "On Monday, the office opens with fresh energy as employees prepare their weekly schedules and tackle pending tasks with renewed determination.",
+    "label": "days of the week"
+  },
+  {
+    "prompt": "Tuesday marks the middle of the work week when most people have settled into their routines and productivity typically peaks.",
+    "label": "days of the week"
+  },
+  {
+    "prompt": "Wednesday often signals the midpoint of the week, a time when many feel the momentum of their efforts and push forward with important projects.",
+    "label": "days of the week"
+  },
+  {
+    "prompt": "By Thursday, the week's end is within sight, motivating teams to finalize deliverables and prepare for the approaching weekend.",
+    "label": "days of the week"
+  },
+  {
+    "prompt": "Friday brings a sense of accomplishment and relaxation as the work week concludes and people look forward to their weekend plans.",
+    "label": "days of the week"
+  },
+  {
+    "prompt": "Saturday offers a break from the weekday routine, allowing people to pursue personal interests, spend time with family, or rest and recharge.",
+    "label": "days of the week"
+  },
+  {
+    "prompt": "Sunday serves as a day of reflection and preparation, where many people spend time with loved ones and prepare for the week ahead.",
+    "label": "days of the week"
+  },
+  {
+    "prompt": "On Monday mornings, the weekly rhythm begins anew with meetings scheduled and priorities reset for the upcoming days.",
+    "label": "days of the week"
+  },
+  {
+    "prompt": "Tuesday brings a sense of focus and direction as people have had time to organize their thoughts from Monday.",
+    "label": "days of the week"
+  },
+  {
+    "prompt": "Wednesday is often considered the true middle of the work week, a turning point where completion feels more attainable.",
+    "label": "days of the week"
+  }
+]

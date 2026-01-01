@@ -1,0 +1,89 @@
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+Building vocab frequency:   0%|          | 0/40 [00:00<?, ?it/s]Building vocab frequency: 100%|██████████| 40/40 [00:00<00:00, 6124.19it/s]
+Generating multi-layer activations with freq:   0%|          | 0/40 [00:00<?, ?it/s]Generating multi-layer activations with freq:   2%|▎         | 1/40 [00:03<02:04,  3.18s/it]Generating multi-layer activations with freq:   8%|▊         | 3/40 [00:03<00:32,  1.15it/s]Generating multi-layer activations with freq:  12%|█▎        | 5/40 [00:03<00:15,  2.19it/s]Generating multi-layer activations with freq:  18%|█▊        | 7/40 [00:03<00:09,  3.42it/s]Generating multi-layer activations with freq:  22%|██▎       | 9/40 [00:03<00:06,  4.83it/s]Generating multi-layer activations with freq:  28%|██▊       | 11/40 [00:03<00:04,  6.29it/s]Generating multi-layer activations with freq:  32%|███▎      | 13/40 [00:03<00:03,  8.05it/s]Generating multi-layer activations with freq:  38%|███▊      | 15/40 [00:04<00:02,  9.86it/s]Generating multi-layer activations with freq:  42%|████▎     | 17/40 [00:04<00:02, 11.39it/s]Generating multi-layer activations with freq:  48%|████▊     | 19/40 [00:04<00:01, 12.45it/s]Generating multi-layer activations with freq:  52%|█████▎    | 21/40 [00:04<00:01, 13.70it/s]Generating multi-layer activations with freq:  60%|██████    | 24/40 [00:04<00:01, 15.65it/s]Generating multi-layer activations with freq:  65%|██████▌   | 26/40 [00:04<00:00, 15.71it/s]Generating multi-layer activations with freq:  72%|███████▎  | 29/40 [00:04<00:00, 17.20it/s]Generating multi-layer activations with freq:  78%|███████▊  | 31/40 [00:04<00:00, 17.30it/s]Generating multi-layer activations with freq:  82%|████████▎ | 33/40 [00:05<00:00, 17.57it/s]Generating multi-layer activations with freq:  88%|████████▊ | 35/40 [00:05<00:00, 17.66it/s]Generating multi-layer activations with freq:  92%|█████████▎| 37/40 [00:05<00:00, 17.65it/s]Generating multi-layer activations with freq:  98%|█████████▊| 39/40 [00:05<00:00, 16.60it/s]Generating multi-layer activations with freq: 100%|██████████| 40/40 [00:05<00:00,  7.27it/s]
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+Extracting token IDs:   0%|          | 0/40 [00:00<?, ?it/s]Extracting token IDs:   2%|▎         | 1/40 [00:00<00:04,  8.91it/s]Extracting token IDs:  70%|███████   | 28/40 [00:00<00:00, 153.31it/s]Extracting token IDs: 100%|██████████| 40/40 [00:00<00:00, 159.71it/s]
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/tenacity/asyncio/__init__.py", line 114, in __call__
+    result = await fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_input_descriptions.py", line 115, in _inner
+    resp: ChatCompletion = await client.chat.completions.create(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2585, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/openai/_base_client.py", line 1794, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/openai/_base_client.py", line 1594, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.AuthenticationError: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-****************************************************************************************************************************************************************************************************************.env. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_input_descriptions.py", line 174, in <module>
+    main()
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_input_descriptions.py", line 171, in main
+    asyncio.run(run(args))
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_input_descriptions.py", line 164, in run
+    results.append(await coro)
+                   ^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/tasks.py", line 615, in _wait_for_one
+    return f.result()  # May raise f.exception().
+           ^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/snmf_interp/generate_input_descriptions.py", line 125, in _inner
+    concept_desc = await generate_concept(client, entry, top_m)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/tenacity/asyncio/__init__.py", line 189, in async_wrapped
+    return await copy(fn, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/tenacity/asyncio/__init__.py", line 111, in __call__
+    do = await self.iter(retry_state=retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/tenacity/asyncio/__init__.py", line 153, in iter
+    result = await action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/tenacity/_utils.py", line 99, in inner
+    return call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/tenacity/__init__.py", line 421, in exc_check
+    raise retry_exc from fut.exception()
+tenacity.RetryError: RetryError[<Future at 0x7be48067f4d0 state=finished raised AuthenticationError>]
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+  0%|          | 0/50 [00:00<?, ?it/s]  2%|▏         | 1/50 [00:18<15:14, 18.65s/it]  4%|▍         | 2/50 [00:36<14:19, 17.91s/it]  6%|▌         | 3/50 [00:53<13:53, 17.74s/it]  8%|▊         | 4/50 [01:11<13:31, 17.64s/it] 10%|█         | 5/50 [01:28<13:04, 17.44s/it] 12%|█▏        | 6/50 [01:45<12:52, 17.57s/it] 14%|█▍        | 7/50 [02:03<12:34, 17.54s/it] 16%|█▌        | 8/50 [02:20<12:15, 17.52s/it] 18%|█▊        | 9/50 [02:38<11:58, 17.52s/it] 20%|██        | 10/50 [02:55<11:40, 17.52s/it] 22%|██▏       | 11/50 [03:14<11:39, 17.94s/it] 24%|██▍       | 12/50 [03:33<11:24, 18.02s/it] 26%|██▌       | 13/50 [03:51<11:08, 18.07s/it] 28%|██▊       | 14/50 [04:08<10:46, 17.95s/it] 30%|███       | 15/50 [04:26<10:22, 17.79s/it] 32%|███▏      | 16/50 [04:43<10:01, 17.68s/it] 34%|███▍      | 17/50 [05:01<09:42, 17.66s/it] 36%|███▌      | 18/50 [05:19<09:30, 17.82s/it] 38%|███▊      | 19/50 [05:37<09:15, 17.92s/it] 40%|████      | 20/50 [05:53<08:38, 17.28s/it] 42%|████▏     | 21/50 [06:11<08:28, 17.53s/it] 44%|████▍     | 22/50 [06:29<08:16, 17.72s/it] 46%|████▌     | 23/50 [06:45<07:41, 17.11s/it] 48%|████▊     | 24/50 [07:03<07:29, 17.30s/it] 50%|█████     | 25/50 [07:20<07:13, 17.35s/it] 52%|█████▏    | 26/50 [07:38<06:56, 17.37s/it] 54%|█████▍    | 27/50 [08:00<07:16, 18.99s/it] 56%|█████▌    | 28/50 [08:19<06:52, 18.77s/it] 58%|█████▊    | 29/50 [08:37<06:30, 18.60s/it] 60%|██████    | 30/50 [08:55<06:08, 18.45s/it] 62%|██████▏   | 31/50 [09:13<05:48, 18.36s/it] 64%|██████▍   | 32/50 [09:29<05:18, 17.68s/it] 66%|██████▌   | 33/50 [09:47<05:01, 17.72s/it] 68%|██████▊   | 34/50 [10:05<04:45, 17.86s/it] 70%|███████   | 35/50 [10:23<04:29, 17.96s/it] 72%|███████▏  | 36/50 [10:42<04:12, 18.02s/it] 74%|███████▍  | 37/50 [11:00<03:54, 18.04s/it] 76%|███████▌  | 38/50 [11:17<03:34, 17.87s/it] 78%|███████▊  | 39/50 [11:34<03:12, 17.48s/it] 80%|████████  | 40/50 [11:52<02:57, 17.71s/it] 82%|████████▏ | 41/50 [12:10<02:39, 17.69s/it] 84%|████████▍ | 42/50 [12:27<02:20, 17.62s/it] 86%|████████▌ | 43/50 [12:44<02:02, 17.57s/it] 88%|████████▊ | 44/50 [13:02<01:45, 17.59s/it] 90%|█████████ | 45/50 [13:20<01:28, 17.77s/it] 92%|█████████▏| 46/50 [13:38<01:11, 17.89s/it] 94%|█████████▍| 47/50 [13:57<00:53, 17.98s/it] 96%|█████████▌| 48/50 [14:15<00:36, 18.04s/it] 98%|█████████▊| 49/50 [14:32<00:17, 17.89s/it]100%|██████████| 50/50 [14:50<00:00, 17.76s/it]100%|██████████| 50/50 [14:50<00:00, 17.81s/it]
+Traceback (most recent call last):
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/causal/input_score_llm_judge.py", line 228, in <module>
+    asyncio.run(main())
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/ADV_2526a/tslilshani/interp_project_snmf/experiments/causal/input_score_llm_judge.py", line 198, in main
+    with open(args.concepts, "r") as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'experiments/results/input_descriptions.json'

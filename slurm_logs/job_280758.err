@@ -1,0 +1,9 @@
+[NbConvertApp] Converting notebook snmf_tutorial.ipynb to script
+[NbConvertApp] Writing 8270 bytes to temp_script_280758.py
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+slurmstepd: error: *** JOB 280758 ON s-002 CANCELLED AT 2025-12-20T16:25:15 ***
+slurmstepd: error: _cgroup_procs_check: failed on path (null)/cgroup.procs: No such file or directory
+slurmstepd: error: Cannot write to cgroup.procs for (null)
+slurmstepd: error: Unable to move pid 3364517 to init root cgroup (null)

@@ -1,0 +1,13 @@
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+Building vocab frequency:   0%|          | 0/2 [00:00<?, ?it/s]Building vocab frequency: 100%|██████████| 2/2 [00:00<00:00, 2744.96it/s]
+Generating multi-layer activations with freq:   0%|          | 0/2 [00:00<?, ?it/s]Generating multi-layer activations with freq:  50%|█████     | 1/2 [00:01<00:01,  1.47s/it]Generating multi-layer activations with freq: 100%|██████████| 2/2 [00:01<00:00,  1.31it/s]
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+Extracting token IDs:   0%|          | 0/2 [00:00<?, ?it/s]Extracting token IDs: 100%|██████████| 2/2 [00:00<00:00, 31.25it/s]
+/home/ADV_2526a/tslilshani/anaconda3/envs/snmf_hier/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+  0%|          | 0/3 [00:00<?, ?it/s] 33%|███▎      | 1/3 [00:19<00:39, 19.84s/it] 67%|██████▋   | 2/3 [00:36<00:18, 18.06s/it]100%|██████████| 3/3 [00:54<00:00, 18.13s/it]100%|██████████| 3/3 [00:54<00:00, 18.29s/it]

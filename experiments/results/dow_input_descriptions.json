@@ -1,0 +1,20 @@
+[
+  {
+    "K": 3,
+    "layer": 0,
+    "h_row": 2,
+    "description": "The most obvious connection between the tokens is that they are both days of the week."
+  },
+  {
+    "K": 3,
+    "layer": 0,
+    "h_row": 0,
+    "description": "The most obvious connection between the tokens is that they are all articles used in the English language."
+  },
+  {
+    "K": 3,
+    "layer": 0,
+    "h_row": 1,
+    "description": "The most obvious connection between the tokens is that they all pertain to future activities and the organization of time."
+  }
+]

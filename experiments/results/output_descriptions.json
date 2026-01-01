@@ -1,0 +1,1402 @@
+[
+  {
+    "description": "- Connection: The tokens collectively represent verbs associated with improvement, enhancement, and achievement in various endeavors.",
+    "layer": 0,
+    "h_row": 35,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent common English word suffixes.",
+    "layer": 0,
+    "h_row": 44,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens describe various terms related to quantities or amounts, expressing measures of more or fewer items.",
+    "layer": 0,
+    "h_row": 34,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are associated with names of automotive brands, models, and components.",
+    "layer": 0,
+    "h_row": 8,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent themes related to legal concepts, including property law, demographic public policies, and the legal ramifications of criminal actions.",
+    "layer": 0,
+    "h_row": 9,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are conjunctions and transition words that facilitate the logical flow and connectivity of ideas in written discourse.",
+    "layer": 0,
+    "h_row": 33,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are related to video streaming services and content creation.",
+    "layer": 0,
+    "h_row": 18,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are all transitional or connective words used to link ideas and statements in writing and speech.",
+    "layer": 0,
+    "h_row": 33,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens primarily relate to technologies and concepts involved in network communication and data interoperability.",
+    "layer": 0,
+    "h_row": 30,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively imply themes of interaction and communication within a social or digital context, possibly reflecting dynamics of online communities or platforms.",
+    "layer": 0,
+    "h_row": 7,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively relate to societal demographics, property issues, and their implications in legal contexts such as crime and public life.",
+    "layer": 0,
+    "h_row": 9,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent elements of conversational English, primarily focusing on contractions and auxiliary verbs commonly used in informal speech.",
+    "layer": 0,
+    "h_row": 19,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: TRASH",
+    "layer": 0,
+    "h_row": 11,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are predominantly related to the concept of virtual health and technological interventions in healthcare.",
+    "layer": 0,
+    "h_row": 45,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens loosely relate to various themes in nature and experience, encompassing animals like \"Wolf\" and \"Bird,\" as well as celestial objects like \"Moon,\" but do not exhibit a clear, singular underlying connection.",
+    "layer": 0,
+    "h_row": 47,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens appear to be fragments or suffixes of terms related to programming or operational processes.",
+    "layer": 0,
+    "h_row": 45,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The underlying connection between the tokens is that they all pertain to different types of food and culinary elements involved in cooking and meal preparation.",
+    "layer": 0,
+    "h_row": 43,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens may represent fragments of words associated with \"Southern themes\" or \"southern geographical elements.\"",
+    "layer": 0,
+    "h_row": 45,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent terms associated with physical activity and exercise, particularly in the context of running or aerobic movements.",
+    "layer": 0,
+    "h_row": 9,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent morphological elements and suffixes commonly found in English words, illustrating processes of word formation.",
+    "layer": 0,
+    "h_row": 21,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively point towards different characteristics and types of textiles, particularly emphasizing their colors, sizes, and potential conditions.",
+    "layer": 0,
+    "h_row": 21,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively focus on evaluating and ranking the best brands or products based on user feedback and ratings.",
+    "layer": 0,
+    "h_row": 31,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent various forms of the verb \"to be\" and past participles indicating experiences or states, signifying an emphasis on reflection and the state of having undergone certain actions or experiences.",
+    "layer": 0,
+    "h_row": 10,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are all related to concepts of construction, property, and sociopolitical themes in urban development.",
+    "layer": 0,
+    "h_row": 46,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens hint at fragmented discussions related to behavioral psychology and its applications or analyses.",
+    "layer": 0,
+    "h_row": 42,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens relate to competition and movement, particularly in the context of racing or sporting events where pace and performance are key elements.",
+    "layer": 0,
+    "h_row": 46,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent concepts and items related to laundry and fabric care.",
+    "layer": 0,
+    "h_row": 20,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively refer to the concepts of order and relation among elements in a structured system.",
+    "layer": 0,
+    "h_row": 31,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent themes related to military conflict and societal narratives surrounding arms and engagement.",
+    "layer": 0,
+    "h_row": 7,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: There is no clear underlying connection between the tokens, leading to a distinction without a cohesive theme.",
+    "layer": 0,
+    "h_row": 10,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent roots or morphemes used in the formation of words in the English language.",
+    "layer": 0,
+    "h_row": 44,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are fundamentally tied to the theme of assessing and defining quality in various contexts, including individual traits and perceptions.",
+    "layer": 0,
+    "h_row": 33,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent concepts involved in social and organizational dynamics, emphasizing the importance of inclusion, succession, and interrelations among entities within a system.",
+    "layer": 0,
+    "h_row": 8,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent terminology related to categorization and specifications in various contexts, such as business or strategic planning.",
+    "layer": 0,
+    "h_row": 22,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens reflect themes and characters commonly found in narratives, particularly those involving conflict and dramatic storytelling.",
+    "layer": 0,
+    "h_row": 6,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively emphasize core values and principles that are essential or critical in various contexts, particularly relating to justice and necessities of life.",
+    "layer": 0,
+    "h_row": 32,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens relate to fundamental aspects of societal structures and possibly fictional or narrative characters that explore these themes within a planetary or civic context.",
+    "layer": 0,
+    "h_row": 43,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens suggest a theme of communication and transmission, particularly related to data and logistics, although the connection is not strongly established.",
+    "layer": 0,
+    "h_row": 35,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent common word fragments or suffixes used in forming various technical and descriptive terms in the English language.",
+    "layer": 0,
+    "h_row": 32,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are primarily associated with notable poets and their relevance in the context of literature and academic discourse.",
+    "layer": 0,
+    "h_row": 22,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are all related to the assessment of behavioral risks and predictions in developmental contexts, such as education or mental health.",
+    "layer": 0,
+    "h_row": 20,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are all comparative and superlative adjectives that describe different extremities of characteristics or qualities, often used for ranking entities.",
+    "layer": 0,
+    "h_row": 19,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are components or roots from the Spanish language, showing connections to various Spanish words or phrases.",
+    "layer": 0,
+    "h_row": 44,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are related to concepts of comparison, specificity, and geographical references.",
+    "layer": 0,
+    "h_row": 34,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively reference various instances and events concerning time and their relevance or conditions in which they occur.",
+    "layer": 0,
+    "h_row": 23,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens pertain to expressions of human emotions and states, focusing on desires and experiences.",
+    "layer": 0,
+    "h_row": 8,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are all related to physical movement and activity, particularly in contexts of running, pacing, and energetic motions.",
+    "layer": 0,
+    "h_row": 9,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens share a connection in their function as components of word formation in academic and scientific terminology, particularly through common prefixes and suffixes.",
+    "layer": 0,
+    "h_row": 11,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively relate to the assessment and prediction of risks in behavioral contexts, particularly within project management or psychological evaluations.",
+    "layer": 0,
+    "h_row": 20,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are primarily components of word structures used in the English language, representing various suffixes and fragments that denote states, qualities, or grammatical forms.",
+    "layer": 0,
+    "h_row": 21,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively refer to concepts and aspects related to measurement and evaluation metrics.",
+    "layer": 0,
+    "h_row": 33,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens primarily relate to conversational expressions and auxiliary verbs indicative of beliefs, thoughts, and suppositions in English language usage.",
+    "layer": 0,
+    "h_row": 24,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens describe actions that people commonly engage in during daily life activities or entertainment contexts.",
+    "layer": 0,
+    "h_row": 36,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively emphasize the idea of completeness or totality, representing a single unified entity or system.",
+    "layer": 0,
+    "h_row": 0,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: All tokens relate to quantities and descriptors of groups or amounts.",
+    "layer": 0,
+    "h_row": 34,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively describe the concept of size and significance, often referring to large quantities or substantial impact.",
+    "layer": 0,
+    "h_row": 48,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent elements and concepts from mathematics and science, incorporating symbols, abbreviations, and terms that suggest a focus on chemical elements and possibly mathematical formulas or theories.",
+    "layer": 0,
+    "h_row": 23,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens predominantly describe user interface interaction methods commonly seen in mobile devices and applications.",
+    "layer": 0,
+    "h_row": 47,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: All tokens represent actions focused on enhancement and achievement in various contexts.",
+    "layer": 0,
+    "h_row": 35,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent different aspects of experience or states of having completed actions in life.",
+    "layer": 0,
+    "h_row": 10,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent key attributes and strategies related to product characterization and marketing approaches.",
+    "layer": 0,
+    "h_row": 22,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are all conjunctions and transitional phrases used to connect and clarify relationships between ideas in written language.",
+    "layer": 0,
+    "h_row": 0,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens likely refer to characters or elements from anime, video games, and popular culture narratives.",
+    "layer": 0,
+    "h_row": 11,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are primarily overlapping fragments or segments of words that function as common prefixes, suffixes, or roots in the English language.",
+    "layer": 0,
+    "h_row": 36,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively describe a narrative of events that are interconnected through actions and circumstances, emphasizing a sequential or cause-and-effect relationship in storytelling or situational contexts.",
+    "layer": 0,
+    "h_row": 13,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively relate to the organization and arrangement of various elements or groups, emphasizing the ideas of separation, categorization, and combination.",
+    "layer": 0,
+    "h_row": 10,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: All tokens describe actions that indicate growth or transformation, often in competitive or developmental contexts.",
+    "layer": 0,
+    "h_row": 1,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively relate to concepts in materials or surfaces, particularly those involved in textiles and home decor such as rugs, and the properties or themes associated with them, including degradation and expansion.",
+    "layer": 0,
+    "h_row": 21,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are all related to children and education, emphasizing students, their learning environments, and the role of educators in their development.",
+    "layer": 0,
+    "h_row": 14,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are linked by themes of rhythm, movement, and settings related to social activities or music, likely within the context of dance or fitness.",
+    "layer": 0,
+    "h_row": 46,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent fragments of words or phrases related to forms of expression in language.",
+    "layer": 0,
+    "h_row": 12,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively describe varying levels of magnitude and significance, highlighting items or concepts that are large, impactful, or noteworthy.",
+    "layer": 0,
+    "h_row": 48,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively relate to medical terms and health treatments, specifically focusing on various approaches and methodologies in healthcare.",
+    "layer": 0,
+    "h_row": 45,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens reflect a narrative centered around life stages and relationships, particularly focusing on adolescence, adulthood, and cultural references to marriage within Scandinavian mythology.",
+    "layer": 0,
+    "h_row": 49,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent fragments or elements related to the concept of algebra, highlighting variables and operations used in algebraic expressions.",
+    "layer": 0,
+    "h_row": 49,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent a theme of comparison and ranking among qualities or entities, emphasizing notions of superiority and distinction.",
+    "layer": 0,
+    "h_row": 24,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent conjunctions and transitional phrases that are used to connect ideas and clauses in sentences.",
+    "layer": 0,
+    "h_row": 0,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are associated with the transportation and distribution of goods or materials.",
+    "layer": 0,
+    "h_row": 35,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are primarily elements of the English present participle tense, indicating ongoing actions or states.",
+    "layer": 0,
+    "h_row": 37,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent concepts related to daily news or information segments, emphasizing routine themes or features commonly associated with a specific format, such as a weekly or daily publication.",
+    "layer": 0,
+    "h_row": 1,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent segments or morphemes commonly found in the formation of English words.",
+    "layer": 0,
+    "h_row": 2,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens reflect themes of urban development, societal structures, and public life within the context of construction and property management.",
+    "layer": 0,
+    "h_row": 46,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent syllables or components commonly found in terms related to management and operations.",
+    "layer": 0,
+    "h_row": 25,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are primarily connected by their relevance to categorizing examples and instances, particularly in the context of sales or classification in various purposes.",
+    "layer": 0,
+    "h_row": 23,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are related to academic subjects and concepts commonly explored in education, such as mathematics, art, and scientific principles.",
+    "layer": 0,
+    "h_row": 23,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are primarily linked by their association with the prefix \"re-\", indicating actions that involve repetition or renewal.",
+    "layer": 0,
+    "h_row": 12,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens relate to scientific terminology, potentially referencing celestial or planetary sciences and biological classifications.",
+    "layer": 0,
+    "h_row": 11,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are primarily related to interactions and actions typically associated with touchscreen devices and user interface functions.",
+    "layer": 0,
+    "h_row": 47,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens primarily represent notable poets and literary figures, focusing on the study of their works in an academic context.",
+    "layer": 0,
+    "h_row": 22,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent elements and symbols commonly used in written documentation and text formatting.",
+    "layer": 0,
+    "h_row": 48,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent common phonetic fragments or parts of English words used in various combinations.",
+    "layer": 0,
+    "h_row": 36,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent fundamental elements of governance and authenticity in political contexts, emphasizing core principles like \"real\" and \"rule.\"",
+    "layer": 0,
+    "h_row": 12,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent themes of mental health challenges and the impact of living environments on psychological well-being, particularly emphasizing therapy and the responsibilities of parenthood.",
+    "layer": 0,
+    "h_row": 37,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent fragments or elements of English contractions and expressions used in conversational and subjective contexts, largely focused on personal beliefs or future intentions.",
+    "layer": 0,
+    "h_row": 24,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively describe different aspects or components of a whole, emphasizing the idea of parts making up a complex item or concept.",
+    "layer": 0,
+    "h_row": 38,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens primarily represent punctuation and formatting symbols commonly used in written texts.",
+    "layer": 0,
+    "h_row": 48,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively suggest a connection to military or educational training corps, particularly in reference to structured programs focused on physical training or discipline.",
+    "layer": 0,
+    "h_row": 13,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens primarily relate to the theme of sponsorship and influence in political and media contexts.",
+    "layer": 0,
+    "h_row": 25,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens illustrate the themes of comparison and relationships, highlighting similarities and differences between various entities or concepts.",
+    "layer": 0,
+    "h_row": 34,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent various prefixes or suffixes, commonly found in the formation of words across different contexts.",
+    "layer": 0,
+    "h_row": 12,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are primarily related to cloud computing and infrastructure technology, with AWS representing a leading service in this sector.",
+    "layer": 0,
+    "h_row": 14,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The only clear connection among the tokens is the reference to \"BOOK,\" suggesting a theme of literature, while other tokens are largely irrelevant or uncontextualized.",
+    "layer": 0,
+    "h_row": 26,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent common suffixes and segments of words associated with societal constructs such as democracy, quality, and identity.",
+    "layer": 0,
+    "h_row": 26,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent different activities related to consuming content and engaging with various environments, notably in information-seeking or leisure contexts.",
+    "layer": 0,
+    "h_row": 36,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent various dimensions of classification based on superiority or distinctiveness among entities, highlighting qualities like owning, ranking, or categorization (e.g., fastest, strongest, youngest).",
+    "layer": 0,
+    "h_row": 24,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent key concepts and technologies used in software development and data processing, specifically focusing on programming languages and their implementations.",
+    "layer": 0,
+    "h_row": 3,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent themes surrounding dragons in a fantasy gaming or literary context.",
+    "layer": 0,
+    "h_row": 2,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens broadly relate to elements of nature and ecosystems, focusing on various forms of life and their environments.",
+    "layer": 0,
+    "h_row": 47,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent comparative and superlative adjectives that describe the extremes of categories such as time, size, or preference.",
+    "layer": 0,
+    "h_row": 39,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent verbs and actions related to events or phenomena, illustrating a narrative of interactions and occurrences among subjects.",
+    "layer": 0,
+    "h_row": 13,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent influential individuals and entities in contemporary culture, potentially related to political or media discussions.",
+    "layer": 0,
+    "h_row": 25,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are all related to the concept of singing and its grammatical forms or variations.",
+    "layer": 0,
+    "h_row": 37,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent the concept of wholeness and completeness in various contexts.",
+    "layer": 0,
+    "h_row": 0,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens primarily relate to locations and cultural identifiers within the United States.",
+    "layer": 0,
+    "h_row": 3,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent actions related to personal and skill development through competition, training, and performance improvements.",
+    "layer": 0,
+    "h_row": 1,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent transitional phrases used to indicate logical progression and relationships between ideas in writing.",
+    "layer": 0,
+    "h_row": 16,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively emphasize themes of respect, dignity, and social standing in interpersonal relationships and societal contexts.",
+    "layer": 0,
+    "h_row": 15,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent themes related to challenges and responsibilities in parenthood and family dynamics.",
+    "layer": 0,
+    "h_row": 37,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens reflect elements of modern digital and tech culture, possibly indicating a connection to music, streaming, or technology-related services.",
+    "layer": 0,
+    "h_row": 38,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: TRASH",
+    "layer": 0,
+    "h_row": 26,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are primarily related to visual elements and design concepts associated with images and graphical representation.",
+    "layer": 0,
+    "h_row": 27,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens likely relate to themes of governance, society, and apocalyptic scenarios in literature or media.",
+    "layer": 0,
+    "h_row": 40,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are all related to childhood education and the experiences of children in school.",
+    "layer": 0,
+    "h_row": 14,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens appear to relate to concepts of measurement and dynamic processes, potentially in a mathematical or analytical context, but lack a clear and coherent theme.",
+    "layer": 0,
+    "h_row": 39,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent terms associated with agriculture and the environment, highlighting elements that may pertain to land use, farming practices, or ecological management.",
+    "layer": 0,
+    "h_row": 14,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: TRASH",
+    "layer": 0,
+    "h_row": 4,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent elements of fantasy literature and the importance of caution in engaging with such imaginative worlds.",
+    "layer": 0,
+    "h_row": 2,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively refer to military occupations or operations, potentially specifically involving a corps or guard unit operating in sandy, northern regions.",
+    "layer": 0,
+    "h_row": 13,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: All tokens are comparative adjectives indicating varying degrees of similarity or extremity in qualities like size or time.",
+    "layer": 0,
+    "h_row": 17,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are related to giving instructions or taking actions (e.g., \"take a seat\", \"be present\").",
+    "layer": 0,
+    "h_row": 49,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The most obvious connection among the tokens is the concept of merging or linking disparate elements to form a cohesive whole, emphasizing collaboration and integration.",
+    "layer": 0,
+    "h_row": 40,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent the various components and intricacies involved in understanding a complex subject or entity.",
+    "layer": 0,
+    "h_row": 38,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent common English grammatical components necessary for forming sentences.",
+    "layer": 0,
+    "h_row": 28,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent concepts associated with rendering graphical user interfaces in software development.",
+    "layer": 0,
+    "h_row": 5,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens relate to contemporary popular culture and technology, highlighting trends in music and consumer electronics.",
+    "layer": 0,
+    "h_row": 38,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent various components or fragments of words related to processes or duties, particularly in the context of management or operational terms.",
+    "layer": 0,
+    "h_row": 25,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively emphasize the themes of respect, dignity, and personal integrity in social contexts.",
+    "layer": 0,
+    "h_row": 15,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens reference former New York City Mayor Bill de Blasio and related cultural or political contexts.",
+    "layer": 0,
+    "h_row": 27,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens center around linguistic and narrative structures used to connect ideas and present contrasting or comparative thoughts in discourse.",
+    "layer": 0,
+    "h_row": 4,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively refer to elements commonly found in adventure-oriented narratives and media, particularly those involving quests, mysteries, and significant timelines in genres such as fantasy or sci-fi.",
+    "layer": 0,
+    "h_row": 1,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens reflect structural elements that are commonly used in programming languages or markup syntax.",
+    "layer": 0,
+    "h_row": 16,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively refer to elements associated with competitive racing and championships.",
+    "layer": 0,
+    "h_row": 18,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent core concepts, practices, and technologies related to coding and software development.",
+    "layer": 0,
+    "h_row": 3,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: TRASH",
+    "layer": 0,
+    "h_row": 28,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent essential components of English language grammar, forming the basis for sentence structure and communication.",
+    "layer": 0,
+    "h_row": 28,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively describe attributes that compare different entities in terms of age, speed, size, quality, and personal preference.",
+    "layer": 0,
+    "h_row": 39,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent morphological segments that contribute to word formation related to processes or states in language.",
+    "layer": 0,
+    "h_row": 2,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The most obvious connection among the tokens is the concept of visual imagery or representation, with a primary focus on \"picture.\"",
+    "layer": 0,
+    "h_row": 27,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are connected by the theme of food safety and health concerns, particularly related to dietary ingredients and allergies.",
+    "layer": 0,
+    "h_row": 29,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively relate to the theme of educational courses and the critical evaluation of ideas and arguments within academic discourse.",
+    "layer": 0,
+    "h_row": 5,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent various modifiers used for quantifying or qualifying concepts.",
+    "layer": 0,
+    "h_row": 6,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively reflect themes of human life stages, personal milestones, and cultural affiliations centering around Norse mythology and the geography of the Nordic region.",
+    "layer": 0,
+    "h_row": 49,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are connected through their relevance to software design patterns and programming terminology, particularly focusing on deceptive operations and handling within code structures.",
+    "layer": 0,
+    "h_row": 15,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The underlying connection between the tokens is the concept of merging or linking disparate elements together.",
+    "layer": 0,
+    "h_row": 40,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively suggest a connection to American cultural or geographical identity, indicating themes related to the United States.",
+    "layer": 0,
+    "h_row": 3,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent fragments of various English words, specifically prefixes or suffixes used to denote states of being or forms of nouns.",
+    "layer": 0,
+    "h_row": 29,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens relate to health and emotional well-being, notably in contexts involving maternal health and heart health.",
+    "layer": 0,
+    "h_row": 26,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: TRASH",
+    "layer": 0,
+    "h_row": 17,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are primarily connected through their association with soccer clubs, competitions, and relevant geographical identifiers.",
+    "layer": 0,
+    "h_row": 42,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are all transitional words and phrases used to connect ideas in logical reasoning and discourse.",
+    "layer": 0,
+    "h_row": 16,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent various elements and terminologies associated with network communication and technology architectures.",
+    "layer": 0,
+    "h_row": 30,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively describe principles of order, organization, and relationships in various contexts, emphasizing structured arrangements and systematic interactions.",
+    "layer": 0,
+    "h_row": 31,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens appear to represent components of terms associated with technology and science, focusing on themes like energy systems, computing, and possibly the internet.",
+    "layer": 0,
+    "h_row": 41,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent various food items and dishes commonly found in meals.",
+    "layer": 0,
+    "h_row": 43,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens suggest themes of governance and societal structure.",
+    "layer": 0,
+    "h_row": 40,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens relate to the conceptual framework of data structure and organization in the context of shapes and quantities.",
+    "layer": 0,
+    "h_row": 39,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively indicate a theme of assessing the reliability and availability of software or systems, particularly in regard to their features or functionalities.",
+    "layer": 0,
+    "h_row": 41,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are connected through themes of assessment, evaluation, and reliability in data or performance metrics.",
+    "layer": 0,
+    "h_row": 41,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively reference themes and characters associated with violent or action-oriented animated media.",
+    "layer": 0,
+    "h_row": 6,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens primarily reference elements related to \"Bill de Blasio,\" the former mayor of New York City.",
+    "layer": 0,
+    "h_row": 27,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: TRASH",
+    "layer": 0,
+    "h_row": 7,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent fragments of terms related to software architecture and design, particularly focusing on terms like \"cent\" (in \"behavior\"), \"oper\" (in \"operating\"), and \"ative\" (in \"operative\").",
+    "layer": 0,
+    "h_row": 15,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent linguistic connectors and elements within narrative structures, emphasizing contrasts and transitions in storytelling.",
+    "layer": 0,
+    "h_row": 4,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: TRASH",
+    "layer": 0,
+    "h_row": 17,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent themes of emotional resilience and the celebration of extraordinary experiences in art and personal narratives.",
+    "layer": 0,
+    "h_row": 30,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: All tokens represent comparative adjectives that indicate relative measures of equality or extremity.",
+    "layer": 0,
+    "h_row": 17,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: TRASH",
+    "layer": 0,
+    "h_row": 42,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent comparative adjectives that describe varying degrees of age, strength, and other characteristics, highlighting the extremes within particular categories.",
+    "layer": 0,
+    "h_row": 19,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens relate to various forms of English words that signify mental or emotional states, typically ending in the suffix \"-ment.\"",
+    "layer": 0,
+    "h_row": 44,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are primarily connected to the concept of \"tax interviewing\" focusing on discussing the duration or measurement associated with it.",
+    "layer": 0,
+    "h_row": 28,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent themes related to academic courses and excellence in education, particularly within the field of medicine.",
+    "layer": 0,
+    "h_row": 5,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens primarily relate to video and streaming technology concepts.",
+    "layer": 0,
+    "h_row": 18,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are primarily connected through the theme of knowledge and the exploration of ideas and convictions found in literature and philosophical discourse.",
+    "layer": 0,
+    "h_row": 4,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens appear to connect primarily to symbols and syntax used in programming or markup languages.",
+    "layer": 0,
+    "h_row": 16,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent informal contractions and auxiliary verbs used in casual English conversation.",
+    "layer": 0,
+    "h_row": 19,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent various degrees of certainty, existence, and conditional states, reflecting how we articulate nuances in truth and perception.",
+    "layer": 0,
+    "h_row": 6,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens suggest a theme of societal transformation or changes in collective identity, specifically alluding to the concept of \"us\" versus \"them\".",
+    "layer": 0,
+    "h_row": 7,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens collectively represent concepts related to energy, its states, and structures in scientific contexts, potentially spanning chemistry and physics.",
+    "layer": 0,
+    "h_row": 41,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens relate to concepts of interconnectedness and sustainability in systems or communities.",
+    "layer": 0,
+    "h_row": 8,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens primarily connote themes of citizenship and societal governance structures.",
+    "layer": 0,
+    "h_row": 43,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens primarily relate to food quality and safety, emphasizing aspects like ingredients, allergies, and the freshness of food.",
+    "layer": 0,
+    "h_row": 29,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are associated with the process and components involved in user interface rendering in software applications.",
+    "layer": 0,
+    "h_row": 5,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens revolve around the theme of consumer product evaluations and reviews, focusing on identifying the best brands and their attributes.",
+    "layer": 0,
+    "h_row": 31,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens collectively highlight the theme of significance and critical attributes essential for evaluating entities or situations.",
+    "layer": 0,
+    "h_row": 32,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens are primarily associated with abbreviations and terms from sports and entertainment, particularly soccer and franchises like Marvel, indicating a blend of sporting and pop culture references.",
+    "layer": 0,
+    "h_row": 42,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens represent concepts related to beauty, memorable experiences, and the joy of adventure.",
+    "layer": 0,
+    "h_row": 30,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are primarily related to the laundry process and fabric care.",
+    "layer": 0,
+    "h_row": 20,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens are primarily related to the concept of technology, specifically focusing on microchips or computer chips.",
+    "layer": 0,
+    "h_row": 29,
+    "K": 50,
+    "sign": -1
+  },
+  {
+    "description": "- Connection: The tokens represent common prefixes or suffixes used in English words.",
+    "layer": 0,
+    "h_row": 32,
+    "K": 50,
+    "sign": 1
+  },
+  {
+    "description": "- Connection: The tokens primarily connect to themes of racing and competition in sports, including performance metrics and championship achievements.",
+    "layer": 0,
+    "h_row": 18,
+    "K": 50,
+    "sign": 1
+  }
+]
