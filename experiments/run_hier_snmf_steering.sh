@@ -82,7 +82,7 @@ PYTHONPATH=. python experiments/snmf_interp/generate_output_centric_descriptions
    --model gemini-2.0-flash \
    --ranks 400,200,100,50 \
    --layers 0,3 \
-   --concurrency 50
+   --concurrency 25
 
  PYTHONPATH=. python experiments/causal/output_score_llm_judge.py \
    --input experiments/artifacts/causal_output.json \
@@ -91,7 +91,7 @@ PYTHONPATH=. python experiments/snmf_interp/generate_output_centric_descriptions
    --layers 11 \
    --ranks 400,200,100,50 \
    --model gemini-2.0-flash \
-   --concurrency 50 \
+   --concurrency 25 \
    --attempts 2 \
    --sparsity 0.01
 echo "Finished."
