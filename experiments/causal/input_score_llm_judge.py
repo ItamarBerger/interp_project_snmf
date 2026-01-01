@@ -30,13 +30,19 @@ def extract_rating(response_text):
     """
     Extracts the rating from the LLM response.
     Supports both "Rating: [[score]]" and "Rating: score" formats.
+    Returns None if extraction fails instead of raising an exception.
     """
-    match = re.search(r'Rating:\s*(?:\[\[(\d+)\]\]|(\d+))', response_text)
-    if match:
-        score_str = match.group(1) if match.group(1) is not None else match.group(2)
-        return int(score_str)
-    else:
-        raise ValueError("Could not extract rating from response: " + response_text)
+    try:
+        match = re.search(r'Rating:\s*(?:\[\[(\d+)\]\]|(\d+))', response_text)
+        if match:
+            score_str = match.group(1) if match.group(1) is not None else match.group(2)
+            return int(score_str)
+        else:
+            print(f"⚠ Warning: Could not extract rating from response: {response_text[:100]}...")
+            return None
+    except Exception as e:
+        print(f"⚠ Warning: Error extracting rating: {e}")
+        return None
 
 # Global model & semaphore will be set in main(), then used by async fns
 model = None
@@ -83,7 +89,7 @@ class RateLimiter:
 # ------------------------------
 # LLM evaluators
 # ------------------------------
-async def evaluate_concept_score(concept: str, sentence_fragment: str, attempts: int = 2) -> int:
+async def evaluate_concept_score(concept: str, sentence_fragment: str, attempts: int = 5) -> int:
     """
     Asynchronously evaluates how clearly the specified concept is incorporated in the sentence fragment.
     Returns an integer rating 0-2.
@@ -118,7 +124,13 @@ Provide your rating using this exact format: "Rating: [[score]]".
                 if elapsed > 10:
                     print(f"      [SLOW] Concept API took {elapsed:.1f}s")
             content = response.text.strip()
-            return extract_rating(content)
+            rating = extract_rating(content)
+            if rating is None:
+                if attempt == attempts - 1:
+                    print("Could not extract rating, returning 0.")
+                    return 0
+                continue
+            return rating
         except asyncio.TimeoutError:
             print(f"⚠ TIMEOUT: concept scoring attempt {attempt+1} exceeded 60s")
             if attempt == attempts - 1:
@@ -147,7 +159,7 @@ Provide your rating using this exact format: "Rating: [[score]]".
                 print("Skipping concept score, returning 0.")
                 return 0
 
-async def evaluate_fluency_score(sentence_fragment: str, attempts: int = 2) -> int:
+async def evaluate_fluency_score(sentence_fragment: str, attempts: int = 5) -> int:
     """
     Asynchronously evaluates the fluency of the sentence fragment. Returns an integer rating 0-2.
     """
@@ -176,7 +188,13 @@ Provide your rating using this exact format: "Rating: [[score]]".
                 if elapsed > 10:
                     print(f"      [SLOW] Fluency API took {elapsed:.1f}s")
             content = response.text.strip()
-            return extract_rating(content)
+            rating = extract_rating(content)
+            if rating is None:
+                if attempt == attempts - 1:
+                    print("Could not extract rating, returning 0.")
+                    return 0
+                continue
+            return rating
         except asyncio.TimeoutError:
             print(f"⚠ TIMEOUT: fluency scoring attempt {attempt+1} exceeded 60s")
             if attempt == attempts - 1:
@@ -208,11 +226,20 @@ Provide your rating using this exact format: "Rating: [[score]]".
 def harmonic_mean(scores):
     """
     Computes the harmonic mean of the provided scores.
-    If any score is zero, the harmonic mean will be zero.
+    If any score is zero or None, the harmonic mean will be zero.
     """
-    if any(score == 0 for score in scores):
+    # Filter out None values and convert to list
+    valid_scores = [s for s in scores if s is not None]
+    
+    # If any scores were None or if any valid score is 0, return 0
+    if len(valid_scores) < len(scores) or any(score == 0 for score in valid_scores):
         return 0
-    return len(scores) / sum(1.0 / score for score in scores)
+    
+    # If no valid scores, return 0
+    if not valid_scores:
+        return 0
+        
+    return len(valid_scores) / sum(1.0 / score for score in valid_scores)
 
 async def llm_judge(sentence: str, concept: str, entry_idx: int, sent_idx: int, total_sents: int) -> dict:
     print(f"    → [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents}: calling concept API...")
@@ -355,16 +382,37 @@ async def main():
     }
     print(f"  ✓ Built concept map with {len(concept_map)} concepts")
 
-    # Process
+    # Process in batches to prevent resource exhaustion
     print(f"\n[STEP 5/5] Processing entries and scoring sentences...")
     print(f"{'='*80}")
     total_entries_global = total_entries
     start_time = time.time()
-    tasks = [
-        asyncio.create_task(process_entry(i, entry, concept_map, total_entries, is_diffmean=args.diffmean))
-        for i, entry in enumerate(filtered)
-    ]
-    all_results = await asyncio.gather(*tasks)
+    
+    batch_size = 20  # Process 20 entries at a time
+    all_results = []
+    
+    for batch_start in range(0, total_entries, batch_size):
+        batch_end = min(batch_start + batch_size, total_entries)
+        batch = filtered[batch_start:batch_end]
+        print(f"\n{'*'*80}")
+        print(f"[BATCH {batch_start//batch_size + 1}/{(total_entries + batch_size - 1)//batch_size}] Processing entries {batch_start+1} to {batch_end}...")
+        print(f"{'*'*80}")
+        
+        tasks = [
+            asyncio.create_task(process_entry(batch_start + i, entry, concept_map, total_entries, is_diffmean=args.diffmean))
+            for i, entry in enumerate(batch)
+        ]
+        batch_results = await asyncio.gather(*tasks)
+        all_results.extend(batch_results)
+        
+        batch_time = time.time() - start_time
+        avg_per_entry = batch_time / len(all_results) if all_results else 0
+        remaining = total_entries - len(all_results)
+        eta_seconds = remaining * avg_per_entry if avg_per_entry > 0 else 0
+        print(f"\n{'*'*80}")
+        print(f"[BATCH COMPLETE] {len(all_results)}/{total_entries} total entries done. ETA: {eta_seconds/60:.1f} min")
+        print(f"{'*'*80}\n")
+    
     elapsed_time = time.time() - start_time
 
     # Save results

@@ -224,6 +224,11 @@ async def llm_judge(
     attempts: int,
 ) -> dict:
     print(f"    → [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents}: calling concept API...", flush=True)
+    # DEBUG: Log what we're evaluating and flag problematic concepts
+    if sent_idx == 0:  # Only log first sentence per entry to avoid spam
+        is_bad_concept = "only one token" in concept.lower() or len(concept) < 20
+        print(f"      [DEBUG] Concept: '{concept[:200]}'", flush=True)
+        print(f"      [DEBUG] Sentence: '{sentence[:200]}'", flush=True)
     concept_score = await evaluate_concept_score(concept, sentence, attempts=attempts)
     print(f"    → [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents}: calling fluency API...", flush=True)
     fluency_score = await evaluate_fluency_score(sentence, attempts=attempts)
