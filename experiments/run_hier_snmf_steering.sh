@@ -37,7 +37,7 @@ PYTHONPATH=. python experiments/snmf_interp/generate_concept_context.py \
 PYTHONPATH=. python experiments/snmf_interp/generate_input_descriptions.py \
   --input-json experiments/artifacts/concept_contexts.json \
   --output-json experiments/artifacts/input_descriptions.json \
-  --model gemini-1.5-flash \
+  --model gemini-2.0-flash \
   --env-var GEMINI_API_KEY \
   --layers 0,3,6,9,11 \
   --k-values 400,200,100,50 \
@@ -60,7 +60,7 @@ PYTHONPATH=. python experiments/snmf_interp/generate_vocab_proj.py\
 PYTHONPATH=. python experiments/snmf_interp/generate_output_centric_descriptions.py\
   --input experiments/artifacts/vocab_proj.json \
   --output experiments/artifacts/output_descriptions.json \
-  --model gemini-1.5-flash \
+  --model gemini-2.0-flash \
   --layers 0,3,6,9,11 \
   --ranks 400,200,100,50 \
   --top-m 25 \
