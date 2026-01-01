@@ -12,7 +12,7 @@ PYTHONPATH=. python experiments/train/train_hier.py \
     --model-name gpt2-small \
     --factorization-mode mlp \
     --layers 0,3,6,9,11 \
-    --data-path data/final_dataset_20_concepts.json \
+    --data-path data/hier_concepts.json \
     --model-device cuda \
     --data-device cpu \
     --fitting-device cuda \

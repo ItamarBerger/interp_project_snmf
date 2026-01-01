@@ -136,7 +136,7 @@ async def run(args):
     data = load_data(args.input_json)
     layers = set(_parse_int_list(args.layers))
     k_values = set(_parse_int_list(args.k_values))
-    # each k corresponds to a specific layer. Hence number of levels is len(k_values)
+    # each k corresponds to a specific level. Hence number of levels is len(k_values)
     n_levels = len(k_values)
     levels = [i for i in range(n_levels)]
 

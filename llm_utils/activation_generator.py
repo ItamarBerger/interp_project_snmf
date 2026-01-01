@@ -317,6 +317,7 @@ def extract_token_ids_sample_ids_and_labels(dataset: ConceptDataset, act_generat
     Returns:
         token_ids (torch.Tensor): Tensor of shape (num_tokens,) containing the token IDs
                                   for all non-padding tokens in the dataset.
+        sample_ids (List): List of sample indices corresponding to each non-padding token.
         labels (List): List of labels corresponding to each non-padding token.
     """
     all_token_ids = []

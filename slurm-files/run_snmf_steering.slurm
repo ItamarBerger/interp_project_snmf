@@ -22,4 +22,4 @@ umask 0002
 source /home/ADV_2526a/tslilshani/anaconda3/etc/profile.d/conda.sh
 conda activate snmf_hier
 
-bash experiments/test_snmf_steering.sh
+bash experiments/run_hier_snmf_steering.sh
