@@ -13,6 +13,12 @@ def load_aggregated_results(input_file: str) -> List[Dict]:
         return json.load(f)
 
 
+def load_layer_level_summary(input_file: str) -> Dict:
+    """Load the layer-level summary JSON"""
+    with open(input_file, 'r') as f:
+        return json.load(f)
+
+
 def group_by_level(entries: List[Dict]) -> Dict[int, List[Dict]]:
     """Group entries by level"""
     level_groups = defaultdict(list)
@@ -179,6 +185,114 @@ def print_comparative_analysis(stats: Dict[int, Dict], entries: List[Dict], outp
     # Print a concise confirmation message
     print(f"  ✓ Wrote overall comparative stats to: {overall_path}")
     print(f"  ✓ Wrote {len(index)} per-(level,layer) summary files to: {output_dir}")
+
+
+def create_layer_level_visualizations(layer_level_data: Dict, output_dir: str):
+    """
+    Create visualizations for each layer comparing its levels.
+    Each layer gets its own figure with subplots for the three score types.
+    
+    Args:
+        layer_level_data: Dict with structure {layer: {"layer": layer, "levels": {...}}}
+        output_dir: Directory to save figures
+    """
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Set up style
+    plt.style.use('seaborn-v0_8-darkgrid')
+    
+    print(f"\n  Creating per-layer visualizations...")
+    
+    for layer_key, layer_info in sorted(layer_level_data.items(), key=lambda x: int(x[0]) if str(x[0]).isdigit() else 0):
+        layer = layer_info["layer"]
+        levels_dict = layer_info["levels"]
+        
+        # Sort levels
+        sorted_levels = sorted([int(k) for k in levels_dict.keys()])
+        
+        if len(sorted_levels) == 0:
+            print(f"    ⚠ Layer {layer}: No levels found, skipping...")
+            continue
+        
+        # Extract data for this layer
+        level_labels = [f"Level {level}" for level in sorted_levels]
+        
+        concept_scores = []
+        final_scores = []
+        fluency_scores = []
+        
+        for level in sorted_levels:
+            level_data = levels_dict[str(level)]
+            concept_scores.append(level_data.get("concept_score", 0) or 0)
+            final_scores.append(level_data.get("final_score", 0) or 0)
+            fluency_scores.append(level_data.get("fluency_score", 0) or 0)
+        
+        # Create figure with 3 subplots
+        fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+        
+        colors = plt.cm.viridis(np.linspace(0.2, 0.9, len(sorted_levels)))
+        
+        # Subplot 1: Concept Scores
+        bars1 = axes[0].bar(range(len(sorted_levels)), concept_scores,
+                           color=colors, alpha=0.8, edgecolor='black', linewidth=1.5)
+        axes[0].set_xlabel('Level', fontsize=12, fontweight='bold')
+        axes[0].set_ylabel('Mean Concept Score', fontsize=12, fontweight='bold')
+        axes[0].set_title(f'Concept Scores', fontsize=14, fontweight='bold')
+        axes[0].set_xticks(range(len(sorted_levels)))
+        axes[0].set_xticklabels([str(l) for l in sorted_levels], fontsize=11)
+        axes[0].set_ylim(0, max(2, max(concept_scores) * 1.2 if concept_scores else 2))
+        axes[0].grid(axis='y', alpha=0.3)
+        
+        # Add value labels
+        for bar, score in zip(bars1, concept_scores):
+            height = bar.get_height()
+            axes[0].text(bar.get_x() + bar.get_width()/2., height + 0.02,
+                        f'{score:.2f}', ha='center', va='bottom', fontsize=9)
+        
+        # Subplot 2: Final Scores
+        bars2 = axes[1].bar(range(len(sorted_levels)), final_scores,
+                           color=colors, alpha=0.8, edgecolor='black', linewidth=1.5)
+        axes[1].set_xlabel('Level', fontsize=12, fontweight='bold')
+        axes[1].set_ylabel('Mean Final Score', fontsize=12, fontweight='bold')
+        axes[1].set_title(f'Final Scores', fontsize=14, fontweight='bold')
+        axes[1].set_xticks(range(len(sorted_levels)))
+        axes[1].set_xticklabels([str(l) for l in sorted_levels], fontsize=11)
+        axes[1].set_ylim(0, max(2, max(final_scores) * 1.2 if final_scores else 2))
+        axes[1].grid(axis='y', alpha=0.3)
+        
+        # Add value labels
+        for bar, score in zip(bars2, final_scores):
+            height = bar.get_height()
+            axes[1].text(bar.get_x() + bar.get_width()/2., height + 0.02,
+                        f'{score:.2f}', ha='center', va='bottom', fontsize=9)
+        
+        # Subplot 3: Fluency Scores
+        bars3 = axes[2].bar(range(len(sorted_levels)), fluency_scores,
+                           color=colors, alpha=0.8, edgecolor='black', linewidth=1.5)
+        axes[2].set_xlabel('Level', fontsize=12, fontweight='bold')
+        axes[2].set_ylabel('Mean Fluency Score', fontsize=12, fontweight='bold')
+        axes[2].set_title(f'Fluency Scores', fontsize=14, fontweight='bold')
+        axes[2].set_xticks(range(len(sorted_levels)))
+        axes[2].set_xticklabels([str(l) for l in sorted_levels], fontsize=11)
+        axes[2].set_ylim(0, max(2, max(fluency_scores) * 1.2 if fluency_scores else 2))
+        axes[2].grid(axis='y', alpha=0.3)
+        
+        # Add value labels
+        for bar, score in zip(bars3, fluency_scores):
+            height = bar.get_height()
+            axes[2].text(bar.get_x() + bar.get_width()/2., height + 0.02,
+                        f'{score:.2f}', ha='center', va='bottom', fontsize=9)
+        
+        # Overall title
+        plt.suptitle(f'Layer {layer}: Score Comparison Across Levels', 
+                    fontsize=16, fontweight='bold', y=1.02)
+        plt.tight_layout()
+        
+        # Save figure
+        output_path = os.path.join(output_dir, f'layer_{layer}_levels_comparison.png')
+        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        print(f"    ✓ Layer {layer}: Saved {output_path}")
+        plt.close()
 
 
 def create_visualizations(stats: Dict[int, Dict], output_dir: str):
@@ -353,12 +467,18 @@ def print_layer_analysis(layer_stats: Dict):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Analyze aggregated max scores with focus on level comparison"
+        description="Analyze aggregated max scores with focus on layer-level comparison"
     )
     parser.add_argument(
-        "--input",
+        "--layer-level-input",
         required=True,
-        help="Path to aggregated scores JSON"
+        help="Path to layer-level summary JSON (output from aggregate_causal_results.py --layer-level-output)"
+    )
+    parser.add_argument(
+        "--concepts-input",
+        required=False,
+        default=None,
+        help="Path to aggregated concepts JSON (optional, for additional analyses)"
     )
     parser.add_argument(
         "--output-dir",
@@ -369,47 +489,59 @@ def main():
     args = parser.parse_args()
 
     print("\n" + "="*80)
-    print("ANALYZING AGGREGATED MAX SCORES")
+    print("ANALYZING AGGREGATED MAX SCORES BY LAYER AND LEVEL")
     print("="*80)
 
-    # Load data
-    print(f"\n[STEP 1/5] Loading aggregated results from {args.input}...")
-    entries = load_aggregated_results(args.input)
-    print(f"  ✓ Loaded {len(entries)} concepts")
+    # Load layer-level data
+    print(f"\n[STEP 1/2] Loading layer-level summary from {args.layer_level_input}...")
+    layer_level_data = load_layer_level_summary(args.layer_level_input)
+    print(f"  ✓ Loaded {len(layer_level_data)} layers")
+    
+    for layer_key, layer_info in sorted(layer_level_data.items(), key=lambda x: int(x[0]) if str(x[0]).isdigit() else 0):
+        num_levels = len(layer_info.get("levels", {}))
+        print(f"    Layer {layer_info['layer']}: {num_levels} levels")
 
-    # Group by level
-    print(f"\n[STEP 2/5] Grouping by level...")
-    level_groups = group_by_level(entries)
-    print(f"  ✓ Found {len(level_groups)} levels: {sorted(level_groups.keys())}")
-    for level, group in level_groups.items():
-        print(f"    Level {level}: {len(group)} concepts")
+    # Create per-layer visualizations
+    print(f"\n[STEP 2/2] Creating per-layer visualizations...")
+    create_layer_level_visualizations(layer_level_data, args.output_dir)
 
-    # Compute statistics
-    print(f"\n[STEP 3/5] Computing statistics...")
-    stats = compute_level_statistics(level_groups)
-    print(f"  ✓ Computed statistics for all levels")
-
-    # Print analyses
-    print(f"\n[STEP 4/5] Printing detailed analyses...")
-    print_level_analysis(stats)
-    print_comparative_analysis(stats, entries, args.output_dir)
-
-    # Additional analysis by layer
-    layer_stats = analyze_by_layer(entries)
-    print_layer_analysis(layer_stats)
-
-    # Create visualizations
-    print(f"\n[STEP 5/5] Creating visualizations...")
-    create_visualizations(stats, args.output_dir)
+    # Optional: Load concepts data for additional analysis
+    if args.concepts_input:
+        print(f"\n[ADDITIONAL] Loading concept-level data from {args.concepts_input}...")
+        entries = load_aggregated_results(args.concepts_input)
+        print(f"  ✓ Loaded {len(entries)} concepts")
+        
+        # Group by level for cross-layer analysis
+        print(f"\n[ADDITIONAL] Creating cross-layer level analysis...")
+        level_groups = group_by_level(entries)
+        print(f"  ✓ Found {len(level_groups)} levels across all layers")
+        
+        # Compute statistics
+        stats = compute_level_statistics(level_groups)
+        
+        # Print analyses
+        print_level_analysis(stats)
+        print_comparative_analysis(stats, entries, args.output_dir)
+        
+        # Additional analysis by layer
+        layer_stats = analyze_by_layer(entries)
+        print_layer_analysis(layer_stats)
+        
+        # Create cross-layer visualizations
+        print(f"\n[ADDITIONAL] Creating cross-layer visualizations...")
+        create_visualizations(stats, args.output_dir)
 
     print("\n" + "="*80)
     print("✓ ANALYSIS COMPLETE!")
     print("="*80)
     print(f"\nFigures saved to: {args.output_dir}")
-    print(f"  - concept_scores_by_level.png")
-    print(f"  - final_scores_by_level.png")
-    print(f"  - fluency_scores_by_level.png")
-    print(f"  - all_scores_comparison.png")
+    print(f"  - Per-layer comparison figures: layer_<N>_levels_comparison.png")
+    if args.concepts_input:
+        print(f"  - Cross-layer analysis figures:")
+        print(f"    * concept_scores_by_level.png")
+        print(f"    * final_scores_by_level.png")
+        print(f"    * fluency_scores_by_level.png")
+        print(f"    * all_scores_comparison.png")
     print("\n")
 
 

@@ -186,6 +186,89 @@ def aggregate_by_layer(aggregated_concepts: List[Dict]) -> Dict[int, Dict]:
 
     return aggregated_by_layer
 
+
+def aggregate_by_layer_and_level(aggregated_concepts: List[Dict]) -> Dict:
+    """
+    Aggregate concepts by layer and level.
+    
+    For each layer, group concepts by level and compute average max scores.
+    
+    Returns:
+      - A dict where keys are layers, and values contain level-wise statistics
+        Structure: {
+            layer: {
+                "layer": layer,
+                "levels": {
+                    level: {
+                        "level": level,
+                        "final_score": avg_max_final_score,
+                        "concept_score": avg_max_concept_score,
+                        "fluency_score": avg_max_fluency_score,
+                        "num_concepts": count
+                    }
+                }
+            }
+        }
+    """
+    # Group by (layer, level)
+    layer_level_groups = defaultdict(lambda: defaultdict(list))
+    
+    for concept in aggregated_concepts:
+        layer = concept["layer"]
+        level = concept.get("level", 0)
+        layer_level_groups[layer][level].append(concept)
+    
+    # Compute statistics for each layer and level
+    result = {}
+    
+    for layer, level_dict in layer_level_groups.items():
+        levels_data = {}
+        
+        for level, concepts in level_dict.items():
+            # Extract scores
+            concept_scores = [
+                c["max_avg_concept_score"]
+                for c in concepts
+                if c.get("max_avg_concept_score") is not None
+            ]
+            final_scores = [
+                c["max_avg_final_score"]
+                for c in concepts
+                if c.get("max_avg_final_score") is not None
+            ]
+            fluency_scores = [
+                c["max_avg_fluency_score"]
+                for c in concepts
+                if c.get("max_avg_fluency_score") is not None
+            ]
+            
+            levels_data[level] = {
+                "level": level,
+                "final_score": (
+                    sum(final_scores) / len(final_scores)
+                    if final_scores else None
+                ),
+                "concept_score": (
+                    sum(concept_scores) / len(concept_scores)
+                    if concept_scores else None
+                ),
+                "fluency_score": (
+                    sum(fluency_scores) / len(fluency_scores)
+                    if fluency_scores else None
+                ),
+                "num_concepts": len(concepts),
+                "num_valid_final_scores": len(final_scores),
+                "num_valid_concept_scores": len(concept_scores),
+                "num_valid_fluency_scores": len(fluency_scores)
+            }
+        
+        result[layer] = {
+            "layer": layer,
+            "levels": levels_data
+        }
+    
+    return result
+
     
 
 
@@ -213,6 +296,12 @@ def main():
         "--layers-output",
         required=True,
         help="Path to write aggregated JSON by layers"
+    )
+    parser.add_argument(
+        "--layer-level-output",
+        required=False,
+        default=None,
+        help="Path to write layer-level summary JSON (each layer with its levels and scores)"
     )
 
     args = parser.parse_args()
@@ -255,14 +344,23 @@ def main():
         json.dump(result_list, f, indent=2)
 
     # Save aggregation where each entry is a layer with the scores obtained for each level
-    print(f"\n[STEP 3./3] Saving results to {args.layers_output}...")
+    print(f"\n[STEP 3.2/4] Saving results to {args.layers_output}...")
 
     aggregated_by_layer = aggregate_by_layer(result_list)
     with open(args.layers_output, 'w') as f:
         json.dump(aggregated_by_layer, f, indent=2)
 
+    print(f"  ✓ Saved layer aggregation to {args.layers_output}")
 
-    print(f"  ✓ Saved {len(result_list)} aggregated entries")
+    # Save layer-level aggregation (new format for visualization)
+    if args.layer_level_output:
+        print(f"\n[STEP 3.3/4] Saving layer-level summary to {args.layer_level_output}...")
+        layer_level_data = aggregate_by_layer_and_level(result_list)
+        with open(args.layer_level_output, 'w') as f:
+            json.dump(layer_level_data, f, indent=2)
+        print(f"  ✓ Saved {len(layer_level_data)} layers with level breakdowns")
+
+    print(f"  ✓ Saved {len(result_list)} aggregated concept entries")
 
     # Print summary statistics
     print("\n" + "="*80)
