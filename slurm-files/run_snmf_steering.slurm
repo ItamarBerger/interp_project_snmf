@@ -46,5 +46,5 @@ fi
 
 echo "Running command : $SCRIPT_CMD"
 
-bash SCRIPT_CMD
+bash $SCRIPT_CMD
 
