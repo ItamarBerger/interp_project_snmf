@@ -27,4 +27,9 @@ if [ -z "$STEPS" ]; then
   STEPS="all"
 fi
 
-bash experiments/run_hier_snmf_steering.sh --steps $STEPS
+if [ -z "$LAYERS" ]; then
+  LAYERS="0,3,6,9,11"
+fi
+
+
+bash experiments/run_hier_snmf_steering.sh --steps $STEPS --layers $LAYERS

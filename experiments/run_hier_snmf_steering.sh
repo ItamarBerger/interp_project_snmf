@@ -86,7 +86,7 @@ if [[ " ${STEPS[*]} " == *" generate_input_descriptions "* ]]; then
     --output-json experiments/artifacts/input_descriptions.json \
     --model gemini-2.0-flash \
     --env-var GEMINI_API_KEY \
-    --layers 0,3,6,9,11 \
+    --layers $LAYERS \
     --k-values 400,200,100,50 \
     --top-m 10 \
     --max-tokens 200 \
@@ -121,8 +121,9 @@ if [[ " ${STEPS[*]} " == *" generate_output_descriptions "* ]]; then
   --input experiments/artifacts/vocab_proj.json \
   --output experiments/artifacts/output_descriptions.json \
   --model gemini-2.0-flash \
-  --layers 0,3,6,9,11 \
+  --layers $LAYERS \
   --ranks 400,200,100,50 \
+  --concurrency 25 \
   --top-m 25 \
   --max-tokens 5000
   fi
@@ -134,7 +135,7 @@ if [[ " ${STEPS[*]} " == *" generate_causal_output "* ]]; then
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/causal/generate_causal_output.py \
    --model-name gpt2-small \
-   --layers 0,3,6,9,11 \
+   --layers $LAYERS \
    --ranks 400,200,100,50 \
    --sparsity 0.01 \
    --factorization-base-path experiments/artifacts/hier \
@@ -155,7 +156,7 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
    --output experiments/artifacts/causal_results_in.json \
    --model gemini-2.0-flash \
    --ranks 400,200,100,50 \
-   --layers 0,3,6,9,11 \
+   --layers $LAYERS \
    --concurrency 25
   fi
   echo "Input score judging completed."
@@ -168,7 +169,7 @@ if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
     --input experiments/artifacts/causal_output.json \
    --concepts experiments/artifacts/output_descriptions.json \
    --output experiments/artifacts/results_causal_out.json \
-   --layers 0,3,6,9,11 \
+   --layers $LAYERS \
    --ranks 400,200,100,50 \
    --model gemini-2.0-flash \
    --concurrency 25 \
