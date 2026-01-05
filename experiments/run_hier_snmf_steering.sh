@@ -6,6 +6,7 @@ echo "Starting hierarchical SNMF steering experiment..."
 
 STEPS="all"
 DRY_RUN=0
+LAYERS="0,3,6,9,11"
 
 # Get args to control which steps to run
 # If STEPS is "all", run all steps
@@ -18,6 +19,10 @@ while [[ $# -gt 0 ]]; do
     --dry-run)
       DRY_RUN=1
       shift 1
+      ;;
+    --layers)
+      LAYERS="$2"
+      shift 2
       ;;
     *)
       echo "Unknown arg: $1" >&2
@@ -45,7 +50,7 @@ if [[ " ${STEPS[*]} " == *" train "* ]]; then
       --fine-tune \
       --model-name gpt2-small \
       --factorization-mode mlp \
-      --layers 0,3,6,9,11 \
+      --layers $LAYERS \
       --data-path data/hier_concepts.json \
       --model-device cuda \
       --data-device cpu \
@@ -64,7 +69,7 @@ if [[ " ${STEPS[*]} " == *" generate_concept_context "* ]]; then
     --models-dir experiments/artifacts/hier \
     --output-json experiments/artifacts/concept_contexts.json \
     --data-path data/hier_concepts.json \
-    --layers 0,3,6,9,11 \
+    --layers $LAYERS \
     --ranks 400,200,100,50 \
     --num-samples-per-factor 25 \
     --context-window 15 \
@@ -104,7 +109,7 @@ if [[ " ${STEPS[*]} " == *" generate_vocab_proj "* ]]; then
     --base-path . \
     --factorization-base-path experiments/artifacts/hier \
     --output-path experiments/artifacts/vocab_proj.json \
-    --layers 0,3,6,9,11 \
+    --layers $LAYERS \
     --ranks 400,200,100,50 \
     --top-k 75 \
     --sparsity 0.01 \
