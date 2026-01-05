@@ -36,6 +36,9 @@ if [[ "${STEPS[0]}" == "all" ]]; then
   STEPS=("train" "generate_concept_context" "generate_input_descriptions" "generate_vocab_proj" "generate_output_descriptions" "generate_causal_output" "input_score_judge" "output_score_judge")
 fi
 
+echo "Steps to run: ${STEPS[*]}"
+echo "Layers: $LAYERS"
+
 
 if [[ " ${STEPS[*]} " == *" train "* ]]; then
   echo "Running training step..."
