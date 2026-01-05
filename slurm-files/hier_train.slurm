@@ -1,9 +1,8 @@
 #!/bin/bash
 
 #SBATCH --job-name=train_hier_snmf
-#SBATCH --chdir=/home/ADV_2526a/itamarberger/interp_project_snmf
-#SBATCH --output=/home/ADV_2526a/itamarberger/slurm_logs/%x_%j.out
-#SBATCH --error=/home/ADV_2526a/itamarberger/slurm_logs/%x_%j.err
+#SBATCH --output=/home/ADV_2526a/%u/slurm_logs/%x_%j.out
+#SBATCH --error=/home/ADV_2526a/%u/slurm_logs/%x_%j.err
 #SBATCH --partition=studentkillable
 #SBATCH --time=24:00:00
 #SBATCH --signal=USR1@120
@@ -13,6 +12,9 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mail-user=itamarberger@mail.tau.ac.il
 #SBATCH --mail-type=FAIL,END
+
+# Set working directory according to the user currently running the job
+cd /home/ADV_2526a/$USER/interp_project_snmf
 
 
 # Make sure that files that are created by this script are accesible by everyone

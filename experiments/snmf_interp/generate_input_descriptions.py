@@ -11,6 +11,11 @@ import google.generativeai as genai
 
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 from dotenv import load_dotenv
+import logging
+
+from utils import setup_logging
+
+logger = logging.getLogger(__name__)
 
 # ---------------- Prompts ---------------- #
 CONCEPT_PROMPT = """
@@ -121,7 +126,7 @@ def make_generate_concept(retries: int, model, max_tokens: int, semaphore: async
 def make_process_entry(generate_concept):
     async def _inner(entry, top_m: int):
         concept_desc = await generate_concept(entry, top_m)
-        print(".", end="", flush=True)
+        logger.info(".", extra={"end": ""})
         return {
             "K": entry["K"],
             "layer": entry["layer"],
@@ -163,15 +168,16 @@ async def run(args):
         if (int(e["layer"]) in layers and int(e["K"]) in k_values and int(e["level"]) in levels)
     ]
 
-    print(f"Running over {len(tasks)} tasks …")
+    logger.info(f"Running over {len(tasks)} tasks …")
     results = []
     for coro in asyncio.as_completed(tasks):
         results.append(await coro)
 
     save_data(args.output_json, results)
-    print(f"\nWrote {len(results)} descriptions to {args.output_json}")
+    logger.info(f"\nWrote {len(results)} descriptions to {args.output_json}")
 
 def main():
+    setup_logging()
     args = build_arg_parser().parse_args()
     asyncio.run(run(args))
 

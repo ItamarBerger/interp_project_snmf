@@ -3,15 +3,20 @@ from datetime import datetime
 from pathlib import Path
 from typing import List
 
+from utils import setup_logging
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from evaluation.json_handler import JsonHandler
 from llm_utils.activation_generator import ActivationGenerator, extract_token_ids_sample_ids_and_labels
 from data_utils.concept_dataset import SupervisedConceptDataset
 from factorization.seminmf import NMFSemiNMF  # typing only
+import logging
+
+logger = logging.getLogger(__name__)
 
 # ----------------------------- utils -----------------------------
 def log(txt: str) -> None:
-    print(f"[{datetime.now()}] {txt}", flush=True)
+    logger.info(txt)
 
 def set_seed(seed: int = 42) -> None:
     random.seed(seed); np.random.seed(seed)
@@ -68,6 +73,7 @@ def get_top_activating_indices(G_np: np.ndarray, concept_idx: int, num_samples: 
 
 # ----------------------------- main -----------------------------
 def main():
+    setup_logging()
     p = argparse.ArgumentParser(description="Extract top contexts for Semi-NMF factors from saved models (fully arg-driven).")
     # Required explicit paths (no assumptions)
     p.add_argument("--models-dir", type=str, required=True,

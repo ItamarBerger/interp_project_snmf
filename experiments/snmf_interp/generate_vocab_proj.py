@@ -1,5 +1,8 @@
 import sys
 import os
+
+from utils import setup_logging
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import argparse
@@ -15,7 +18,9 @@ from evaluation.json_handler import JsonHandler
 from intervention.intervener import Intervener
 from factorization.seminmf import NMFSemiNMF
 from tqdm import tqdm
+import logging
 
+logger = logging.getLogger(__name__)
 
 
 
@@ -31,7 +36,7 @@ def set_seed(seed: int = 42):
     torch.backends.cudnn.benchmark = False
 
 def log(txt: str):
-    print(f"[{datetime.now()}] {txt}", flush=True)
+    logger.info(txt)
 
 
 def parse_int_list(spec: str):
@@ -85,6 +90,7 @@ def get_vocab_proj_gemma(concept_vector, model, top_k=50, device="cuda"):
 # Main
 # ------------------------------
 if __name__ == "__main__":
+    setup_logging()
     parser = argparse.ArgumentParser(
         description="Vocab projection for NMF concept vectors (auto-switch Gemma vs Regular)."
     )
