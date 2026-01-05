@@ -83,8 +83,8 @@ if [[ " ${STEPS[*]} " == *" generate_input_descriptions "* ]]; then
     PYTHONPATH=. python experiments/snmf_interp/generate_input_descriptions.py \
     --input-json experiments/artifacts/concept_contexts.json \
     --output-json experiments/artifacts/input_descriptions.json \
-    --model gpt-4o-mini \
-    --env-var OPENAI_API_KEY \
+    --model gemini-2.0-flash \
+    --env-var GEMINI_API_KEY \
     --layers 0,3,6,9,11 \
     --k-values 400,200,100,50 \
     --top-m 10 \
@@ -148,14 +148,14 @@ fi
 if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
   echo "Starting input score judging..."
   if [[ $DRY_RUN -eq 0 ]]; then
-     PYTHONPATH=. python experiments/causal/input_score_llm_judge.py \
+    PYTHONPATH=. python experiments/causal/input_score_llm_judge.py \
    --input experiments/artifacts/causal_output.json \
    --concepts experiments/artifacts/input_descriptions.json \
    --output experiments/artifacts/causal_results_in.json \
    --model gemini-2.0-flash \
    --ranks 400,200,100,50 \
-   --layers 0,3 \
-   --concurrency 25
+   --layers 0,3,6,9,11 \
+   --concurrency 50
   fi
   echo "Input score judging completed."
 fi
@@ -163,16 +163,16 @@ fi
 if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
   echo "Starting output score judging..."
   if [[ $DRY_RUN -eq 0 ]]; then
-      PYTHONPATH=. python experiments/causal/output_score_llm_judge.py \
-      --input experiments/artifacts/causal_output.json \
-     --concepts experiments/artifacts/output_descriptions.json \
-     --output experiments/artifacts/results_causal_out.json \
-     --layers 11 \
-     --ranks 400,200,100,50 \
-     --model gemini-2.0-flash \
-     --concurrency 25 \
-     --attempts 2 \
-     --sparsity 0.01
+    PYTHONPATH=. python experiments/causal/output_score_llm_judge.py \
+    --input experiments/artifacts/causal_output.json \
+   --concepts experiments/artifacts/output_descriptions.json \
+   --output experiments/artifacts/results_causal_out.json \
+   --layers 0,3,6,9,11 \
+   --ranks 400,200,100,50 \
+   --model gemini-2.0-flash \
+   --concurrency 50 \
+   --attempts 2 \
+   --sparsity 0.01
   fi
     echo "Output score judging completed."
 fi
