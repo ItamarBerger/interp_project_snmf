@@ -32,7 +32,7 @@ if [ -z "$LAYERS" ]; then
 fi
 
 # Convert '|' to ',' if needed, since slurm can't handle the "," character well in variable passing
-LAYERS=$(echo "LAYERS" | tr '|' ',')
+LAYERS=$(echo "$LAYERS" | tr '|' ',')
 
 echo "Running scripts with STEPS=$STEPS and LAYERS=$LAYERS"
 
