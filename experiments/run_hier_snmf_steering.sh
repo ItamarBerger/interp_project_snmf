@@ -102,7 +102,7 @@ if [[ " ${STEPS[*]} " == *" generate_vocab_proj "* ]]; then
    PYTHONPATH=. python experiments/snmf_interp/generate_vocab_proj.py\
     --model-name gpt2-small \
     --base-path . \
-    --factorization-base-path experiments/artifacts \
+    --factorization-base-path experiments/artifacts/hier \
     --output-path experiments/artifacts/vocab_proj.json \
     --layers 0 \
     --ranks 50 \
