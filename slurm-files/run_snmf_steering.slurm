@@ -37,4 +37,12 @@ STEPS=$(echo "$STEPS" | tr '|' ',')
 
 echo "Running scripts with STEPS=$STEPS and LAYERS=$LAYERS"
 
-bash experiments/run_hier_snmf_steering.sh --steps $STEPS --layers $LAYERS
+SCRIPT_CMD="experiments/run_hier_snmf_steering.sh --steps $STEPS --layers $LAYERS"
+
+if [[ -n "$CAUS_SAVE_PATH" ]]; then
+  echo "Using causal save path: $CAUS_SAVE_PATH"
+  SCRIPT_CMD+=" --causal-save-path $CAUS_SAVE_PATH"
+fi
+
+bash SCRIPT_CMD
+

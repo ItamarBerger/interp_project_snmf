@@ -7,6 +7,7 @@ echo "Starting hierarchical SNMF steering experiment..."
 STEPS="all"
 DRY_RUN=0
 LAYERS="0,3,6,9,11"
+CAUSAL_SAVE_PATH="experiments/artifacts/causal_output.json"
 
 # Get args to control which steps to run
 # If STEPS is "all", run all steps
@@ -22,6 +23,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --layers)
       LAYERS="$2"
+      shift 2
+      ;;
+    --causal-save-path
+      CAUSAL_SAVE_PATH="$2"
       shift 2
       ;;
     *)
@@ -147,7 +152,7 @@ if [[ " ${STEPS[*]} " == *" generate_causal_output "* ]]; then
    --ranks 400,200,100,50 \
    --sparsity 0.01 \
    --factorization-base-path experiments/artifacts/hier \
-   --save-path experiments/artifacts/causal_output.json \
+   --save-path $CAUSAL_SAVE_PATH \
    --device cuda
   fi
   echo "Causal output generated."
