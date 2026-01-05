@@ -11,6 +11,11 @@ import google.generativeai as genai
 # from openai import AsyncOpenAI
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 from experiments.evaluation.json_handler import JsonHandler
+import logging
+
+from utils import setup_logging
+
+logger = logging.getLogger(__name__)
 
 # ── utils ─────────────────────────────────────────────────────────────────────
 def parse_int_list(spec: Optional[str]) -> Optional[List[int]]:
@@ -122,12 +127,12 @@ Make sure you output a very precise and detailed description of the concept that
         )
 
         prompt = CONNECTION_PROMPT.format(token_context_str=token_context_str)
-        print(f"[→] Generating for K={entry.get('K', 'SAE')} layer={entry['layer']} row={entry['h_row']} level={entry.get('level', 0)}…", flush=True)
+        logger.info(f"[→] Generating for K={entry.get('K', 'SAE')} layer={entry['layer']} row={entry['h_row']} level={entry.get('level', 0)}…")
 
         resp = await _call_gemini(prompt, max_tokens)
         content = resp.text.strip()
         result  = extract_results_section(content) or "ERROR: no Results section"
-        print(f"[✔] Done K={entry.get('K', 'SAE')} layer={entry['layer']} level = {entry.get('level', 0)}", flush=True)
+        logger.info(f"[✔] Done K={entry.get('K', 'SAE')} layer={entry['layer']} level = {entry.get('level', 0)}")
         return {
             'description': result,
             'layer': entry['layer'],
@@ -145,7 +150,7 @@ Make sure you output a very precise and detailed description of the concept that
         if int(e['layer']) in layers and ('K' not in e or not ranks or int(e['K']) in ranks) and int(e['level']) in levels
     ]
 
-    print(f"Processing {len(filtered)} entries…", flush=True)
+    logger.info(f"Processing {len(filtered)} entries…")
     tasks = [generate_concept(e) for e in filtered]
 
     results = []
@@ -153,9 +158,9 @@ Make sure you output a very precise and detailed description of the concept that
         try:
             res = await coro
             results.append(res)
-            print(f"  → Completed {len(results)}/{len(filtered)}", flush=True)
+            logger.info(f"  → Completed {len(results)}/{len(filtered)}")
         except Exception as err:
-            print(f"  ⚠ Sample exception: {err}", flush=True)
+            logger.info(f"  ⚠ Sample exception: {err}")
 
     json_handler = JsonHandler(
         ["description", "layer", "level", "h_row", "K", "sign"],
@@ -168,7 +173,7 @@ Make sure you output a very precise and detailed description of the concept that
 
     bad  = sum(('TRASH' in (r['description'] or "")) for r in results)
     good = len(results) - bad
-    print(f"Good: {good}\tBad: {bad}", flush=True)
+    logger.info(f"Good: {good}\tBad: {bad}")
 
 # ── entrypoint ────────────────────────────────────────────────────────────────
 def build_argparser() -> argparse.ArgumentParser:
@@ -186,6 +191,7 @@ def build_argparser() -> argparse.ArgumentParser:
     return p
 
 def main():
+    setup_logging()
     args = build_argparser().parse_args()
     asyncio.run(run(args))
 

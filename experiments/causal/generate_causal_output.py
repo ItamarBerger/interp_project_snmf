@@ -6,6 +6,8 @@ import argparse
 import pickle
 from datetime import datetime
 
+from utils import setup_logging
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import random
@@ -17,6 +19,9 @@ from transformer_lens import HookedTransformer
 from evaluation.json_handler import JsonHandler
 from intervention.intervener import Intervener
 from factorization.seminmf import NMFSemiNMF
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Gemma-only utility (safe to import; only used if gemma)
 try:
@@ -29,7 +34,7 @@ except Exception:
 # Utils
 # ------------------------------
 def log(txt: str) -> None:
-    print(f"[{datetime.now()}] {txt}", flush=True)
+    logger.info(txt)
 
 def set_seed(seed: int = 42) -> None:
     random.seed(seed)
@@ -78,6 +83,7 @@ def get_concept_vector_gemma(mlp_vec: torch.Tensor, model: HookedTransformer, la
 # Main
 # ------------------------------
 def main():
+    setup_logging()
     set_seed(42)
 
     parser = argparse.ArgumentParser(
@@ -106,7 +112,7 @@ def main():
 
     args = parser.parse_args()
     device = args.device or torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Device: {device}")
+    logger.info(f"Device: {device}")
     model_name = args.model_name
     layers = args.layers
     ranks = args.ranks                      # list[int] for hierarchical run, e.g. [400,200,100,50]
