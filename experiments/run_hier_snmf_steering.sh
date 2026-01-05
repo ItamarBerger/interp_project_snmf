@@ -104,8 +104,8 @@ if [[ " ${STEPS[*]} " == *" generate_vocab_proj "* ]]; then
     --base-path . \
     --factorization-base-path experiments/artifacts/hier \
     --output-path experiments/artifacts/vocab_proj.json \
-    --layers 0 \
-    --ranks 50 \
+    --layers 0,3,6,9,11 \
+    --ranks 400,200,100,50 \
     --top-k 75 \
     --sparsity 0.01 \
     --device cuda \
