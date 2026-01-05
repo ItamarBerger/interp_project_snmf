@@ -155,7 +155,7 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
    --model gemini-2.0-flash \
    --ranks 400,200,100,50 \
    --layers 0,3,6,9,11 \
-   --concurrency 50
+   --concurrency 25
   fi
   echo "Input score judging completed."
 fi
@@ -170,7 +170,7 @@ if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
    --layers 0,3,6,9,11 \
    --ranks 400,200,100,50 \
    --model gemini-2.0-flash \
-   --concurrency 50 \
+   --concurrency 25 \
    --attempts 2 \
    --sparsity 0.01
   fi
