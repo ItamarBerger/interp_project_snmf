@@ -25,7 +25,7 @@ while [[ $# -gt 0 ]]; do
       LAYERS="$2"
       shift 2
       ;;
-    --causal-save-path
+    --causal-save-path)
       CAUSAL_SAVE_PATH="$2"
       shift 2
       ;;
@@ -43,6 +43,7 @@ fi
 
 echo "Steps to run: ${STEPS[*]}"
 echo "Layers: $LAYERS"
+echo "save path for causal output: $CAUSAL_SAVE_PATH"
 
 
 if [[ " ${STEPS[*]} " == *" train "* ]]; then
