@@ -44,5 +44,7 @@ if [[ -n "$CAUS_SAVE_PATH" ]]; then
   SCRIPT_CMD="$SCRIPT_CMD --causal-save-path $CAUS_SAVE_PATH"
 fi
 
+echo "Running command : $SCRIPT_CMD"
+
 bash SCRIPT_CMD
 
