@@ -128,6 +128,8 @@ def main():
     factorization_base_path = args.factorization_base_path
     save_path = args.save_path
 
+    logger.info("Using save path: %s", save_path)
+
     # Track how many rows we already created per (layer, h_row, hier_level, K)
     processed_counts = {}
     if os.path.exists(save_path):

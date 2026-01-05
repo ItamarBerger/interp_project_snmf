@@ -41,7 +41,7 @@ SCRIPT_CMD="experiments/run_hier_snmf_steering.sh --steps $STEPS --layers $LAYER
 
 if [[ -n "$CAUS_SAVE_PATH" ]]; then
   echo "Using causal save path: $CAUS_SAVE_PATH"
-  SCRIPT_CMD+=" --causal-save-path $CAUS_SAVE_PATH"
+  SCRIPT_CMD="$SCRIPT_CMD --causal-save-path $CAUS_SAVE_PATH"
 fi
 
 bash SCRIPT_CMD
