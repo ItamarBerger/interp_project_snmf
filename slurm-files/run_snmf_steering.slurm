@@ -31,5 +31,6 @@ if [ -z "$LAYERS" ]; then
   LAYERS="0,3,6,9,11"
 fi
 
+echo "Running scripts with STEPS=$STEPS and LAYERS=$LAYERS"
 
 bash experiments/run_hier_snmf_steering.sh --steps $STEPS --layers $LAYERS
