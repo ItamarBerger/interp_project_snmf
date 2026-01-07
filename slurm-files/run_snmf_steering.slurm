@@ -27,4 +27,24 @@ if [ -z "$STEPS" ]; then
   STEPS="all"
 fi
 
-bash experiments/run_hier_snmf_steering.sh --steps $STEPS
+if [ -z "$LAYERS" ]; then
+  LAYERS="0,3,6,9,11"
+fi
+
+# Convert '|' to ',' if needed, since slurm can't handle the "," character well in variable passing
+LAYERS=$(echo "$LAYERS" | tr '|' ',')
+STEPS=$(echo "$STEPS" | tr '|' ',')
+
+echo "Running scripts with STEPS=$STEPS and LAYERS=$LAYERS"
+
+SCRIPT_CMD="experiments/run_hier_snmf_steering.sh --steps $STEPS --layers $LAYERS"
+
+if [[ -n "$CAUS_SAVE_PATH" ]]; then
+  echo "Using causal save path: $CAUS_SAVE_PATH"
+  SCRIPT_CMD="$SCRIPT_CMD --causal-save-path $CAUS_SAVE_PATH"
+fi
+
+echo "Running command : $SCRIPT_CMD"
+
+bash $SCRIPT_CMD
+

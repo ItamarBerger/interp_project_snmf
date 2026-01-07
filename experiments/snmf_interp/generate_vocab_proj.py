@@ -189,7 +189,7 @@ if __name__ == "__main__":
                 nmf_models[layer] = pickle.load(f)
             log(f"Loaded hierarchical NMF for layer {layer}, ranks {ranks_str}")
         else:
-            log(f"Missing hierarchical file for layer {layer}: {fp}")
+            logger.warning(f"Missing hierarchical file for layer {layer}: {fp}")
 
     # Vocab projection per (layer, level)/h
     for layer in layers:

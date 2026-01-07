@@ -186,7 +186,7 @@ def build_argparser() -> argparse.ArgumentParser:
     p.add_argument("--layers", type=str, help="Layers filter like '23,31' or '0-3,6'. Default env/23,31.")
     p.add_argument("--ranks",  type=str, help="Ranks (K) filter like '50,100' or '50-200'. If omitted, no K filter.")
     p.add_argument("--top-m", type=int, help="Top-M tokens to consider per entry (overrides TOP_M env).")
-    p.add_argument("--concurrency", type=int, help="Max concurrent API calls (overrides CONCURRENCY env).")
+    p.add_argument("--concurrency", type=int, help="Max concurrent API calls (overrides CONCURRENCY env).", default=25)
     p.add_argument("--max-tokens", type=int, default=5000, help="max_tokens for the completion (default 5000).")
     return p
 

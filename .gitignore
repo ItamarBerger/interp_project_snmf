@@ -17,6 +17,8 @@
 # Pyenv
 .python-version
 
+# Ignore local env variables
+.env
 
 # Hydra's output
 outputs/*

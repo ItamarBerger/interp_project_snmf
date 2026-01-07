@@ -126,7 +126,7 @@ def make_generate_concept(retries: int, model, max_tokens: int, semaphore: async
 def make_process_entry(generate_concept):
     async def _inner(entry, top_m: int):
         concept_desc = await generate_concept(entry, top_m)
-        logger.info(".", extra={"end": ""})
+        print(".", end="", flush=True)
         return {
             "K": entry["K"],
             "layer": entry["layer"],
