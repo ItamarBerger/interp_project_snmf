@@ -295,7 +295,7 @@ def create_layer_level_visualizations(layer_level_data: Dict, output_dir: str):
         plt.close()
 
 
-def create_visualizations(stats: Dict[int, Dict], output_dir: str):
+def create_visualizations(stats: Dict[int, Dict], output_dir: str, layer_stats: dict):
     """Create matplotlib visualizations comparing levels"""
     # save figures by their corresponding layer (output_dir/layer_{layer}.png)
 
@@ -303,6 +303,8 @@ def create_visualizations(stats: Dict[int, Dict], output_dir: str):
 
     sorted_levels = sorted(stats.keys())
 
+    layers_string = "_".join(str(layer) for layer in sorted(layer_stats.keys()))
+    layers_description = "[Layers " + ", ".join(str(layer) for layer in sorted(layer_stats.keys())) + "]"
     # Set up style
     plt.style.use('seaborn-v0_8-darkgrid')
     colors = plt.cm.viridis(np.linspace(0.2, 0.9, len(sorted_levels)))
@@ -318,7 +320,7 @@ def create_visualizations(stats: Dict[int, Dict], output_dir: str):
 
     ax.set_xlabel('Level', fontsize=14, fontweight='bold')
     ax.set_ylabel('Mean Concept Score', fontsize=14, fontweight='bold')
-    ax.set_title('Max Average Concept Scores by Level', fontsize=16, fontweight='bold', pad=20)
+    ax.set_title(f'Max Average Concept Scores by Level {layers_description}', fontsize=16, fontweight='bold', pad=20)
     ax.set_xticks(range(len(sorted_levels)))
     ax.set_xticklabels([f'Level {l}' for l in sorted_levels], fontsize=12)
     ax.set_ylim(0, 2)
@@ -331,8 +333,9 @@ def create_visualizations(stats: Dict[int, Dict], output_dir: str):
                 f'{mean:.3f}', ha='center', va='bottom', fontsize=10, fontweight='bold')
 
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'concept_scores_by_level.png'), dpi=300, bbox_inches='tight')
-    print(f"  ✓ Saved: {os.path.join(output_dir, 'concept_scores_by_level.png')}")
+    concepts_score_file_name = f'concept_scores_by_level_{layers_string}.png'
+    plt.savefig(os.path.join(output_dir, concepts_score_file_name), dpi=300, bbox_inches='tight')
+    print(f"  ✓ Saved: {os.path.join(output_dir, concepts_score_file_name)}")
     plt.close()
 
     # Figure 2: Final Scores
@@ -346,7 +349,7 @@ def create_visualizations(stats: Dict[int, Dict], output_dir: str):
 
     ax.set_xlabel('Level', fontsize=14, fontweight='bold')
     ax.set_ylabel('Mean Final Score', fontsize=14, fontweight='bold')
-    ax.set_title('Max Average Final Scores by Level', fontsize=16, fontweight='bold', pad=20)
+    ax.set_title(f'Max Average Final Scores by Level {layers_description}', fontsize=16, fontweight='bold', pad=20)
     ax.set_xticks(range(len(sorted_levels)))
     ax.set_xticklabels([f'Level {l}' for l in sorted_levels], fontsize=12)
     ax.set_ylim(0, 2)
@@ -359,8 +362,9 @@ def create_visualizations(stats: Dict[int, Dict], output_dir: str):
                 f'{mean:.3f}', ha='center', va='bottom', fontsize=10, fontweight='bold')
 
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'final_scores_by_level.png'), dpi=300, bbox_inches='tight')
-    print(f"  ✓ Saved: {os.path.join(output_dir, 'final_scores_by_level.png')}")
+    final_scores_file_name = f'final_scores_by_level_{layers_string}.png'
+    plt.savefig(os.path.join(output_dir, final_scores_file_name), dpi=300, bbox_inches='tight')
+    print(f"  ✓ Saved: {os.path.join(output_dir, final_scores_file_name)}")
     plt.close()
 
     # Figure 3: Fluency Scores
@@ -374,7 +378,7 @@ def create_visualizations(stats: Dict[int, Dict], output_dir: str):
 
     ax.set_xlabel('Level', fontsize=14, fontweight='bold')
     ax.set_ylabel('Mean Fluency Score', fontsize=14, fontweight='bold')
-    ax.set_title('Max Average Fluency Scores by Level', fontsize=16, fontweight='bold', pad=20)
+    ax.set_title(f'Max Average Fluency Scores by Level {layers_description}', fontsize=16, fontweight='bold', pad=20)
     ax.set_xticks(range(len(sorted_levels)))
     ax.set_xticklabels([f'Level {l}' for l in sorted_levels], fontsize=12)
     ax.set_ylim(0, 2)
@@ -387,8 +391,9 @@ def create_visualizations(stats: Dict[int, Dict], output_dir: str):
                 f'{mean:.3f}', ha='center', va='bottom', fontsize=10, fontweight='bold')
 
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'fluency_scores_by_level.png'), dpi=300, bbox_inches='tight')
-    print(f"  ✓ Saved: {os.path.join(output_dir, 'fluency_scores_by_level.png')}")
+    fluency_scores_file_name = f'fluency_scores_by_level_{layers_string}.png'
+    plt.savefig(os.path.join(output_dir, fluency_scores_file_name), dpi=300, bbox_inches='tight')
+    print(f"  ✓ Saved: {os.path.join(output_dir, fluency_scores_file_name)}")
     plt.close()
 
     # Figure 4: Combined comparison
@@ -418,11 +423,15 @@ def create_visualizations(stats: Dict[int, Dict], output_dir: str):
             axes[idx].text(bar.get_x() + bar.get_width()/2., height + 0.05,
                           f'{mean:.2f}', ha='center', va='bottom', fontsize=9)
 
-    plt.suptitle('Comparison of All Score Types Across Levels', fontsize=16, fontweight='bold', y=1.02)
+    plt.suptitle(f'Comparison of All Score Types Across Levels {layers_description}', fontsize=16, fontweight='bold', y=1.02)
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'all_scores_comparison.png'), dpi=300, bbox_inches='tight')
-    print(f"  ✓ Saved: {os.path.join(output_dir, 'all_scores_comparison.png')}")
+    all_scores_file_name = f'all_scores_comparison_{layers_string}.png'
+    plt.savefig(os.path.join(output_dir, all_scores_file_name), dpi=300, bbox_inches='tight')
+    print(f"  ✓ Saved: {os.path.join(output_dir, all_scores_file_name)}")
     plt.close()
+    # Return the filenames that this script has created
+    return concepts_score_file_name, final_scores_file_name, fluency_scores_file_name, all_scores_file_name
+
 
 
 def analyze_by_layer(entries: List[Dict]) -> Dict:
@@ -506,6 +515,7 @@ def main():
     create_layer_level_visualizations(layer_level_data, args.output_dir)
 
     # Optional: Load concepts data for additional analysis
+    additional_files_created = ()
     if args.concepts_input:
         print(f"\n[ADDITIONAL] Loading concept-level data from {args.concepts_input}...")
         entries = load_aggregated_results(args.concepts_input)
@@ -529,7 +539,7 @@ def main():
         
         # Create cross-layer visualizations
         print(f"\n[ADDITIONAL] Creating cross-layer visualizations...")
-        create_visualizations(stats, args.output_dir)
+        additional_files_created = create_visualizations(stats, args.output_dir,layer_stats)
 
     print("\n" + "="*80)
     print("✓ ANALYSIS COMPLETE!")
@@ -538,10 +548,8 @@ def main():
     print(f"  - Per-layer comparison figures: layer_<N>_levels_comparison.png")
     if args.concepts_input:
         print(f"  - Cross-layer analysis figures:")
-        print(f"    * concept_scores_by_level.png")
-        print(f"    * final_scores_by_level.png")
-        print(f"    * fluency_scores_by_level.png")
-        print(f"    * all_scores_comparison.png")
+        for file_name in additional_files_created:
+            print(f"    * {file_name}")
     print("\n")
 
 

@@ -1,0 +1,26 @@
+{
+  "level": 1,
+  "layer": 0,
+  "num_concepts": 200,
+  "concept_scores": {
+    "mean": 0.718125,
+    "std": 0.6639132920607931,
+    "min": 0.0,
+    "max": 2.0,
+    "count": 200
+  },
+  "final_scores": {
+    "mean": 0.51625,
+    "std": 0.4458097735207996,
+    "min": 0.0,
+    "max": 1.5,
+    "count": 200
+  },
+  "fluency_scores": {
+    "mean": 0.87875,
+    "std": 0.19035739413009414,
+    "min": 0.125,
+    "max": 1.25,
+    "count": 200
+  }
+}

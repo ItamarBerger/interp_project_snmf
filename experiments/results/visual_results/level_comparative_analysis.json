@@ -1,0 +1,110 @@
+{
+  "1": {
+    "num_concepts": 200,
+    "concept_scores": {
+      "mean": 0.718125,
+      "std": 0.6639132920607931,
+      "median": 0.5,
+      "min": 0.0,
+      "max": 2.0,
+      "count": 200
+    },
+    "final_scores": {
+      "mean": 0.51625,
+      "std": 0.4458097735207996,
+      "median": 0.375,
+      "min": 0.0,
+      "max": 1.5,
+      "count": 200
+    },
+    "fluency_scores": {
+      "mean": 0.87875,
+      "std": 0.19035739413009414,
+      "median": 0.875,
+      "min": 0.125,
+      "max": 1.25,
+      "count": 200
+    }
+  },
+  "2": {
+    "num_concepts": 100,
+    "concept_scores": {
+      "mean": 0.82,
+      "std": 0.7034113305882983,
+      "median": 0.75,
+      "min": 0.0,
+      "max": 2.0,
+      "count": 100
+    },
+    "final_scores": {
+      "mean": 0.5683333333333332,
+      "std": 0.4628384647416897,
+      "median": 0.5,
+      "min": 0.0,
+      "max": 1.5,
+      "count": 100
+    },
+    "fluency_scores": {
+      "mean": 0.835,
+      "std": 0.2410134850999006,
+      "median": 0.875,
+      "min": 0.125,
+      "max": 1.25,
+      "count": 100
+    }
+  },
+  "0": {
+    "num_concepts": 400,
+    "concept_scores": {
+      "mean": 0.735625,
+      "std": 0.5404970946961695,
+      "median": 0.625,
+      "min": 0.0,
+      "max": 2.0,
+      "count": 400
+    },
+    "final_scores": {
+      "mean": 0.4686458333333334,
+      "std": 0.33727164020740674,
+      "median": 0.45833333333333326,
+      "min": 0.0,
+      "max": 1.3333333333333335,
+      "count": 400
+    },
+    "fluency_scores": {
+      "mean": 0.7953125,
+      "std": 0.23103347126282373,
+      "median": 0.875,
+      "min": 0.0,
+      "max": 1.375,
+      "count": 400
+    }
+  },
+  "3": {
+    "num_concepts": 50,
+    "concept_scores": {
+      "mean": 0.4975,
+      "std": 0.5626333175346089,
+      "median": 0.25,
+      "min": 0.0,
+      "max": 2.0,
+      "count": 50
+    },
+    "final_scores": {
+      "mean": 0.37,
+      "std": 0.38239377609997777,
+      "median": 0.20833333333333331,
+      "min": 0.0,
+      "max": 1.3333333333333333,
+      "count": 50
+    },
+    "fluency_scores": {
+      "mean": 0.84,
+      "std": 0.20922475952907676,
+      "median": 0.875,
+      "min": 0.25,
+      "max": 1.25,
+      "count": 50
+    }
+  }
+}
