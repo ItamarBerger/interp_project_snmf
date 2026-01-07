@@ -1,0 +1,22 @@
+{
+  "11": {
+    "layer": 11,
+    "num_concepts": 559,
+    "avg_max_concept_score": 0.565742397137746,
+    "avg_max_final_score": 0.43149970184853803,
+    "avg_max_fluency_score": 0.8300536672629696,
+    "num_valid_concept_scores": 559,
+    "num_valid_final_scores": 559,
+    "num_valid_fluency_scores": 559
+  },
+  "9": {
+    "layer": 9,
+    "num_concepts": 665,
+    "avg_max_concept_score": 0.5490601503759398,
+    "avg_max_final_score": 0.41754385964912216,
+    "avg_max_fluency_score": 0.7996240601503759,
+    "num_valid_concept_scores": 665,
+    "num_valid_final_scores": 665,
+    "num_valid_fluency_scores": 665
+  }
+}
