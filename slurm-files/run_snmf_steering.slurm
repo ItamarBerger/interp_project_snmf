@@ -44,12 +44,12 @@ if [[ -n "$CAUS_SAVE_PATH" ]]; then
   SCRIPT_CMD="$SCRIPT_CMD --causal-save-path $CAUS_SAVE_PATH"
 fi
 
-if [[ -n "$OUTPUT_SCORE_RESULTS"]]; then
+if [[ -n "$OUTPUT_SCORE_RESULTS" ]]; then
   echo "Using output score results path: $OUTPUT_SCORE_RESULTS"
   SCRIPT_CMD="$SCRIPT_CMD --output-score-results $OUTPUT_SCORE_RESULTS"
 fi
 
-if [[ -n "$INPUT_SCORE_RESULTS"]]; then
+if [[ -n "$INPUT_SCORE_RESULTS" ]]; then
   echo "Using input score results path: $INPUT_SCORE_RESULTS"
   SCRIPT_CMD="$SCRIPT_CMD --input-score-results $INPUT_SCORE_RESULTS"
 fi
