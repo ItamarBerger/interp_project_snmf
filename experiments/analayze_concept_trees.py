@@ -407,7 +407,7 @@ def main():
                             layers=nmf_list,
                             concept_idx=i,
                             layer_idx=len(nmf_list)-1,
-                            top_k_factors=3,
+                            top_k_factors=5,
                             top_k_tokens=10,
                             minimal_activation=0.1
                         )
