@@ -237,6 +237,92 @@ def add_tree_to_graph(G, node, tree_id, model_layer, level=0, parent_id=None):
             parent_id=node_id
         )
 
+from collections import Counter, defaultdict
+def analayze_concept_trees(layers, concept_tree_base_path, save_path):
+    """
+    i.  calculate avergage depth of concept trees per layer
+    ii. calculate average branching factor per model layer and per level of tree.
+    iii. find depth distribution of concept trees per layer
+    """
+
+
+    for layer in layers:
+        stats = {}
+        
+        # Load the concept tree graph
+        graph_file = os.path.join(concept_tree_base_path, f"concept_trees_layer{layer}.graphml")
+        if not os.path.isfile(graph_file):
+            print(f"Warning: GraphML file not found for layer {layer}: {graph_file}")
+            continue
+        G = nx.read_graphml(graph_file)
+
+        # Find roots (nodes with in-degree 0)
+        roots = [n for n, deg in G.in_degree() if deg == 0]
+
+
+        all_depths = []
+        branching_per_level = defaultdict(list)  # level -> list of branching factors
+        leaf_counts = []
+        total_nodes_per_tree = []
+
+        for root in roots:
+            # BFS traversal to capture levels
+            queue = [(root, 0)]
+            tree_nodes = 0
+            tree_leaves = 0
+            max_depth_tree = 0  # track max depth for this tree
+
+            while queue:
+                node_id, level = queue.pop(0)
+                tree_nodes += 1
+
+                children = list(G.successors(node_id))
+                n_children = len(children)
+
+                # track branching factor per level
+                branching_per_level[level].append(n_children)
+
+                if n_children == 0:
+                    tree_leaves += 1
+
+                # update max depth of this tree
+                if level > max_depth_tree:
+                    max_depth_tree = level
+
+                for child in children:
+                    queue.append((child, level + 1))
+
+            leaf_counts.append(tree_leaves)
+            total_nodes_per_tree.append(tree_nodes)
+            all_depths.append(max_depth_tree)
+        # --- Compute stats ---
+        stats['avg_depth'] = np.mean(all_depths) if all_depths else 0
+        stats['max_depth'] = np.max(all_depths) if all_depths else 0
+        stats['avg_branching_per_level'] = {
+            lvl: np.mean(vals) for lvl, vals in branching_per_level.items()
+        }
+        stats['branching_distribution_per_level'] = {
+            lvl: dict(Counter(vals)) for lvl, vals in branching_per_level.items()
+        }
+        stats['avg_leaf_count_per_tree'] = np.mean(leaf_counts) if leaf_counts else 0
+        stats['leaf_ratio_per_tree'] = [
+            leaves / total if total > 0 else 0
+            for leaves, total in zip(leaf_counts, total_nodes_per_tree)
+        ]
+        stats['tree_count'] = len(roots)
+
+
+        # Save all of layer's stats to JSON
+        layer_save_path = os.path.join(save_path, f"concept_trees_stats_layer{layer}.json")
+        os.makedirs(os.path.dirname(layer_save_path), exist_ok=True)
+
+        with open(layer_save_path, "w") as f:
+            json.dump(stats, f, indent=4)
+        print(f"Analysis saved to {layer_save_path}")
+        
+
+
+
 
 
 
@@ -345,9 +431,19 @@ def main():
         os.makedirs(output_path, exist_ok=True)  # create the base folder
         nx.write_graphml(G_trees, os.path.join(output_path, f"concept_trees_layer{layer}.graphml"))
 
+    
+    
+    # 4. Analayse concept trees and save analysis to output path per layer + saving analysi
+
+
+    save_path = os.path.join(output_path, "concept_trees_analysis")
+    analayze_concept_trees(layers, output_path, save_path)
+
+    log(f"Concept trees analysis is done")
 
 
 
+        
 
 
 
