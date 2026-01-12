@@ -298,19 +298,22 @@ def analayze_concept_trees(layers, concept_tree_base_path, save_path):
         stats['avg_depth'] = np.mean(all_depths) if all_depths else 0
         stats['max_depth'] = np.max(all_depths) if all_depths else 0
         stats['avg_branching_per_level'] = {
-            lvl: np.mean(vals) for lvl, vals in branching_per_level.items()
-        }
+                                         int(lvl): float(np.mean(vals)) for lvl, vals in branching_per_level.items()
+                                         }
+
         stats['branching_distribution_per_level'] = {
-            lvl: dict(Counter(vals)) for lvl, vals in branching_per_level.items()
-        }
-        stats['avg_leaf_count_per_tree'] = np.mean(leaf_counts) if leaf_counts else 0
+                                                int(lvl): {int(k): int(v) for k, v in dict(Counter(vals)).items()}
+                                                for lvl, vals in branching_per_level.items()
+                                                }
+
+        stats['avg_depth'] = float(np.mean(all_depths)) if all_depths else 0
+        stats['max_depth'] = int(np.max(all_depths)) if all_depths else 0
+        stats['avg_leaf_count_per_tree'] = float(np.mean(leaf_counts)) if leaf_counts else 0
         stats['leaf_ratio_per_tree'] = [
-            leaves / total if total > 0 else 0
-            for leaves, total in zip(leaf_counts, total_nodes_per_tree)
-        ]
-        stats['tree_count'] = len(roots)
-
-
+                                    float(leaves) / total if total > 0 else 0
+                                    for leaves, total in zip(leaf_counts, total_nodes_per_tree)
+                                     ]
+        stats['tree_count'] = int(len(roots))
         # Save all of layer's stats to JSON
         layer_save_path = os.path.join(save_path, f"concept_trees_stats_layer{layer}.json")
         os.makedirs(os.path.dirname(layer_save_path), exist_ok=True)
@@ -422,9 +425,9 @@ def main():
         
 
         # print trees for sanity check
-        for idx, tree in enumerate(concept_trees):
-            log(f"Concept Tree for Model's Layer {layer}, tree {idx}:")
-            print_concept_tree(tree, token_ds=nmf_models[layer]["token_dataset"])
+        #for idx, tree in enumerate(concept_trees):
+        #    log(f"Concept Tree for Model's Layer {layer}, tree {idx}:")
+        #    print_concept_tree(tree, token_ds=nmf_models[layer]["token_dataset"])
 
         # 3.2 Save concept trees to output path per layer
         os.makedirs(output_path, exist_ok=True)  # create the base folder
