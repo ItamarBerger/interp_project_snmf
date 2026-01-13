@@ -2,8 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-CSV_PATH = "concept_tree_layers_comparison.csv"
-OUTPUT_DIR = "."
+CSV_PATH = "experiments/artifacts/concept_trees/concept_trees_analysis_visualizations/concept_tree_layers_comparison.csv"
+OUTPUT_DIR = "experiments/artifacts/concept_trees/concept_trees_analysis_visualizations"
 
 
 def plot_shallow_ratio(df):

@@ -6,8 +6,8 @@ import glob
 # ------------------------------
 # Paths
 # ------------------------------
-LEVEL_CSV_DIR = "./concept_tree_levels_comparison"  # folder containing level comparison of specific layer CSVs
-OUTPUT_FILE = "./branching_across_layers.png"
+LEVEL_CSV_DIR = "experiments/artifacts/concept_trees/concept_trees_analysis_visualizations/concept_tree_levels_comparison"  # folder containing level comparison of specific layer CSVs
+OUTPUT_FILE = "experiments/artifacts/concept_trees/concept_trees_analysis_visualizations/branching_across_layers.png"
 
 # ------------------------------
 # Load all CSVs (each corresponds to a layer)

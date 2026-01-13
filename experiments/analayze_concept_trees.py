@@ -376,7 +376,7 @@ def main():
     factorization_base_path = args.factorization_base_path
     output_path = args.output_path
 
-    # 1. Train hier SNMF for specified model and layers
+    # 1. Train hier SNMF for specified model and layers - only if artifacts/hier is empty or non existing
 
 
 
