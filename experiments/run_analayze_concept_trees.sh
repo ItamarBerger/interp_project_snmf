@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-# Train hier SNMF for specified model and layers - only if artifacts/hier directory is empty or non existing
+#Train hier SNMF for specified model and layers - only if artifacts/hier directory is empty or non existing
 PYTHONPATH=. python experiments/train/train_hier.py \
     --sparsity 0.01 \
     --ranks 400,200,100,50 \
@@ -26,7 +26,7 @@ PYTHONPATH=. python experiments/train/train_hier.py \
 
 
 
-# Create concept tree analysis in the format of jsons
+#Create concept tree analysis in the format of jsons
 
 export PYTHONPATH=.
  python experiments/analayze_concept_trees.py \
@@ -37,7 +37,7 @@ export PYTHONPATH=.
   --output-path experiments/artifacts/concept_trees/
 
 
-# Extract Key Findings into csv tables
+#Extract Key Findings into csv tables
 
 export PYTHONPATH=.
  python experiments/concept_trees_analaysis_to_csv.py \
