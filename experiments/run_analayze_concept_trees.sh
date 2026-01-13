@@ -10,6 +10,7 @@ PYTHONPATH=. python experiments/train/train_hier.py \
     --ft-lr 1e-3 \
     --ft-iters 500 \
     --fine-tune \
+    --overwrite\
     --model-name gpt2-small \
     --factorization-mode mlp \
     --layers 0,1,2,3,4,5,6,7,8,9,10,11 \
@@ -19,8 +20,8 @@ PYTHONPATH=. python experiments/train/train_hier.py \
     --fitting-device cuda \
     --base-path . \
     --save-path experiments/artifacts/hier/ \
-    --seed 42
-
+    --seed 42 \
+    --wandb-mode disabled
     echo "Finished."
 
 
@@ -40,7 +41,7 @@ export PYTHONPATH=.
 
 export PYTHONPATH=.
  python experiments/concept_trees_analaysis_to_csv.py \
-  --layers 0,3,6,9,11 \
+  --layers 0,1,2,3,4,5,6,7,8,9,10,11 \
   --concept-trees-analysis-path experiments/artifacts/concept_trees/concept_trees_analysis \
   --output-path experiments/artifacts/concept_trees/concept_trees_analysis_visualizations/
 

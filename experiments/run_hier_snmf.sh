@@ -11,7 +11,7 @@ PYTHONPATH=. python experiments/train/train_hier.py \
     --fine-tune \
     --model-name gpt2-small \
     --factorization-mode mlp \
-    --layers 0,3,6,9,11 \
+    --layers 0,1,2,3,4,5,6,7,8,9,10,11 \
     --data-path data/hier_concepts.json \
     --model-device cuda \
     --data-device cpu \
