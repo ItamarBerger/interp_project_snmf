@@ -25,9 +25,7 @@ PYTHONPATH=. python experiments/train/train_hier.py \
     echo "Finished."
 
 
-
 #Create concept tree analysis in the format of jsons
-
 export PYTHONPATH=.
  python experiments/analayze_concept_trees.py \
   --factorization-base-path experiments/artifacts/hier/ \
@@ -37,8 +35,7 @@ export PYTHONPATH=.
   --output-path experiments/artifacts/concept_trees/
 
 
-#Extract Key Findings into csv tables
-
+#Extract Key Findings into csv tables for easier visualization
 export PYTHONPATH=.
  python experiments/concept_trees_analaysis_to_csv.py \
   --layers 0,1,2,3,4,5,6,7,8,9,10,11 \
@@ -46,11 +43,12 @@ export PYTHONPATH=.
   --output-path experiments/artifacts/concept_trees/concept_trees_analysis_visualizations/
 
 
+# Note : The following visualization scripts are commented out since they have only been locally tested on windows (seems like slurm had an issue with it).
 # Save Visualization of Key Findings across levels
-export PYTHONPATH=.
-python experiments/artifacts/concept_trees/concept_trees_analysis_visualizations/visualize_key_findings_across_levels.py
+# export PYTHONPATH=.
+# python experiments/artifacts/concept_trees/concept_trees_analysis_visualizations/visualize_key_findings_across_levels.py
 
 
-# Save Visualization of Key Findings per layer
-export PYTHONPATH=.
-python experiments/artifacts/concept_trees/concept_trees_analysis_visualizations/visualize_key_findings_per_layer.py
+# # Save Visualization of Key Findings per layer
+# export PYTHONPATH=.
+# python experiments/artifacts/concept_trees/concept_trees_analysis_visualizations/visualize_key_findings_per_layer.py
