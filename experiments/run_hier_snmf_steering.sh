@@ -8,6 +8,9 @@ STEPS="all"
 DRY_RUN=0
 LAYERS="0,3,6,9,11"
 CAUSAL_SAVE_PATH="experiments/artifacts/causal_output.json"
+OUTPUT_SCORE_RESULTS="experiments/artifacts/causal_results_out.json"
+INPUT_SCORE_RESULTS="experiments/artifacts/causal_results_in.json"
+CONCEPTS_CONTEXT_FILE="experiments/artifacts/concept_contexts.json"
 
 # Get args to control which steps to run
 # If STEPS is "all", run all steps
@@ -27,6 +30,18 @@ while [[ $# -gt 0 ]]; do
       ;;
     --causal-save-path)
       CAUSAL_SAVE_PATH="$2"
+      shift 2
+      ;;
+    --output-score-results)
+      OUTPUT_SCORE_RESULTS="$2"
+      shift 2
+      ;;
+    --input-score-results)
+      INPUT_SCORE_RESULTS="$2"
+      shift 2
+      ;;
+    --concepts-context-file)
+      CONCEPTS_CONTEXT_FILE="$2"
       shift 2
       ;;
     *)
@@ -76,7 +91,7 @@ if [[ " ${STEPS[*]} " == *" generate_concept_context "* ]]; then
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/snmf_interp/generate_concept_context.py \
     --models-dir experiments/artifacts/hier \
-    --output-json experiments/artifacts/concept_contexts.json \
+    --output-json $CONCEPTS_CONTEXT_FILE \
     --data-path data/hier_concepts.json \
     --layers $LAYERS \
     --ranks 400,200,100,50 \
@@ -167,7 +182,7 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
     PYTHONPATH=. python experiments/causal/input_score_llm_judge.py \
    --input experiments/artifacts/causal_output.json \
    --concepts experiments/artifacts/input_descriptions.json \
-   --output experiments/artifacts/causal_results_in.json \
+   --output $INPUT_SCORE_RESULTS \
    --model gemini-2.0-flash \
    --ranks 400,200,100,50 \
    --layers $LAYERS \
@@ -182,7 +197,7 @@ if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
     PYTHONPATH=. python experiments/causal/output_score_llm_judge.py \
     --input experiments/artifacts/causal_output.json \
    --concepts experiments/artifacts/output_descriptions.json \
-   --output experiments/artifacts/results_causal_out.json \
+   --output $OUTPUT_SCORE_RESULTS \
    --layers $LAYERS \
    --ranks 400,200,100,50 \
    --model gemini-2.0-flash \
