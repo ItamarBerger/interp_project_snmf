@@ -3,11 +3,18 @@ import matplotlib.pyplot as plt
 import os
 import glob
 
+
+
+# -------------------------------
+# Model
+# -------------------------------
+MODEL_NAME = "gemma_2_2b"
+
 # ------------------------------
 # Paths
 # ------------------------------
-LEVEL_CSV_DIR = "experiments/artifacts/concept_trees/concept_trees_analysis_visualizations/concept_tree_levels_comparison"
-OUTPUT_DIR = "experiments/artifacts/concept_trees/concept_trees_analysis_visualizations"
+LEVEL_CSV_DIR = f"experiments/artifacts/concept_trees/{MODEL_NAME}_analysis/concept_trees_analysis_visualizations/concept_tree_layers_comparison"
+OUTPUT_DIR = f"experiments/artifacts/concept_trees/{MODEL_NAME}_analysis/concept_trees_analysis_visualizations"
 
 OUTPUT_FILE_ALL = os.path.join(OUTPUT_DIR, "branching_across_layers.png")
 
