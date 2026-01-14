@@ -375,10 +375,9 @@ def main():
     ranks_str = "-".join(map(str, ranks))
     factorization_base_path = args.factorization_base_path
     output_path = args.output_path
-
-    # 1. Train hier SNMF for specified model and layers - only if artifacts/hier is empty or non existing
-
-
+    
+    # experimenting with different values for this hyper-parameter, revealed that 0.9 for gemma-2-2b and 0.1 for gpt2-small (that's where pruning appears to be effective)
+    minimal_activation = 0.1 if "gemma" in args.model_name.lower() else 0.1
 
     # 2. Create concept trees per layer
     # 2.1 load hierarchical models once per layer
@@ -409,7 +408,7 @@ def main():
                             layer_idx=len(nmf_list)-1,
                             top_k_factors=5,
                             top_k_tokens=10,
-                            minimal_activation=0.1
+                            minimal_activation=minimal_activation 
                         )
             concept_trees.append(concept_tree)
 
