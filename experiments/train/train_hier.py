@@ -115,7 +115,8 @@ def main():
     # Resolve parsed lists
     layers = parse_int_list(args.layers)
     ranks = parse_int_list(args.ranks)
-
+    log(f"Parsed layers: {layers}")
+    log(f"Parsed ranks: {ranks}")
     # Seed & devices
     set_seed(args.seed)
     model_device = args.model_device
