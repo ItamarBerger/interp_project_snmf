@@ -6,8 +6,9 @@ echo "Starting hierarchical SNMF steering experiment..."
 
 STEPS="all"
 DRY_RUN=0
-LAYERS="0,3,6,9,11"
+LAYERS="0"
 CAUSAL_SAVE_PATH="experiments/artifacts/causal_output.json"
+MODEL_NAME="meta-llama/Llama-3.1-8B"
 
 # Get args to control which steps to run
 # If STEPS is "all", run all steps
@@ -49,19 +50,19 @@ echo "save path for causal output: $CAUSAL_SAVE_PATH"
 if [[ " ${STEPS[*]} " == *" train "* ]]; then
   echo "Running training step..."
   if [[ $DRY_RUN -eq 0 ]]; then
-     PYTHONPATH=. python experiments/train/train_hier.py \
-      --sparsity 0.01 \
-      --ranks 400,200,100,50 \
+    PYTHONPATH=. python experiments/train/train_hier.py \
+     --sparsity 0.01 \
+     --ranks 50 \
       --max-iterations-per-layer 2000 \
       --patience 1500 \
       --ft-lr 1e-3 \
       --ft-iters 500 \
       --fine-tune \
-      --model-name gpt2-small \
+      --model-name $MODEL_NAME \
       --factorization-mode mlp \
       --layers $LAYERS \
       --data-path data/hier_concepts.json \
-      --model-device cuda \
+      --model-device cpu \
       --data-device cpu \
       --fitting-device cuda \
       --base-path . \
@@ -79,14 +80,14 @@ if [[ " ${STEPS[*]} " == *" generate_concept_context "* ]]; then
     --output-json experiments/artifacts/concept_contexts.json \
     --data-path data/hier_concepts.json \
     --layers $LAYERS \
-    --ranks 400,200,100,50 \
+    --ranks 50 \
     --num-samples-per-factor 25 \
     --context-window 15 \
     --sparsity 0.01 \
     --seed 42 \
-    --model-name "gpt2-small" \
+    --model-name "$MODEL_NAME" \
     --factor-mode mlp \
-    --model-device cuda \
+    --model-device cpu \
     --data-device cpu
   fi
   echo "Concept contexts generated."
@@ -101,7 +102,7 @@ if [[ " ${STEPS[*]} " == *" generate_input_descriptions "* ]]; then
     --model gemini-2.0-flash \
     --env-var GEMINI_API_KEY \
     --layers $LAYERS \
-    --k-values 400,200,100,50 \
+    --k-values 50 \
     --top-m 10 \
     --max-tokens 200 \
     --concurrency 50 \
@@ -114,15 +115,15 @@ if [[ " ${STEPS[*]} " == *" generate_vocab_proj "* ]]; then
   echo "Generating vocabulary projections..."
   if [[ $DRY_RUN -eq 0 ]]; then
    PYTHONPATH=. python experiments/snmf_interp/generate_vocab_proj.py\
-    --model-name gpt2-small \
+    --model-name "$MODEL_NAME" \
     --base-path . \
     --factorization-base-path experiments/artifacts/hier \
     --output-path experiments/artifacts/vocab_proj.json \
     --layers $LAYERS \
-    --ranks 400,200,100,50 \
+    --ranks 50 \
     --top-k 75 \
     --sparsity 0.01 \
-    --device cuda \
+    --device cpu \
     --seed 123
   fi
   echo "Vocabulary projections generated."
@@ -136,7 +137,7 @@ if [[ " ${STEPS[*]} " == *" generate_output_descriptions "* ]]; then
   --output experiments/artifacts/output_descriptions.json \
   --model gemini-2.0-flash \
   --layers $LAYERS \
-  --ranks 400,200,100,50 \
+  --ranks 50 \
   --concurrency 25 \
   --top-m 25 \
   --max-tokens 5000
@@ -148,13 +149,13 @@ if [[ " ${STEPS[*]} " == *" generate_causal_output "* ]]; then
   echo "Generating causal output..."
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/causal/generate_causal_output.py \
-   --model-name gpt2-small \
-   --layers $LAYERS \
-   --ranks 400,200,100,50 \
-   --sparsity 0.01 \
-   --factorization-base-path experiments/artifacts/hier \
-   --save-path $CAUSAL_SAVE_PATH \
-   --device cuda
+  --model-name "$MODEL_NAME" \
+  --layers $LAYERS \
+  --ranks 50 \
+  --sparsity 0.01 \
+  --factorization-base-path experiments/artifacts/hier \
+  --save-path $CAUSAL_SAVE_PATH \
+  --device cpu
   fi
   echo "Causal output generated."
 fi
@@ -165,13 +166,13 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
   echo "Starting input score judging..."
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/causal/input_score_llm_judge.py \
-   --input experiments/artifacts/causal_output.json \
-   --concepts experiments/artifacts/input_descriptions.json \
-   --output experiments/artifacts/causal_results_in.json \
-   --model gemini-2.0-flash \
-   --ranks 400,200,100,50 \
-   --layers $LAYERS \
-   --concurrency 25
+  --input experiments/artifacts/causal_output.json \
+  --concepts experiments/artifacts/input_descriptions.json \
+  --output experiments/artifacts/causal_results_in.json \
+  --model gemini-2.0-flash \
+  --ranks 50 \
+  --layers $LAYERS \
+  --concurrency 25
   fi
   echo "Input score judging completed."
 fi
@@ -181,14 +182,14 @@ if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/causal/output_score_llm_judge.py \
     --input experiments/artifacts/causal_output.json \
-   --concepts experiments/artifacts/output_descriptions.json \
-   --output experiments/artifacts/results_causal_out.json \
-   --layers $LAYERS \
-   --ranks 400,200,100,50 \
-   --model gemini-2.0-flash \
-   --concurrency 25 \
-   --attempts 2 \
-   --sparsity 0.01
+     --concepts experiments/artifacts/output_descriptions.json \
+     --output experiments/artifacts/results_causal_out.json \
+     --layers $LAYERS \
+     --ranks 50 \
+     --model gemini-2.0-flash \
+     --concurrency 25 \
+     --attempts 2 \
+     --sparsity 0.01
   fi
     echo "Output score judging completed."
 fi
