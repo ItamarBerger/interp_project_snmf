@@ -26,4 +26,5 @@ outputs/*
 # Local wandb output
 wandb/*
 
-# Ignore artifacts
+# Ignore playground files
+playground.ipynb
