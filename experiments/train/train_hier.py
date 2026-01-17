@@ -89,7 +89,7 @@ def main():
                         help="Activation mode for ActivationGenerator (e.g., 'mlp').")
     parser.add_argument("--layers", type=str, default="0-31",
                         help="Comma/range list of layers, e.g. '0-31' or '0,4,10-12'.")
-    parser.add_argument("--data-path", type=str, default="data/final_dataset_20_concepts.json",
+    parser.add_argument("--data-path", type=str, default="data/hier_concepts.json",
                         help="Path to the supervised concepts JSON.")
 
     # Devices
