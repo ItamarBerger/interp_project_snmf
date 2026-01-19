@@ -16,6 +16,7 @@ class PlotType(StrEnum):
     LAYER_BOXPLOT = "layer_boxplot"
     LEVEL_BOXPLOT = "level_boxplot"
     MEAN_LAYER_BARPLOT = "mean_layer_barplot"
+    MEAN_LEVEL_BARPLOT = "mean_level_barplot"
 
     def get_graph_type(self):
         parts = self.value.spit("_")
@@ -224,6 +225,52 @@ def plot_level_means_for_layer(layer_df: pd.DataFrame, layer_id: str, output_pre
     except Exception as e:
         logger.error(f"Failed to save mean score plot for Layer {layer_id}: {e}")
 
+
+def plot_layer_means_for_level(level_df: pd.DataFrame, level: str, output_prefix: str):
+    """
+    Generates and saves a bar plot of mean scores for a specific level across all given layers.
+    arguments:
+    - level_df: DataFrame filtered for the specific level
+    - level: The level identifier
+    - output_prefix: Prefix for the output file name
+    """
+    if level_df.empty:
+        logger.warning(f"No data found for Level {level}. Skipping plot.")
+        return
+
+    plt.figure(figsize=(10, 6))
+
+    # Generate Barplot
+    barplot = sns.barplot(
+        data=level_df,
+        x="Layer",
+        y="Score",
+        hue="Metric",
+        palette="Set2",
+        errorbar='sd',
+    )
+
+    for container in barplot.containers:
+        barplot.bar_label(container, fmt="%.2f", label_type="edge", fontsize=9)
+
+    plt.title(f"Mean Scores - Level {level}")
+    plt.xlabel("Layer")
+    plt.ylabel("Mean Score")
+    plt.ylim(MIN_SCORE - BUFFER, MAX_SCORE + BUFFER)
+    plt.legend(title="Metric")
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+    # Construct output filename
+    output_path = f"{output_prefix}_mean_level_{level}.png"
+
+    try:
+        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        plt.close()
+        logger.info(f"Saved mean score plot for Level {level} to: {output_path}")
+    except Exception as e:
+        logger.error(f"Failed to save mean score plot for Level {level}: {e}")
+
+
 def main():
     args = parse_arguments()
 
@@ -236,26 +283,22 @@ def main():
 
     df = transform_data_to_df(data, args.include_fluency)
 
-    if args.graph_type == PlotType.LAYER_BOXPLOT:
-        for layer_id, entries in data.items():
-            logger.info(f"Processing Layer {layer_id}...")
+    levels = df['Level'].unique()
+    layers = df['Layer'].unique()
 
-            layer_df = df[df['Layer'] == int(layer_id)]
-            plot_layer_distribution(layer_df, layer_id, args.output_prefix)
-    elif args.graph_type == PlotType.LEVEL_BOXPLOT:
-        levels = df['Level'].unique()
-        for level in levels:
-            logger.info(f"Processing Level {level}...")
+    graph_type_mapping = {
+        PlotType.LAYER_BOXPLOT: (layers, plot_layer_distribution, "Layer"),
+        PlotType.LEVEL_BOXPLOT: (levels, plot_level_distribution, "Level"),
+        PlotType.MEAN_LAYER_BARPLOT: (layers, plot_level_means_for_layer, "Layer"),
+        PlotType.MEAN_LEVEL_BARPLOT: (levels, plot_layer_means_for_level, "Level"),
+    }
 
-            level_df = df[df['Level'] == level]
-            plot_level_distribution(level_df, level, args.output_prefix)
-
-    elif args.graph_type == PlotType.MEAN_LAYER_BARPLOT:
-        for layer_id, entries in data.items():
-            logger.info(f"Processing Mean Scores for Layer {layer_id}...")
-
-            layer_df = df[df['Layer'] == int(layer_id)]
-            plot_level_means_for_layer(layer_df, layer_id, args.output_prefix)
+    if args.graph_type in graph_type_mapping:
+        items, plot_func, label = graph_type_mapping[args.graph_type]
+        for item in items:
+            logger.info(f"Processing {label} {item}...")
+            filtered_df = df[df[label] == (int(item) if label == "Layer" else item)]
+            plot_func(filtered_df, item, args.output_prefix)
     else:
         logger.error(f"Graph type {args.graph_type} not implemented.")
 
