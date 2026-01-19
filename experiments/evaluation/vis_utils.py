@@ -32,14 +32,14 @@ def plot_boxplot(df, plt_title, x: str, y: str, hue: str, ylim: tuple) -> plt.Fi
 
     return fig
 
-def plot_barplot(df, plt_title, x: str, y: str, hue: str, ylim: tuple, y_label: Optional[str] = None, bar_label_fontsize = 9) -> plt.Figure:
+def plot_barplot(df, plt_title, x: str, y: str, hue: str, ylim: tuple, y_label: Optional[str] = None, bar_label_fontsize = 9, color_palette = "Set2") -> plt.Figure:
     fig, ax = plt.subplots(figsize=(10, 6))
     barplot = sns.barplot(
         data=df,
         x=x,
         y=y,
         hue=hue,
-        palette="Set2",
+        palette=color_palette,
         errorbar='sd',
         ax=ax,  # Make seaborn use the provided ax
         err_kws={'linewidth': 0.8}

@@ -45,7 +45,25 @@ class PlotMode(StrEnum):
 MIN_SCORE = 0.0
 MAX_SCORE = 2.0
 BUFFER = 0.05
-
+BAR_LABEL_FONTSIZE = 8
+LAYER_COLOR_PALETTE = {
+    0: "#6a3d9a", # Purple
+    1: "#fb9a99", # Light Red
+    2: "#33a02c", # Dark Green
+    3: "#ff7f00", # Orange
+    6: "#1f78b4", # Dark Blue
+    9: "#e31a1c", # Red
+    11: "#a6cee3", # Light Blue
+}
+# LAYER_COLOR_PALETTE = {
+#     0:  "#4C72B0",  # Muted Blue
+#     1:  "#CFA0BF",  # Thistle/Purple
+#     2:  "#55A868",  # Muted Green (Sage)
+#     3:  "#C44E52",  # Muted Red (Rose)
+#     6:  "#8C564B",  # Muted Brown (Cocoa)
+#     9:  "#64B5CD",  # Muted Cyan/Blue-Grey
+#     11: "#EEDC82"  # Muted Yellow (Goldenrod)
+# }
 
 def parse_arguments():
     """
@@ -251,7 +269,8 @@ def plot_level_means_for_layer(df: pd.DataFrame, output_prefix: str, mode: PlotM
                 hue="Layer",
                 ylim=(MIN_SCORE - BUFFER, MAX_SCORE + BUFFER),
                 y_label="Mean Score",
-                bar_label_fontsize=8
+                bar_label_fontsize=BAR_LABEL_FONTSIZE,
+                color_palette=LAYER_COLOR_PALETTE
             )
 
             layers_string = "_".join(str(layer) for layer in sorted(df['Layer'].unique()))
@@ -301,7 +320,8 @@ def plot_layer_means_for_level(df: pd.DataFrame, output_prefix: str, mode: PlotM
                 hue="Level",
                 ylim=(MIN_SCORE - BUFFER, MAX_SCORE + BUFFER),
                 y_label="Mean Score",
-                bar_label_fontsize=8,
+                bar_label_fontsize=BAR_LABEL_FONTSIZE,
+                color_palette=LAYERS_COLOR_PALETTE
             )
 
             layers_string = "_".join(str(layer) for layer in sorted(df['Layer'].unique()))
