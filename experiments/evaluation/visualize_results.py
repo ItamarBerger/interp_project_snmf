@@ -1,30 +1,70 @@
 import argparse
 import logging
+import os
 import sys
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 from enum import StrEnum
 from typing import Dict, Any
 
 from experiments.evaluation.eval_utils import load_data, create_path_if_not_exists
+from experiments.evaluation.vis_utils import save_plt, plot_boxplot, plot_barplot
 from utils import setup_logging
 
 logger = logging.getLogger(__name__)
+
 
 class PlotType(StrEnum):
     LAYER_BOXPLOT = "layer_boxplot"
     LEVEL_BOXPLOT = "level_boxplot"
     MEAN_LAYER_BARPLOT = "mean_layer_barplot"
+    MEAN_LEVEL_BARPLOT = "mean_level_barplot"
 
     def get_graph_type(self):
         parts = self.value.spit("_")
         return parts[-1]
 
+
+class Metric(StrEnum):
+    CONCEPT_SCORE = "concept"
+    FINAL_SCORE = "final"
+    FLUENCY_SCORE = "fluency"
+
+    def get_metric_df_name(self):
+        mapping = {
+            Metric.CONCEPT_SCORE: "Concept Score",
+            Metric.FINAL_SCORE: "Final Score",
+            Metric.FLUENCY_SCORE: "Fluency Score"
+        }
+        return mapping[self]
+
+
+class PlotMode(StrEnum):
+    SINGLE_PLOT = "single_plot"
+    MULTI_PLOT = "multi_plot"
+
+
 MIN_SCORE = 0.0
 MAX_SCORE = 2.0
 BUFFER = 0.05
-
+BAR_LABEL_FONTSIZE = 8
+LAYER_COLOR_PALETTE = {
+    0: "#6a3d9a", # Purple
+    1: "#fb9a99", # Light Red
+    2: "#33a02c", # Dark Green
+    3: "#ff7f00", # Orange
+    6: "#1f78b4", # Dark Blue
+    9: "#e31a1c", # Red
+    11: "#a6cee3", # Light Blue
+}
+# LAYER_COLOR_PALETTE = {
+#     0:  "#4C72B0",  # Muted Blue
+#     1:  "#CFA0BF",  # Thistle/Purple
+#     2:  "#55A868",  # Muted Green (Sage)
+#     3:  "#C44E52",  # Muted Red (Rose)
+#     6:  "#8C564B",  # Muted Brown (Cocoa)
+#     9:  "#64B5CD",  # Muted Cyan/Blue-Grey
+#     11: "#EEDC82"  # Muted Yellow (Goldenrod)
+# }
 
 def parse_arguments():
     """
@@ -35,14 +75,12 @@ def parse_arguments():
     parser.add_argument(
         '--input-file',
         type=str,
+        required=True,
         help="Path to the input JSON file containing processed results."
     )
 
-    parser.add_argument(
-        '--output-prefix',
-        type=str,
-        help="Prefix for the output image files (e.g., 'layer_plot'). Files will be named '{prefix}_layer_{id}.png'."
-    )
+    parser.add_argument("--output-dir", type=str, required=True,
+                        help="Directory to save the output plots.")
 
     parser.add_argument(
         '--graph-type',
@@ -58,8 +96,16 @@ def parse_arguments():
         help="If set, includes fluency scores in the visualization."
     )
 
-    return parser.parse_args()
+    parser.add_argument("--layers", type=str, nargs='*', default=None,
+                        help="Specific layers to visualize. If not set, all layers are visualized.")
 
+    parser.add_argument("--metrics", type=str, nargs='*',
+                        default=None, help="Filter by specific metrics (concept, final, fluency).")
+
+    parser.add_argument("--mode", type=str, choices=[e.value for e in PlotMode], default=PlotMode.MULTI_PLOT,
+                        help="Plotting mode: single_plot or multi_plot.")
+
+    return parser.parse_args()
 
 
 def transform_data_to_df(data: Dict[str, Any], include_fluency: bool) -> pd.DataFrame:
@@ -105,124 +151,174 @@ def transform_data_to_df(data: Dict[str, Any], include_fluency: bool) -> pd.Data
     return pd.DataFrame(records)
 
 
-def plot_layer_distribution(df: pd.DataFrame, layer_id: str, output_prefix: str):
+def plot_multiple_layers_in_single_plot(df: pd.DataFrame, plot_func, plot_func_args: dict, output_dir: str, plt_title: str, x: str):
+    logger.info("Plotting all layers in one plot per metric...")
+    metrics = df['Metric'].unique()
+    for metric in metrics:
+        metric_df = df[df['Metric'] == metric]
+        fig = plot_func(
+            df=metric_df,
+            plt_title=f"{plt_title} - Metric: {metric}",
+            x=x,
+            y="Score",
+            hue="Layer",
+            ylim=(MIN_SCORE - BUFFER, MAX_SCORE + BUFFER),
+            **plot_func_args
+        )
+
+        layers_string = "_".join(str(layer) for layer in sorted(df['Layer'].unique()))
+        output_path = os.path.join(output_dir, f"mean_{metric.lower().replace(' ', '_')}_{x.lower()}_layers_{layers_string}.png")
+        save_plt(fig, f"{plt_title} Metric {metric}", output_path, logger)
+
+def plot_layer_distribution(df: pd.DataFrame, output_dir: str, mode: PlotMode = PlotMode.MULTI_PLOT):
     """
-    Generates and saves a boxplot for a specific layer.
+    Generates and saves a boxplot for a specific layer across all given levels.
     """
-    if df.empty:
-        logger.warning(f"No data found for Layer {layer_id}. Skipping plot.")
-        return
+    if mode == PlotMode.MULTI_PLOT:
+        for layer_id in df['Layer'].unique():
+            logger.info(f"Processing layer {layer_id}...")
+            layer_df = df[df['Layer'] == layer_id]
+            if layer_df.empty:
+                logger.warning(f"No data found for Layer {layer_id}. Skipping plot.")
+                return
 
-    plt.figure(figsize=(10, 6))
+            fig = plot_boxplot(layer_df, f"Score Distribution - Layer {layer_id}", "Level", "Score", "Metric",
+                         (MIN_SCORE - BUFFER, MAX_SCORE + BUFFER))
 
-    # Generate Boxplot
-    # X-axis: Rank (Level)
-    # Y-axis: Score
-    # Distribution is formed by the different 'h_row' values aggregated in the previous step
-    sns.boxplot(
-        data=df,
-        x="Level",
-        y="Score",
-        hue="Metric",
-        palette="Set2",
-    )
+            # Construct output filename
+            output_path = os.path.join(output_dir, f"score_distribution_layer_{layer_id}.png")
 
-    plt.title(f"Score Distribution - Layer {layer_id}")
-    plt.xlabel("Level")
-    plt.ylabel("Score")
-    plt.ylim(MIN_SCORE - BUFFER, MAX_SCORE + BUFFER)
-    plt.legend(title="Metric")
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
+            save_plt(fig, f"score distribution plot for Layer {layer_id}", output_path, logger)
+    else:
+        plot_multiple_layers_in_single_plot(
+            df=df,
+            plot_func=plot_boxplot,
+            plot_func_args={
+                "color_palette": LAYER_COLOR_PALETTE,
+            },
+            output_dir=output_dir,
+            plt_title="Score Distribution",
+            x="Level",
+        )
 
-    # Construct output filename
-    output_path = f"{output_prefix}_layer_{layer_id}.png"
-
-    try:
-        plt.savefig(output_path, dpi=300, bbox_inches='tight')
-        plt.close()
-        logger.info(f"Saved plot for Layer {layer_id} to: {output_path}")
-    except Exception as e:
-        logger.error(f"Failed to save plot for Layer {layer_id}: {e}")
-
-
-
-def plot_level_distribution(df: pd.DataFrame, level: str, output_prefix: str):
+def plot_level_distribution(df: pd.DataFrame, output_dir: str, mode: PlotMode = PlotMode.MULTI_PLOT):
     """
     Generates and saves a boxplot for a specific level across all given layers.
     """
-    if df.empty:
-        logger.warning(f"No data found for Level {level}. Skipping plot.")
-        return
+    if mode == PlotMode.MULTI_PLOT:
+        for level in df['Level'].unique():
+            logger.info(f"Processing level {level}...")
+            level_df = df[df['Level'] == level]
+            if level_df.empty:
+                logger.warning(f"No data found for Level {level}. Skipping plot.")
+                return
 
-    plt.figure(figsize=(10, 6))
+            fig = plot_boxplot(
+                df=level_df,
+                plt_title=f"Score Distribution - Level {level}",
+                x="Layer",
+                y="Score",
+                hue="Metric",
+                ylim=(MIN_SCORE - BUFFER, MAX_SCORE + BUFFER))
 
-    # Generate Boxplot
-    sns.boxplot(
-        data=df,
-        x="Layer",
-        y="Score",
-        hue="Metric",
-        palette="Set2",
-    )
+            # Construct output filename
+            output_path = os.path.join(output_dir, f"score_distribution_level_{level}.png")
 
-    plt.title(f"Score Distribution - Level {level}")
-    plt.xlabel("Layer")
-    plt.ylabel("Score")
-    plt.ylim(MIN_SCORE - BUFFER, MAX_SCORE + BUFFER)
-    plt.legend(title="Metric")
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
+            save_plt(fig, f"score distribution plot for Level {level}", output_path, logger)
+    else:
+        plot_multiple_layers_in_single_plot(
+            df=df,
+            plot_func=plot_boxplot,
+            plot_func_args={
+                "color_palette": LAYER_COLOR_PALETTE,
+            },
+            output_dir=output_dir,
+            plt_title="Score Distribution",
+            x="Layer",
+        )
 
-    # Construct output filename
-    output_path = f"{output_prefix}_level_{level}.png"
-
-    try:
-        plt.savefig(output_path, dpi=300, bbox_inches='tight')
-        plt.close()
-        logger.info(f"Saved plot for Level {level} to: {output_path}")
-    except Exception as e:
-        logger.error(f"Failed to save plot for Level {level}: {e}")
-
-
-def plot_level_means_for_layer(layer_df: pd.DataFrame, layer_id: str, output_prefix: str):
+def plot_level_means_for_layer(df: pd.DataFrame, output_dir: str, mode: PlotMode = PlotMode.MULTI_PLOT):
     """
     Generates and saves a bar plot of mean scores for a specific layer.
     """
-    if layer_df.empty:
-        logger.warning(f"No data found for Layer {layer_id}. Skipping plot.")
-        return
+    if mode == PlotMode.MULTI_PLOT:
+        for layer_id in df['Layer'].unique():
+            layer_df = df[df['Layer'] == layer_id]
+            logger.info(f"Processing layer {layer_id}...")
+            if layer_df.empty:
+                logger.warning(f"No data found for Layer {layer_id}. Skipping plot.")
+                return
 
-    plt.figure(figsize=(10, 6))
+            fig = plot_barplot(
+                df=layer_df,
+                plt_title=f"Mean Scores - Layer {layer_id}",
+                x="Level",
+                y="Score",
+                hue="Metric",
+                ylim=(MIN_SCORE - BUFFER, MAX_SCORE + BUFFER),
+                y_label="Mean Score"
+            )
+            # Construct output filename
+            output_path = os.path.join(output_dir, f"mean_scores_layer_{layer_id}.png")
+
+            save_plt(fig, f"mean score plot for Layer {layer_id}", output_path, logger)
+    else:
+        plot_multiple_layers_in_single_plot(
+            df=df,
+            plot_func=plot_barplot,
+            plot_func_args={
+                "bar_label_fontsize": BAR_LABEL_FONTSIZE,
+                "color_palette": LAYER_COLOR_PALETTE,
+                "y_label": "Mean Score"
+            },
+            output_dir=output_dir,
+            plt_title="Mean Scores",
+            x="Level",
+        )
 
 
-    # Generate Barplot
-    barplot = sns.barplot(
-        data=layer_df,
-        x="Level",
-        y="Score",
-        hue="Metric",
-        palette="Set2",
-        errorbar='sd',
-    )
+def plot_layer_means_for_level(df: pd.DataFrame, output_dir: str, mode: PlotMode = PlotMode.MULTI_PLOT):
+    """
+    Generates and saves a bar plot of mean scores for a specific level across all given layers.
+    arguments:
+    - df: the relevant data frame
+    - level: The level identifier
+    - output_dir: Prefix for the output file name
+    """
+    if mode == PlotMode.MULTI_PLOT:
+        for level in df['Level'].unique():
+            logger.info(f"Processing level {level}...")
+            level_df = df[df['Level'] == level]
+            if level_df.empty:
+                logger.warning(f"No data found for Level {level}. Skipping plot.")
+                return
 
-    for container in barplot.containers:
-        barplot.bar_label(container, fmt="%.2f", label_type="edge", fontsize=9)
+            fig = plot_barplot(
+                df=level_df,
+                plt_title=f"Mean Scores - Level {level}",
+                x="Layer",
+                y="Score",
+                hue="Metric",
+                ylim=(MIN_SCORE - BUFFER, MAX_SCORE + BUFFER),
+                y_label="Mean Score"
+            )
+            # Construct output filename
+            output_path = os.path.join(output_dir, f"mean_scores_level_{level}.png")
 
-    plt.title(f"Mean Scores - Layer {layer_id}")
-    plt.xlabel("Level")
-    plt.ylabel("Mean Score")
-    plt.ylim(MIN_SCORE - BUFFER, MAX_SCORE + BUFFER)
-    plt.legend(title="Metric")
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-
-    # Construct output filename
-    output_path = f"{output_prefix}_mean_layer_{layer_id}.png"
-
-    try:
-        plt.savefig(output_path, dpi=300, bbox_inches='tight')
-        plt.close()
-        logger.info(f"Saved mean score plot for Layer {layer_id} to: {output_path}")
-    except Exception as e:
-        logger.error(f"Failed to save mean score plot for Layer {layer_id}: {e}")
+            save_plt(fig, f"mean score plot for Level {level}", output_path, logger)
+    else:
+        plot_multiple_layers_in_single_plot(
+            df=df,
+            plot_func=plot_barplot,
+            plot_func_args={
+                "bar_label_fontsize": BAR_LABEL_FONTSIZE,
+                "color_palette": LAYER_COLOR_PALETTE,
+                "y_label": "Mean Score"
+            },
+            output_dir=output_dir,
+            plt_title="Mean Scores",
+            x="Layer",
+        )
 
 def main():
     args = parse_arguments()
@@ -232,34 +328,33 @@ def main():
     data = load_data(args.input_file)
 
     # create output directory if it doesn't exist
-    create_path_if_not_exists(args.output_prefix)
+    create_path_if_not_exists(args.output_dir)
 
     df = transform_data_to_df(data, args.include_fluency)
 
-    if args.graph_type == PlotType.LAYER_BOXPLOT:
-        for layer_id, entries in data.items():
-            logger.info(f"Processing Layer {layer_id}...")
+    if args.metrics is not None:
+        # Filter the dataframe if metric is given
+        metric_filter = [Metric(m).get_metric_df_name() for m in args.metrics]
+        df = df[df['Metric'].isin(metric_filter)]
 
-            layer_df = df[df['Layer'] == int(layer_id)]
-            plot_layer_distribution(layer_df, layer_id, args.output_prefix)
-    elif args.graph_type == PlotType.LEVEL_BOXPLOT:
-        levels = df['Level'].unique()
-        for level in levels:
-            logger.info(f"Processing Level {level}...")
+    if args.layers is not None:
+        # Use only specified layers
+        layers = [int(layer) for layer in args.layers if int(layer) in df['Layer'].unique()]
+        df = df[df['Layer'].isin(layers)]
 
-            level_df = df[df['Level'] == level]
-            plot_level_distribution(level_df, level, args.output_prefix)
+    plot_to_func = {
+        PlotType.LAYER_BOXPLOT: plot_layer_distribution,
+        PlotType.LEVEL_BOXPLOT: plot_level_distribution,
+        PlotType.MEAN_LAYER_BARPLOT: plot_level_means_for_layer,
+        PlotType.MEAN_LEVEL_BARPLOT: plot_layer_means_for_level,
+    }
 
-    elif args.graph_type == PlotType.MEAN_LAYER_BARPLOT:
-        for layer_id, entries in data.items():
-            logger.info(f"Processing Mean Scores for Layer {layer_id}...")
+    if args.graph_type in plot_to_func:
+        plot_func = plot_to_func[args.graph_type]
+        plot_func(df=df,output_dir=args.output_dir, mode=PlotMode(args.mode))
 
-            layer_df = df[df['Layer'] == int(layer_id)]
-            plot_level_means_for_layer(layer_df, layer_id, args.output_prefix)
     else:
         logger.error(f"Graph type {args.graph_type} not implemented.")
-
-
 
     logger.info("Visualization complete.")
 
