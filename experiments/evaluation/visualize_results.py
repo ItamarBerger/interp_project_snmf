@@ -1,13 +1,13 @@
 import argparse
-import json
 import logging
 import sys
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from enum import StrEnum
-from typing import Dict, Any, List
+from typing import Dict, Any
 
+from experiments.evaluation.eval_utils import load_data, create_path_if_not_exists
 from utils import setup_logging
 
 logger = logging.getLogger(__name__)
@@ -60,22 +60,6 @@ def parse_arguments():
 
     return parser.parse_args()
 
-
-def load_data(file_path: str) -> Dict[str, Any]:
-    """
-    Loads JSON data from the specified file path.
-    """
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            logger.info(f"Successfully loaded data from {file_path}")
-            return data
-    except FileNotFoundError:
-        logger.error(f"Input file not found: {file_path}")
-        sys.exit(1)
-    except json.JSONDecodeError:
-        logger.error(f"Failed to decode JSON from file: {file_path}")
-        sys.exit(1)
 
 
 def transform_data_to_df(data: Dict[str, Any], include_fluency: bool) -> pd.DataFrame:
@@ -217,6 +201,7 @@ def plot_level_means_for_layer(layer_df: pd.DataFrame, layer_id: str, output_pre
         y="Score",
         hue="Metric",
         palette="Set2",
+        errorbar='sd',
     )
 
     for container in barplot.containers:
@@ -245,6 +230,10 @@ def main():
     logger.info("Starting visualization...")
 
     data = load_data(args.input_file)
+
+    # create output directory if it doesn't exist
+    create_path_if_not_exists(args.output_prefix)
+
     df = transform_data_to_df(data, args.include_fluency)
 
     if args.graph_type == PlotType.LAYER_BOXPLOT:
