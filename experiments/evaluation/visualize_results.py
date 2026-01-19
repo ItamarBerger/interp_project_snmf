@@ -237,7 +237,7 @@ def plot_level_distribution(df: pd.DataFrame, output_dir: str, mode: PlotMode = 
             x="Layer",
         )
 
-def plot_level_means_for_layer(df: pd.DataFrame, output_dir: str, mode: PlotMode = PlotMode.MULTI_PLOT):
+def plot_level_means_across_layers(df: pd.DataFrame, output_dir: str, mode: PlotMode = PlotMode.MULTI_PLOT):
     """
     Generates and saves a bar plot of mean scores for a specific layer.
     """
@@ -277,7 +277,7 @@ def plot_level_means_for_layer(df: pd.DataFrame, output_dir: str, mode: PlotMode
         )
 
 
-def plot_layer_means_for_level(df: pd.DataFrame, output_dir: str, mode: PlotMode = PlotMode.MULTI_PLOT):
+def plot_layer_means_across_levels(df: pd.DataFrame, output_dir: str, mode: PlotMode = PlotMode.MULTI_PLOT):
     """
     Generates and saves a bar plot of mean scores for a specific level across all given layers.
     arguments:
@@ -345,8 +345,8 @@ def main():
     plot_to_func = {
         PlotType.LAYER_BOXPLOT: plot_layer_distribution,
         PlotType.LEVEL_BOXPLOT: plot_level_distribution,
-        PlotType.MEAN_LAYER_BARPLOT: plot_level_means_for_layer,
-        PlotType.MEAN_LEVEL_BARPLOT: plot_layer_means_for_level,
+        PlotType.MEAN_LAYER_BARPLOT: plot_layer_means_across_levels,
+        PlotType.MEAN_LEVEL_BARPLOT: plot_level_means_across_layers
     }
 
     if args.graph_type in plot_to_func:
