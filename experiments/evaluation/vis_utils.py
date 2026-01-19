@@ -12,14 +12,14 @@ def save_plt(fig: plt.Figure, plot_name, output_path, logger):
         logger.error(f"Failed to save {plot_name}: {e}")
 
 
-def plot_boxplot(df, plt_title, x: str, y: str, hue: str, ylim: tuple) -> plt.Figure:
+def plot_boxplot(df, plt_title, x: str, y: str, hue: str, ylim: tuple, color_palette = "Set2") -> plt.Figure:
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.boxplot(
         data=df,
         x=x,
         y=y,
         hue=hue,
-        palette="Set2",
+        palette=color_palette,
         ax=ax  # Make seaborn use the provided ax
     )
 
