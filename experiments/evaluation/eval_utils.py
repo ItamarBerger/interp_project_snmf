@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Dict, Any, List
 import logging
 import json
@@ -6,14 +7,14 @@ import sys
 logger = logging.getLogger(__name__)
 
 
-def load_data(file_path: str) -> List[Dict[str, Any]]:
+def load_data(file_path: str) -> Dict[str, Any]|List[Dict[str, Any]]:
     """
     Loads JSON data from the specified file path.
     """
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-            logger.info(f"Successfully loaded {len(data)} entries from {file_path}")
+            logger.info(f"Successfully loaded data from {file_path}")
             return data
     except FileNotFoundError:
         logger.error(f"Input file not found: {file_path}")
@@ -21,6 +22,14 @@ def load_data(file_path: str) -> List[Dict[str, Any]]:
     except json.JSONDecodeError:
         logger.error(f"Failed to decode JSON from file: {file_path}")
         sys.exit(1)
+
+
+def create_path_if_not_exists(file_path: str):
+    """
+    Creates the directory path for the given file path if it does not exist.
+    """
+    f = Path(file_path)
+    f.parent.mkdir(parents=True, exist_ok=True)
 
 def calculate_entry_means(entry: Dict[str, Any]) -> Dict[str, float]:
     """
