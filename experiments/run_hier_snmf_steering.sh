@@ -6,13 +6,7 @@ echo "Starting hierarchical SNMF steering experiment..."
 
 STEPS="all"
 DRY_RUN=0
-<<<<<<< HEAD
-LAYERS="0"
-CAUSAL_SAVE_PATH="experiments/artifacts/causal_output.json"
-MODEL_NAME="meta-llama/Llama-3.1-8B"
-=======
 LAYERS="0,3,6,9,11"
->>>>>>> main
 
 # Get args to control which steps to run
 # If STEPS is "all", run all steps
@@ -128,11 +122,7 @@ if [[ " ${STEPS[*]} " == *" generate_concept_context "* ]]; then
     --context-window 15 \
     --sparsity 0.01 \
     --seed 42 \
-<<<<<<< HEAD
-    --model-name "$MODEL_NAME" \
-=======
     --model-name $MODEL_NAME \
->>>>>>> main
     --factor-mode mlp \
     --model-device cpu \
     --data-device cpu
@@ -162,11 +152,8 @@ if [[ " ${STEPS[*]} " == *" generate_vocab_proj "* ]]; then
   echo "Generating vocabulary projections..."
   if [[ $DRY_RUN -eq 0 ]]; then
    PYTHONPATH=. python experiments/snmf_interp/generate_vocab_proj.py\
-<<<<<<< HEAD
-    --model-name "$MODEL_NAME" \
-=======
+
     --model-name $MODEL_NAME \
->>>>>>> main
     --base-path . \
     --factorization-base-path $FACTORIZATION_BASE_PATH \
     --output-path $VOCAB_PROJ_FILE \
@@ -200,15 +187,6 @@ if [[ " ${STEPS[*]} " == *" generate_causal_output "* ]]; then
   echo "Generating causal output..."
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/causal/generate_causal_output.py \
-<<<<<<< HEAD
-  --model-name "$MODEL_NAME" \
-  --layers $LAYERS \
-  --ranks 50 \
-  --sparsity 0.01 \
-  --factorization-base-path experiments/artifacts/hier \
-  --save-path $CAUSAL_SAVE_PATH \
-  --device cpu
-=======
    --model-name $MODEL_NAME \
    --layers $LAYERS \
    --ranks 400,200,100,50 \
@@ -216,7 +194,7 @@ if [[ " ${STEPS[*]} " == *" generate_causal_output "* ]]; then
    --factorization-base-path $FACTORIZATION_BASE_PATH \
    --save-path $CAUSAL_OUTPUT_PATH \
    --device cuda
->>>>>>> main
+
   fi
   echo "Causal output generated."
 fi
@@ -227,15 +205,6 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
   echo "Starting input score judging..."
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/causal/input_score_llm_judge.py \
-<<<<<<< HEAD
-  --input experiments/artifacts/causal_output.json \
-  --concepts experiments/artifacts/input_descriptions.json \
-  --output experiments/artifacts/causal_results_in.json \
-  --model gemini-2.0-flash \
-  --ranks 50 \
-  --layers $LAYERS \
-  --concurrency 25
-=======
    --input $CAUSAL_OUTPUT_PATH \
    --concepts $INPUT_DESCRIPTIONS_FILE \
    --output $INPUT_SCORE_RESULTS \
@@ -243,7 +212,6 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
    --ranks 400,200,100,50 \
    --layers $LAYERS \
    --concurrency 25
->>>>>>> main
   fi
   echo "Input score judging completed."
 fi
@@ -252,17 +220,7 @@ if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
   echo "Starting output score judging..."
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/causal/output_score_llm_judge.py \
-<<<<<<< HEAD
-    --input experiments/artifacts/causal_output.json \
-     --concepts experiments/artifacts/output_descriptions.json \
-     --output experiments/artifacts/results_causal_out.json \
-     --layers $LAYERS \
-     --ranks 50 \
-     --model gemini-2.0-flash \
-     --concurrency 25 \
-     --attempts 2 \
-     --sparsity 0.01
-=======
+
     --input $CAUSAL_OUTPUT_PATH \
    --concepts $OUTPUT_DESCRIPTIONS_FILE \
    --output $OUTPUT_SCORE_RESULTS \
@@ -272,7 +230,6 @@ if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
    --concurrency 25 \
    --attempts 2 \
    --sparsity 0.01
->>>>>>> main
   fi
     echo "Output score judging completed."
 fi
