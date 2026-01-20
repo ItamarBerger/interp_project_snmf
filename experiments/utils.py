@@ -33,7 +33,7 @@ def save_model_and_artifact(model, cfg, file_path, layer, rank):
     artifact.add_file(file_path)
 
     # tags
-    tags = [cfg["model_name"], f"seed-{cfg['seed']}"]
+    tags = [sanitized_model_name, f"seed-{cfg['seed']}"]
 
     # Save the artifact to wandb
     wandb.log_artifact(artifact, tags=tags)
