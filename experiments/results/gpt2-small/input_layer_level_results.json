@@ -1,0 +1,92 @@
+{
+  "0": {
+    "layer": 0,
+    "levels": {
+      "1": {
+        "level": 1,
+        "final_score": 0.5162500000000005,
+        "concept_score": 0.718125,
+        "fluency_score": 0.87875,
+        "num_concepts": 200,
+        "num_valid_final_scores": 200,
+        "num_valid_concept_scores": 200,
+        "num_valid_fluency_scores": 200
+      },
+      "2": {
+        "level": 2,
+        "final_score": 0.5683333333333331,
+        "concept_score": 0.82,
+        "fluency_score": 0.835,
+        "num_concepts": 100,
+        "num_valid_final_scores": 100,
+        "num_valid_concept_scores": 100,
+        "num_valid_fluency_scores": 100
+      },
+      "0": {
+        "level": 0,
+        "final_score": 0.4686458333333324,
+        "concept_score": 0.735625,
+        "fluency_score": 0.7953125,
+        "num_concepts": 400,
+        "num_valid_final_scores": 400,
+        "num_valid_concept_scores": 400,
+        "num_valid_fluency_scores": 400
+      },
+      "3": {
+        "level": 3,
+        "final_score": 0.37,
+        "concept_score": 0.4975,
+        "fluency_score": 0.84,
+        "num_concepts": 50,
+        "num_valid_final_scores": 50,
+        "num_valid_concept_scores": 50,
+        "num_valid_fluency_scores": 50
+      }
+    }
+  },
+  "3": {
+    "layer": 3,
+    "levels": {
+      "0": {
+        "level": 0,
+        "final_score": 0.4254166666666662,
+        "concept_score": 0.6153125,
+        "fluency_score": 0.7796875,
+        "num_concepts": 400,
+        "num_valid_final_scores": 400,
+        "num_valid_concept_scores": 400,
+        "num_valid_fluency_scores": 400
+      },
+      "1": {
+        "level": 1,
+        "final_score": 0.48375000000000035,
+        "concept_score": 0.72,
+        "fluency_score": 0.823125,
+        "num_concepts": 200,
+        "num_valid_final_scores": 200,
+        "num_valid_concept_scores": 200,
+        "num_valid_fluency_scores": 200
+      },
+      "2": {
+        "level": 2,
+        "final_score": 0.4829166666666664,
+        "concept_score": 0.765,
+        "fluency_score": 0.79125,
+        "num_concepts": 100,
+        "num_valid_final_scores": 100,
+        "num_valid_concept_scores": 100,
+        "num_valid_fluency_scores": 100
+      },
+      "3": {
+        "level": 3,
+        "final_score": 0.5316666666666667,
+        "concept_score": 0.84,
+        "fluency_score": 0.815,
+        "num_concepts": 50,
+        "num_valid_final_scores": 50,
+        "num_valid_concept_scores": 50,
+        "num_valid_fluency_scores": 50
+      }
+    }
+  }
+}

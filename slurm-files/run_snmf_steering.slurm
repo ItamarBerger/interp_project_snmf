@@ -23,12 +23,16 @@ umask 0002
 source /home/ADV_2526a/tslilshani/anaconda3/etc/profile.d/conda.sh
 conda activate snmf_hier
 
-if [ -z "$STEPS" ]; then
+if [[ -z "$STEPS" ]]; then
   STEPS="all"
 fi
 
-if [ -z "$LAYERS" ]; then
+if [[ -z "$LAYERS" ]]; then
   LAYERS="0,3,6,9,11"
+fi
+
+if [[ -z "$ACT_MODEL_NAME"]]; then
+  ACT_MODEL_NAME="gpt2-small"
 fi
 
 # Convert '|' to ',' if needed, since slurm can't handle the "," character well in variable passing
@@ -37,11 +41,21 @@ STEPS=$(echo "$STEPS" | tr '|' ',')
 
 echo "Running scripts with STEPS=$STEPS and LAYERS=$LAYERS"
 
-SCRIPT_CMD="experiments/run_hier_snmf_steering.sh --steps $STEPS --layers $LAYERS"
+SCRIPT_CMD="experiments/run_hier_snmf_steering.sh --steps $STEPS --layers $LAYERS --act-model-name $ACT_MODEL_NAME"
 
 if [[ -n "$CAUS_SAVE_PATH" ]]; then
   echo "Using causal save path: $CAUS_SAVE_PATH"
   SCRIPT_CMD="$SCRIPT_CMD --causal-save-path $CAUS_SAVE_PATH"
+fi
+
+if [[ -n "$OUTPUT_SCORE_RESULTS" ]]; then
+  echo "Using output score results path: $OUTPUT_SCORE_RESULTS"
+  SCRIPT_CMD="$SCRIPT_CMD --output-score-results $OUTPUT_SCORE_RESULTS"
+fi
+
+if [[ -n "$INPUT_SCORE_RESULTS" ]]; then
+  echo "Using input score results path: $INPUT_SCORE_RESULTS"
+  SCRIPT_CMD="$SCRIPT_CMD --input-score-results $INPUT_SCORE_RESULTS"
 fi
 
 echo "Running command : $SCRIPT_CMD"

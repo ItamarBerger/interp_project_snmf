@@ -1,0 +1,22 @@
+{
+  "0": {
+    "layer": 0,
+    "num_concepts": 750,
+    "avg_max_concept_score": 0.7263333333333334,
+    "avg_max_final_score": 0.488055555555557,
+    "avg_max_fluency_score": 0.8258333333333333,
+    "num_valid_concept_scores": 750,
+    "num_valid_final_scores": 750,
+    "num_valid_fluency_scores": 750
+  },
+  "3": {
+    "layer": 3,
+    "num_concepts": 750,
+    "avg_max_concept_score": 0.6781666666666667,
+    "avg_max_final_score": 0.45572222222222397,
+    "avg_max_fluency_score": 0.7951666666666667,
+    "num_valid_concept_scores": 750,
+    "num_valid_final_scores": 750,
+    "num_valid_fluency_scores": 750
+  }
+}
