@@ -64,7 +64,7 @@ fi
 
 FACTORIZATION_BASE_PATH="experiments/artifacts/$MODEL_NAME/hier"
 OUTPUT_SCORE_RESULTS="experiments/artifacts/$MODEL_NAME/causal_results_out.json"
-INPUT_SCORE_RESULTS="experiments/artifacts/$MODEL_NAME}/causal_results_in.json"
+INPUT_SCORE_RESULTS="experiments/artifacts/$MODEL_NAME/causal_results_in.json"
 CONCEPTS_CONTEXT_FILE="experiments/artifacts/$MODEL_NAME/concept_contexts.json"
 INPUT_DESCRIPTIONS_FILE="experiments/artifacts/$MODEL_NAME/input_descriptions.json"
 VOCAB_PROJ_FILE="experiments/artifacts/$MODEL_NAME/vocab_proj.json"
@@ -151,8 +151,7 @@ fi
 if [[ " ${STEPS[*]} " == *" generate_vocab_proj "* ]]; then
   echo "Generating vocabulary projections..."
   if [[ $DRY_RUN -eq 0 ]]; then
-   PYTHONPATH=. python experiments/snmf_interp/generate_vocab_proj.py\
-
+   PYTHONPATH=. python experiments/snmf_interp/generate_vocab_proj.py \
     --model-name $MODEL_NAME \
     --base-path . \
     --factorization-base-path $FACTORIZATION_BASE_PATH \
@@ -189,12 +188,11 @@ if [[ " ${STEPS[*]} " == *" generate_causal_output "* ]]; then
     PYTHONPATH=. python experiments/causal/generate_causal_output.py \
    --model-name $MODEL_NAME \
    --layers $LAYERS \
-   --ranks 400,200,100,50 \
+   --ranks 50 \
    --sparsity 0.01 \
    --factorization-base-path $FACTORIZATION_BASE_PATH \
    --save-path $CAUSAL_OUTPUT_PATH \
    --device cuda
-
   fi
   echo "Causal output generated."
 fi
@@ -209,7 +207,7 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
    --concepts $INPUT_DESCRIPTIONS_FILE \
    --output $INPUT_SCORE_RESULTS \
    --model gemini-2.0-flash \
-   --ranks 400,200,100,50 \
+   --ranks 50 \
    --layers $LAYERS \
    --concurrency 25
   fi
@@ -220,12 +218,11 @@ if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
   echo "Starting output score judging..."
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/causal/output_score_llm_judge.py \
-
     --input $CAUSAL_OUTPUT_PATH \
    --concepts $OUTPUT_DESCRIPTIONS_FILE \
    --output $OUTPUT_SCORE_RESULTS \
    --layers $LAYERS \
-   --ranks 400,200,100,50 \
+   --ranks 50 \
    --model gemini-2.0-flash \
    --concurrency 25 \
    --attempts 2 \

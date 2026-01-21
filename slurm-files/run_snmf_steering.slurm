@@ -21,7 +21,12 @@ umask 0002
 
 # activate conda environment
 source /home/ADV_2526a/tslilshani/anaconda3/etc/profile.d/conda.sh
-conda activate snmf_hier
+conda activate snmf_ohad
+
+# Load personal API keys if present
+if [ -f /home/ADV_2526a/$USER/.api_keys ]; then
+  source /home/ADV_2526a/$USER/.api_keys
+fi
 
 if [[ -z "$STEPS" ]]; then
   STEPS="all"
@@ -31,7 +36,7 @@ if [[ -z "$LAYERS" ]]; then
   LAYERS="0,3,6,9,11"
 fi
 
-if [[ -z "$ACT_MODEL_NAME"]]; then
+if [[ -z "$ACT_MODEL_NAME" ]]; then
   ACT_MODEL_NAME="gpt2-small"
 fi
 
