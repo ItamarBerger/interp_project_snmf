@@ -27,7 +27,7 @@ def plot_boxplot(df, plt_title, x: str, y: str, hue: str, ylim: tuple, color_pal
     ax.set_xlabel(x)
     ax.set_ylabel(y)
     ax.set_ylim(*ylim)
-    ax.legend(title=hue)
+    ax.legend(title=hue, loc='upper right')
     ax.grid(axis='y', linestyle='--', alpha=0.7)
 
     return fig
@@ -52,7 +52,7 @@ def plot_barplot(df, plt_title, x: str, y: str, hue: str, ylim: tuple, y_label: 
     ax.set_xlabel(x)
     ax.set_ylabel(y_label if y_label else y)
     ax.set_ylim(*ylim)
-    ax.legend(title=hue)
+    ax.legend(title=hue, loc='upper right')
     ax.grid(axis='y', linestyle='--', alpha=0.7)
 
     return fig

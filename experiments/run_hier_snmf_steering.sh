@@ -8,6 +8,8 @@ STEPS="all"
 DRY_RUN=0
 LAYERS="0,3,6,9,11"
 RANKS="400,200,100,50"
+BASE_DIR="experiments/artifacts"
+
 
 # Get args to control which steps to run
 # If STEPS is "all", run all steps
@@ -49,6 +51,10 @@ while [[ $# -gt 0 ]]; do
       MODEL_NAME="$2"
       shift 2
       ;;
+    --base-dir)
+      BASE_DIR="$2"
+      shift 2
+      ;;
     *)
       echo "Unknown arg: $1" >&2
       exit 1
@@ -64,16 +70,18 @@ fi
 
 
 if [[ -z "${CAUSAL_OUTPUT_PATH:-}" ]]; then
-  CAUSAL_OUTPUT_PATH="experiments/artifacts/$MODEL_NAME/causal_output.json"
+  CAUSAL_OUTPUT_PATH="$BASE_DIR/artifacts/$MODEL_NAME/causal_output.json"
 fi
 
-FACTORIZATION_BASE_PATH="experiments/artifacts/$MODEL_NAME/hier"
-OUTPUT_SCORE_RESULTS="experiments/artifacts/$MODEL_NAME/causal_results_out.json"
-INPUT_SCORE_RESULTS="experiments/artifacts/$MODEL_NAME/causal_results_in.json"
-CONCEPTS_CONTEXT_FILE="experiments/artifacts/$MODEL_NAME/concept_contexts.json"
-INPUT_DESCRIPTIONS_FILE="experiments/artifacts/$MODEL_NAME/input_descriptions.json"
-VOCAB_PROJ_FILE="experiments/artifacts/$MODEL_NAME/vocab_proj.json"
-OUTPUT_DESCRIPTIONS_FILE="experiments/artifacts/$MODEL_NAME/output_descriptions.json"
+
+FACTORIZATION_BASE_PATH="$BASE_DIR/$MODEL_NAME/hier"
+OUTPUT_SCORE_RESULTS="$BASE_DIR/$MODEL_NAME/causal_results_out.json"
+INPUT_SCORE_RESULTS="$BASE_DIR/$MODEL_NAME}/causal_results_in.json"
+CONCEPTS_CONTEXT_FILE="$BASE_DIR/$MODEL_NAME/concept_contexts.json"
+INPUT_DESCRIPTIONS_FILE="$BASE_DIR/$MODEL_NAME/input_descriptions.json"
+VOCAB_PROJ_FILE="$BASE_DIR/$MODEL_NAME/vocab_proj.json"
+OUTPUT_DESCRIPTIONS_FILE="$BASE_DIR/$MODEL_NAME/output_descriptions.json"
+
 
 
 # If STEPS is "all", set it to run all steps
