@@ -106,7 +106,7 @@ if [[ " ${STEPS[*]} " == *" train "* ]]; then
       --layers $LAYERS \
       --data-path data/hier_concepts.json \
       --model-device cuda \
-      --data-device cuda \
+      --data-device cpu \
       --fitting-device cuda \
       --base-path . \
       --save-path $FACTORIZATION_BASE_PATH \

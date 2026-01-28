@@ -116,10 +116,11 @@ def make_generate_concept(retries: int, model, max_tokens: int, semaphore: async
         )
         prompt = CONCEPT_PROMPT.format(token_context_str=token_context_str)
 
-        if rate_limiter:
-            await rate_limiter()
 
-        async with semaphore:
+        async with semaphore:            
+            if rate_limiter:
+                await rate_limiter()
+                
             resp = await asyncio.to_thread(
                 model.generate_content,
                 prompt,
