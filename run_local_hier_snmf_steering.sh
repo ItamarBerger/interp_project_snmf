@@ -6,7 +6,7 @@ set -euo pipefail
 # Defaults: STEPS=all, LAYERS=0, MODEL=gpt2-small
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-VENV="/workspace/snmf_ohad"
+VENV="/workspace/snmf_hier"
 LOG_DIR="/workspace/logs"
 
 STEPS="${STEPS:-all}"
