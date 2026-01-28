@@ -9,9 +9,11 @@ experiments/artifacts/neg_causal_output.json filter=lfs diff=lfs merge=lfs -text
 experiments/artifacts/*.json filter=lfs diff=lfs merge=lfs -text
 experiments/artifacts/hier/**/*.pkl filter=lfs diff=lfs merge=lfs -text
 experiments/artifacts/hier/**/*.pt filter=lfs diff=lfs merge=lfs -text
-
 # graphml files for concept trees - can all be easily created, no need to save in repo
 experiments/artifacts/concept_trees/*.graphml
 experiments/artifacts/gpt2-small/**/*.json filter=lfs diff=lfs merge=lfs -text
 experiments/artifacts/gpt2-small/**/*.pkl filter=lfs diff=lfs merge=lfs -text
 experiments/artifacts/gpt2-small/**/*.pt filter=lfs diff=lfs merge=lfs -text
+*.pkl filter=lfs diff=lfs merge=lfs -text
+experiments/artifacts/**/causal*.json filter=lfs diff=lfs merge=lfs -text
+experiments/artifacts/**/vocab_proj.json filter=lfs diff=lfs merge=lfs -text

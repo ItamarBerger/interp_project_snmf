@@ -24,8 +24,8 @@ source /home/ADV_2526a/tslilshani/anaconda3/etc/profile.d/conda.sh
 conda activate snmf_ohad
 
 # Load personal API keys if present
-if [ -f /home/ADV_2526a/$USER/.api_keys ]; then
-  source /home/ADV_2526a/$USER/.api_keys
+if [ -f /workspace/.api_keys ]; then
+  source /workspace/.api_keys
 fi
 
 if [[ -z "$STEPS" ]]; then

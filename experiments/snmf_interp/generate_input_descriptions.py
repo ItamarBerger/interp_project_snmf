@@ -8,6 +8,7 @@ import time
 # from openai import AsyncOpenAI
 # from openai.types.chat import ChatCompletion
 import google.generativeai as genai
+from aiolimiter import AsyncLimiter
 
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 from dotenv import load_dotenv
@@ -95,10 +96,11 @@ def build_arg_parser():
     p.add_argument("--max-tokens", type=int, default=200, help="max_tokens for each completion.")
     p.add_argument("--concurrency", type=int, default=25, help="Semaphore limit for concurrent calls.")
     p.add_argument("--retries", type=int, default=5, help="Tenacity stop_after_attempt.")
+    p.add_argument("--rps-limit", type=float, default=30.0, help="Max Gemini requests per second across all tasks (use lower if seeing 429s).")
     return p
 
 # ---------------- Async workers ---------------- #
-def make_generate_concept(retries: int, model, max_tokens: int, semaphore: asyncio.Semaphore):
+def make_generate_concept(retries: int, model, max_tokens: int, semaphore: asyncio.Semaphore, rate_limiter=None):
     @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(retries))
     async def _inner(entry, top_m: int):
         # sort and pick top-M by activation
@@ -113,6 +115,9 @@ def make_generate_concept(retries: int, model, max_tokens: int, semaphore: async
             for act in top
         )
         prompt = CONCEPT_PROMPT.format(token_context_str=token_context_str)
+
+        if rate_limiter:
+            await rate_limiter()
 
         async with semaphore:
             resp = await asyncio.to_thread(
@@ -155,10 +160,20 @@ async def run(args):
     model = genai.GenerativeModel(args.model)
 
     semaphore = asyncio.Semaphore(args.concurrency)
-    # client = AsyncOpenAI(api_key=api_key)
+    # Use aiolimiter for proper token bucket rate limiting
+    rate_limiter_obj = AsyncLimiter(max_rate=args.rps_limit, time_period=1.0) if args.rps_limit > 0 else None
+
+    async def rate_limiter():
+        if rate_limiter_obj:
+            async with rate_limiter_obj:
+                pass
 
     generate_concept = make_generate_concept(
-        retries=args.retries, model=model, max_tokens=args.max_tokens, semaphore=semaphore
+        retries=args.retries,
+        model=model,
+        max_tokens=args.max_tokens,
+        semaphore=semaphore,
+        rate_limiter=rate_limiter,
     )
     process_entry = make_process_entry(generate_concept)
 

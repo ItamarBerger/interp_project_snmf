@@ -7,6 +7,7 @@ echo "Starting hierarchical SNMF steering experiment..."
 STEPS="all"
 DRY_RUN=0
 LAYERS="0,3,6,9,11"
+RANKS="50"
 
 # Get args to control which steps to run
 # If STEPS is "all", run all steps
@@ -22,6 +23,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --layers)
       LAYERS="$2"
+      shift 2
+      ;;
+    --ranks)
+      RANKS="$2"
       shift 2
       ;;
     --causal-save-path)
@@ -79,6 +84,7 @@ fi
 echo "========== Overview =========="
 echo "Steps to run: ${STEPS[*]}"
 echo "Layers: $LAYERS"
+echo "Ranks: $RANKS"
 echo "save path for causal output: $CAUSAL_OUTPUT_PATH"
 echo "Using factorization base path: $FACTORIZATION_BASE_PATH"
 
@@ -89,7 +95,7 @@ if [[ " ${STEPS[*]} " == *" train "* ]]; then
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/train/train_hier.py \
      --sparsity 0.01 \
-     --ranks 50 \
+    --ranks $RANKS \
       --max-iterations-per-layer 2000 \
       --patience 1500 \
       --ft-lr 1e-3 \
@@ -99,8 +105,8 @@ if [[ " ${STEPS[*]} " == *" train "* ]]; then
       --factorization-mode mlp \
       --layers $LAYERS \
       --data-path data/hier_concepts.json \
-      --model-device cpu \
-      --data-device cpu \
+      --model-device cuda \
+      --data-device cuda \
       --fitting-device cuda \
       --base-path . \
       --save-path $FACTORIZATION_BASE_PATH \
@@ -117,15 +123,15 @@ if [[ " ${STEPS[*]} " == *" generate_concept_context "* ]]; then
     --output-json $CONCEPTS_CONTEXT_FILE \
     --data-path data/hier_concepts.json \
     --layers $LAYERS \
-    --ranks 50 \
+    --ranks $RANKS \
     --num-samples-per-factor 25 \
     --context-window 15 \
     --sparsity 0.01 \
     --seed 42 \
     --model-name $MODEL_NAME \
     --factor-mode mlp \
-    --model-device cpu \
-    --data-device cpu
+    --model-device cuda \
+    --data-device cuda
   fi
   echo "Concept contexts generated."
 fi
@@ -139,7 +145,7 @@ if [[ " ${STEPS[*]} " == *" generate_input_descriptions "* ]]; then
     --model gemini-2.0-flash \
     --env-var GEMINI_API_KEY \
     --layers $LAYERS \
-    --k-values 50 \
+    --k-values $RANKS \
     --top-m 10 \
     --max-tokens 200 \
     --concurrency 50 \
@@ -157,10 +163,10 @@ if [[ " ${STEPS[*]} " == *" generate_vocab_proj "* ]]; then
     --factorization-base-path $FACTORIZATION_BASE_PATH \
     --output-path $VOCAB_PROJ_FILE \
     --layers $LAYERS \
-    --ranks 50 \
+    --ranks $RANKS \
     --top-k 75 \
     --sparsity 0.01 \
-    --device cpu \
+    --device cuda \
     --seed 123
   fi
   echo "Vocabulary projections generated."
@@ -174,7 +180,7 @@ if [[ " ${STEPS[*]} " == *" generate_output_descriptions "* ]]; then
   --output $OUTPUT_DESCRIPTIONS_FILE \
   --model gemini-2.0-flash \
   --layers $LAYERS \
-  --ranks 50 \
+  --ranks $RANKS \
   --concurrency 25 \
   --top-m 25 \
   --max-tokens 5000
@@ -188,7 +194,7 @@ if [[ " ${STEPS[*]} " == *" generate_causal_output "* ]]; then
     PYTHONPATH=. python experiments/causal/generate_causal_output.py \
    --model-name $MODEL_NAME \
    --layers $LAYERS \
-   --ranks 50 \
+  --ranks $RANKS \
    --sparsity 0.01 \
    --factorization-base-path $FACTORIZATION_BASE_PATH \
    --save-path $CAUSAL_OUTPUT_PATH \
@@ -207,7 +213,7 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
    --concepts $INPUT_DESCRIPTIONS_FILE \
    --output $INPUT_SCORE_RESULTS \
    --model gemini-2.0-flash \
-   --ranks 50 \
+  --ranks $RANKS \
    --layers $LAYERS \
    --concurrency 25
   fi
@@ -222,7 +228,7 @@ if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
    --concepts $OUTPUT_DESCRIPTIONS_FILE \
    --output $OUTPUT_SCORE_RESULTS \
    --layers $LAYERS \
-   --ranks 50 \
+  --ranks $RANKS \
    --model gemini-2.0-flash \
    --concurrency 25 \
    --attempts 2 \
