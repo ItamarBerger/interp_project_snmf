@@ -21,7 +21,7 @@ umask 0002
 
 # activate conda environment
 source /home/ADV_2526a/tslilshani/anaconda3/etc/profile.d/conda.sh
-conda activate snmf_ohad
+conda activate snmf_hier
 
 # Load personal API keys if present
 if [ -f /workspace/.api_keys ]; then
