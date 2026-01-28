@@ -7,7 +7,7 @@ echo "Starting hierarchical SNMF steering experiment..."
 STEPS="all"
 DRY_RUN=0
 LAYERS="0,3,6,9,11"
-RANKS="50"
+RANKS="400,200,100,50"
 
 # Get args to control which steps to run
 # If STEPS is "all", run all steps
