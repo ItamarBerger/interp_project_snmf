@@ -11,7 +11,9 @@ def save_model_and_artifact(model, cfg, file_path, layer, rank):
     logger.info(f"Model state saved to {file_path}")
 
     # Prepare artifact for wandb
-    art_name = f"{cfg['model_name']}-{layer}-{rank}-{wandb.run.id}"
+    # Sanitize model name by replacing "/" with "-" (WandB doesn't allow "/" in artifact names)
+    sanitized_model_name = cfg['model_name'].replace("/", "-")
+    art_name = f"{sanitized_model_name}-{layer}-{rank}-{wandb.run.id}"
     artifact_metadata = {
             "configs": cfg
         }
@@ -31,7 +33,7 @@ def save_model_and_artifact(model, cfg, file_path, layer, rank):
     artifact.add_file(file_path)
 
     # tags
-    tags = [cfg["model_name"], f"seed-{cfg['seed']}"]
+    tags = [sanitized_model_name, f"seed-{cfg['seed']}"]
 
     # Save the artifact to wandb
     wandb.log_artifact(artifact, tags=tags)

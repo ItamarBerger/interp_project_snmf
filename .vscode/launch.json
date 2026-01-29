@@ -1,0 +1,53 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug generate_concept_context",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/experiments/snmf_interp/generate_concept_context.py",
+      "python": "/home/ADV_2526a/ohadsharet/anaconda3/envs/snmf_ohad/bin/python",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      },
+      "args": [
+        "--models-dir", "experiments/artifacts/hier",
+        "--output-json", "experiments/artifacts/concept_contexts.json",
+        "--data-path", "data/hier_concepts.json",
+        "--layers", "0",
+        "--ranks", "50",
+        "--num-samples-per-factor", "25",
+        "--context-window", "15",
+        "--sparsity", "0.01",
+        "--seed", "42",
+        "--model-name", "meta-llama/Llama-3.1-8B",
+        "--factor-mode", "mlp",
+        "--model-device", "cpu",
+        "--data-device", "cpu"
+      ]
+    },
+    {
+      "name": "Debug generate_output_centric_descriptions",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/experiments/snmf_interp/generate_output_centric_descriptions.py",
+      "python": "/home/ADV_2526a/ohadsharet/anaconda3/envs/snmf_ohad/bin/python",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      },
+      "args": [
+        "--input", "experiments/artifacts/llama/vocab_proj.json",
+        "--model", "gemini-2.0-flash",
+        "--layers", "0",
+        "--ranks", "50",
+        "--concurrency", "50",
+        "--top-m", "25",
+        "--max-tokens", "5000"
+      ]
+    }
+  ]
+}
