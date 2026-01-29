@@ -24,12 +24,12 @@ def load_data(file_path: str) -> Dict[str, Any]|List[Dict[str, Any]]:
         sys.exit(1)
 
 
-def create_path_if_not_exists(object_path: str):
+def create_path_if_not_exists(object_path: str, is_file: bool):
     """
     Creates the directory path for the given file path if it does not exist.
     """
     f = Path(object_path)
-    if f.is_file():
+    if is_file:
         f.parent.mkdir(parents=True, exist_ok=True)
     else:
         f.mkdir(parents=True, exist_ok=True)

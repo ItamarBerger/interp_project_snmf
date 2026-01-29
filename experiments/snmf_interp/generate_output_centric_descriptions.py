@@ -8,10 +8,9 @@ from typing import List, Optional
 
 from dotenv import load_dotenv
 import google.generativeai as genai
-# from openai import AsyncOpenAI
-from tenacity import retry, wait_random_exponential, stop_after_attempt
 from experiments.evaluation.json_handler import JsonHandler
 import logging
+from experiments.utils import retry_with_attempts, RateLimiter, batched
 
 from utils import setup_logging
 
@@ -78,6 +77,8 @@ async def run(args):
     model = genai.GenerativeModel(model)
     semaphore = asyncio.Semaphore(concurrency)
 
+    rate_limiter = RateLimiter(max_requests=1900, window_seconds=60)
+
     CONNECTION_PROMPT = """
 You are given a set of tokens and their importance score.
 Your task is to determine what is the connection between all the tokens.
@@ -108,8 +109,9 @@ Do not add any markdown to the examples.
 Make sure you output a very precise and detailed description of the concept that fully captures it.
 """.strip()
 
-    @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(5))
+    @retry_with_attempts(args.retries)
     async def _call_gemini(prompt: str,  max_tokens: int):
+        await rate_limiter.acquire()
         async with semaphore:
             resp = await asyncio.to_thread(
                 model.generate_content,
@@ -150,17 +152,23 @@ Make sure you output a very precise and detailed description of the concept that
         if int(e['layer']) in layers and ('K' not in e or not ranks or int(e['K']) in ranks) and int(e['level']) in levels
     ]
 
+
     logger.info(f"Processing {len(filtered)} entries…")
     tasks = [generate_concept(e) for e in filtered]
 
     results = []
-    for coro in asyncio.as_completed(tasks):
-        try:
-            res = await coro
-            results.append(res)
-            logger.info(f"  → Completed {len(results)}/{len(filtered)}")
-        except Exception as err:
-            logger.info(f"  ⚠ Sample exception: {err}")
+    batches = batched(tasks, args.batch_size)
+
+    for batch_idx, batch in enumerate(batches):
+        logger.info(f"Starting batch {batch_idx + 1}/{(len(tasks) + args.batch_size - 1) // args.batch_size} with {len(batch)} tasks.")
+        for coro in asyncio.as_completed(batch):
+            try:
+                res = await coro
+                results.append(res)
+                logger.info(f"  → Completed {len(results)}/{len(filtered)}")
+            except Exception as err:
+                logger.info(f"  ⚠ Sample exception: {err}")
+
 
     json_handler = JsonHandler(
         ["description", "layer", "level", "h_row", "K", "sign"],
@@ -188,6 +196,8 @@ def build_argparser() -> argparse.ArgumentParser:
     p.add_argument("--top-m", type=int, help="Top-M tokens to consider per entry (overrides TOP_M env).")
     p.add_argument("--concurrency", type=int, help="Max concurrent API calls (overrides CONCURRENCY env).", default=25)
     p.add_argument("--max-tokens", type=int, default=5000, help="max_tokens for the completion (default 5000).")
+    p.add_argument("--retries", "-r", type=int, default=5, help="Number of retries for API calls (default 5).")
+    p.add_argument("--batch-size", type=int, default=20, help="Number of tasks to batch together (default 20).")
     return p
 
 def main():

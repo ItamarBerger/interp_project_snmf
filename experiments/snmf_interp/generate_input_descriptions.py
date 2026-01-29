@@ -1,19 +1,14 @@
 import asyncio
 import json
 import os
-import re
 import argparse
 from typing import List, Any
-import time
-# from openai import AsyncOpenAI
-# from openai.types.chat import ChatCompletion
 import google.generativeai as genai
-from aiolimiter import AsyncLimiter
 
-from tenacity import retry, wait_random_exponential, stop_after_attempt
 from dotenv import load_dotenv
 import logging
 
+from experiments.utils import RateLimiter, retry_with_attempts, batched
 from utils import setup_logging
 
 logger = logging.getLogger(__name__)
@@ -96,12 +91,13 @@ def build_arg_parser():
     p.add_argument("--max-tokens", type=int, default=200, help="max_tokens for each completion.")
     p.add_argument("--concurrency", type=int, default=25, help="Semaphore limit for concurrent calls.")
     p.add_argument("--retries", type=int, default=5, help="Tenacity stop_after_attempt.")
-    p.add_argument("--rps-limit", type=float, default=30.0, help="Max Gemini requests per second across all tasks (use lower if seeing 429s).")
+    p.add_argument("--batch-size", type=int, default=20,
+                   help="Number of tasks to batch together for avoiding rate limits.")
     return p
 
 # ---------------- Async workers ---------------- #
-def make_generate_concept(retries: int, model, max_tokens: int, semaphore: asyncio.Semaphore, rate_limiter=None):
-    @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(retries))
+def make_generate_concept(retries: int, model, max_tokens: int, semaphore: asyncio.Semaphore, rate_limiter):
+    @retry_with_attempts(attempts=retries, default_value=None)
     async def _inner(entry, top_m: int):
         # sort and pick top-M by activation
         top = sorted(
@@ -116,11 +112,8 @@ def make_generate_concept(retries: int, model, max_tokens: int, semaphore: async
         )
         prompt = CONCEPT_PROMPT.format(token_context_str=token_context_str)
 
-
-        async with semaphore:            
-            if rate_limiter:
-                await rate_limiter()
-                
+        await rate_limiter.acquire()
+        async with semaphore:
             resp = await asyncio.to_thread(
                 model.generate_content,
                 prompt,
@@ -162,12 +155,8 @@ async def run(args):
 
     semaphore = asyncio.Semaphore(args.concurrency)
     # Use aiolimiter for proper token bucket rate limiting
-    rate_limiter_obj = AsyncLimiter(max_rate=args.rps_limit, time_period=1.0) if args.rps_limit > 0 else None
+    rate_limiter = RateLimiter(max_requests=1900, window_seconds=60)
 
-    async def rate_limiter():
-        if rate_limiter_obj:
-            async with rate_limiter_obj:
-                pass
 
     generate_concept = make_generate_concept(
         retries=args.retries,
@@ -178,16 +167,28 @@ async def run(args):
     )
     process_entry = make_process_entry(generate_concept)
 
-    tasks = [
-        process_entry(e, args.top_m)
-        for e in data
-        if (int(e["layer"]) in layers and int(e["K"]) in k_values and int(e["level"]) in levels)
-    ]
-
-    logger.info(f"Running over {len(tasks)} tasks …")
     results = []
-    for coro in asyncio.as_completed(tasks):
-        results.append(await coro)
+    # Create batches
+    filtered_data = [e for e in data if (int(e["layer"]) in layers and int(e["K"]) in k_values and int(e["level"]) in levels)]
+    batches = batched(
+        filtered_data,
+        args.batch_size
+    )
+
+    for i, batch in enumerate(batches):
+
+        logger.info(
+            f"Processing batch {i + 1}/{(len(filtered_data) + args.batch_size - 1) // args.batch_size} with {len(batch)} entries …")
+        tasks = [
+            process_entry(e, args.top_m)
+            for e in batch
+        ]
+
+        for coro in asyncio.as_completed(tasks):
+            results.append(await coro)
+
+        logger.info(f"\n  → Completed {len(results)}/{len(data)} entries so far.")
+
 
     save_data(args.output_json, results)
     logger.info(f"\nWrote {len(results)} descriptions to {args.output_json}")
