@@ -31,3 +31,6 @@ playground.ipynb
 
 # VS Code launch configuration
 .vscode/launch.json
+
+# Ignore artifacts
+experiments/artifacts/*
