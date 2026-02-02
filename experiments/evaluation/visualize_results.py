@@ -48,13 +48,16 @@ MAX_SCORE = 2.0
 BUFFER = 0.05
 BAR_LABEL_FONTSIZE = 8
 LAYER_COLOR_PALETTE = {
-    0: "#6a3d9a", # Purple
-    1: "#fb9a99", # Light Red
-    2: "#33a02c", # Dark Green
-    3: "#ff7f00", # Orange
-    6: "#1f78b4", # Dark Blue
-    9: "#e31a1c", # Red
-    11: "#a6cee3", # Light Blue
+    0: "#6a3d9a",  # Purple
+    1: "#fb9a99",  # Light Red
+    2: "#33a02c",  # Dark Green
+    3: "#ff7f00",  # Orange
+    6: "#1f78b4",  # Dark Blue
+    9: "#e31a1c",  # Red
+    11: "#a6cee3",  # Light Blue
+    12: "#b15928",  # Brown
+    18: "#8dd3c7",  # Teal
+    25: "#ffffb3",  # Yellow
 }
 # LAYER_COLOR_PALETTE = {
 #     0:  "#4C72B0",  # Muted Blue
@@ -167,7 +170,8 @@ def plot_multiple_layers_in_single_plot(df: pd.DataFrame, plot_func, plot_func_a
         )
 
         layers_string = "_".join(str(layer) for layer in sorted(df['Layer'].unique()))
-        output_path = os.path.join(output_dir, f"mean_{metric.lower().replace(' ', '_')}_{x.lower()}_layers_{layers_string}.png")
+        prefix = "mean" if "Mean" in plt_title else "distribution"
+        output_path = os.path.join(output_dir, f"{prefix}_{metric.lower().replace(' ', '_')}_{x.lower()}_layers_{layers_string}.png")
         save_plt(fig, f"{plt_title} Metric {metric}", output_path, logger)
 
 def plot_layer_distribution(df: pd.DataFrame, output_dir: str, mode: PlotMode = PlotMode.MULTI_PLOT):
@@ -328,7 +332,7 @@ def main():
     data = load_data(args.input_file)
 
     # create output directory if it doesn't exist
-    create_path_if_not_exists(args.output_dir)
+    create_path_if_not_exists(args.output_dir, is_file=False)
 
     df = transform_data_to_df(data, args.include_fluency)
 

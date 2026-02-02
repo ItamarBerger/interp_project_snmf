@@ -9,6 +9,9 @@ DRY_RUN=0
 LAYERS="0,3,6,9,11"
 RANKS="400,200,100,50"
 BASE_DIR="experiments/artifacts"
+RPS_LIMIT=3500
+RETRIES=5
+BATCH_SIZE=20
 
 
 # Get args to control which steps to run
@@ -53,6 +56,14 @@ while [[ $# -gt 0 ]]; do
       ;;
     --base-dir)
       BASE_DIR="$2"
+      shift 2
+      ;;
+    --retries)
+      RETRIES="$2"
+      shift 2
+      ;;
+    --batch-size)
+      BATCH_SIZE="$2"
       shift 2
       ;;
     *)
@@ -157,7 +168,7 @@ if [[ " ${STEPS[*]} " == *" generate_input_descriptions "* ]]; then
     --top-m 10 \
     --max-tokens 200 \
     --concurrency 50 \
-    --retries 5
+    --retries $RETRIES
   fi
   echo "Input descriptions generated."
 fi
@@ -175,7 +186,8 @@ if [[ " ${STEPS[*]} " == *" generate_vocab_proj "* ]]; then
     --top-k 75 \
     --sparsity 0.01 \
     --device cuda \
-    --seed 123
+    --seed 123 \
+    ---batch-size $BATCH_SIZE
   fi
   echo "Vocabulary projections generated."
 fi
@@ -191,7 +203,9 @@ if [[ " ${STEPS[*]} " == *" generate_output_descriptions "* ]]; then
   --ranks $RANKS \
   --concurrency 25 \
   --top-m 25 \
-  --max-tokens 5000
+  --max-tokens 5000 \
+  --retries $RETRIES \
+  --batch-size $BATCH_SIZE
   fi
   echo "Output descriptions generated."
 fi
@@ -221,7 +235,7 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
    --concepts $INPUT_DESCRIPTIONS_FILE \
    --output $INPUT_SCORE_RESULTS \
    --model gemini-2.0-flash \
-  --ranks $RANKS \
+   --ranks $RANKS \
    --layers $LAYERS \
    --concurrency 25
   fi

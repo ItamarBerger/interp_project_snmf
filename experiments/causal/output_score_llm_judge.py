@@ -5,10 +5,10 @@ import os
 import argparse
 import time
 from typing import List, Tuple
-from collections import deque
 from dotenv import load_dotenv
 import google.generativeai as genai
 
+from experiments.utils import RateLimiter, retry_with_attempts
 from utils import setup_logging
 
 # Will be set in main()
@@ -21,40 +21,6 @@ progress_lock = None
 import logging
 
 logger = logging.getLogger(__name__)
-
-class RateLimiter:
-    """Simple rate limiter for 2000 requests per minute."""
-    def __init__(self, max_requests: int = 2000, window_seconds: int = 60):
-        self.max_requests = max_requests
-        self.window_seconds = window_seconds
-        self.request_times = deque()
-        self.lock = asyncio.Lock()
-        self.total_requests = 0
-    
-    async def acquire(self):
-        """Wait if necessary to respect rate limit, then record request."""
-        async with self.lock:
-            now = time.time()
-            # Remove requests older than the window
-            while self.request_times and self.request_times[0] < now - self.window_seconds:
-                self.request_times.popleft()
-            
-            # If we're at the limit, wait until the oldest request expires
-            if len(self.request_times) >= self.max_requests:
-                wait_time = self.request_times[0] + self.window_seconds - now + 0.1
-                if wait_time > 0:
-                    logger.info(f"Rate limit reached ({len(self.request_times)}/{self.max_requests}), waiting {wait_time:.1f}s...")
-                    await asyncio.sleep(wait_time)
-                    # Clean up again after waiting
-                    now = time.time()
-                    while self.request_times and self.request_times[0] < now - self.window_seconds:
-                        self.request_times.popleft()
-            
-            # Record this request
-            self.request_times.append(time.time())
-            self.total_requests += 1
-            if self.total_requests % 100 == 0:
-                logger.info(f"[Rate Limiter] Total requests made: {self.total_requests}, Current window: {len(self.request_times)}/{self.max_requests}")
 
 # ------------------------------
 # Helpers
@@ -108,51 +74,26 @@ Provide your rating using this exact format: "Rating: [[score]]".
 [Sentence Fragment Start]
 {sentence_fragment}
 [Sentence Fragment End]"""
-    for attempt in range(attempts):
-        try:
-            await rate_limiter.acquire()
-            async with semaphore:
-                start = time.time()
-                response = await asyncio.wait_for(
-                    asyncio.to_thread(
-                        model.generate_content,
-                        prompt,
-                        generation_config={"temperature": 0.0}
-                    ),
-                    timeout=60.0
-                )
-                elapsed = time.time() - start
-                if elapsed > 10:
-                    logger.info(f"      [SLOW] Concept API took {elapsed:.1f}s")
-            content = response.text.strip()
-            return extract_rating(content)
-        except asyncio.TimeoutError:
-            logger.error(f"⚠ TIMEOUT: concept scoring attempt {attempt+1} exceeded 60s")
-            if attempt == attempts - 1:
-                logger.warning("Skipping concept score, returning 0.")
-                return 0
-        except Exception as e:
-            error_str = str(e)
-            # Check for 429 error and extract retry_delay
-            if "429" in error_str or "quota" in error_str.lower():
-                retry_delay = 0
-                # Try to extract retry_delay from error message
-                retry_match = re.search(r'retry.*?(\d+\.?\d*)\s*s', error_str, re.IGNORECASE)
-                if retry_match:
-                    retry_delay = float(retry_match.group(1))
-                elif "retry_delay" in error_str:
-                    # Try to find seconds value
-                    seconds_match = re.search(r'seconds:\s*(\d+)', error_str)
-                    if seconds_match:
-                        retry_delay = float(seconds_match.group(1))
-                if retry_delay > 0:
-                    logger.warning(f"Warning: Rate limit exceeded, waiting {retry_delay:.1f}s before retry...")
-                    await asyncio.sleep(retry_delay)
-                    continue
-            logger.info(f"Warning: concept scoring attempt {attempt+1} failed: {e}")
-            if attempt == attempts - 1:
-                logger.warning("Skipping concept score, returning 0.")
-                return 0
+    @retry_with_attempts(attempts, default_value=0)
+    async def _inner():
+       await rate_limiter.acquire()
+       async with semaphore:
+           start = time.time()
+           response = await asyncio.wait_for(
+               asyncio.to_thread(
+                   model.generate_content,
+                   prompt,
+                   generation_config={"temperature": 0.0}
+               ),
+               timeout=60.0
+           )
+           elapsed = time.time() - start
+           if elapsed > 10:
+               logger.info(f"      [SLOW] Concept API took {elapsed:.1f}s")
+       content = response.text.strip()
+       return extract_rating(content)
+
+    return await _inner()
 
 
 async def evaluate_fluency_score(
@@ -167,51 +108,25 @@ Provide your rating using this exact format: "Rating: [[score]]".
 [Sentence Fragment Start]
 {sentence_fragment}
 [Sentence Fragment End]"""
-    for attempt in range(attempts):
-        try:
-            await rate_limiter.acquire()
-            async with semaphore:
-                start = time.time()
-                response = await asyncio.wait_for(
-                    asyncio.to_thread(
-                        model.generate_content,
-                        prompt,
-                        generation_config={"temperature": 0.0}
-                    ),
-                    timeout=60.0
-                )
-                elapsed = time.time() - start
-                if elapsed > 10:
-                    logger.info(f"      [SLOW] Fluency API took {elapsed:.1f}s")
-            content = response.text.strip()
-            return extract_rating(content)
-        except asyncio.TimeoutError:
-            logger.error(f"⚠ TIMEOUT: fluency scoring attempt {attempt+1} exceeded 60s")
-            if attempt == attempts - 1:
-                logger.warning("Skipping fluency score, returning 0.")
-                return 0
-        except Exception as e:
-            error_str = str(e)
-            # Check for 429 error and extract retry_delay
-            if "429" in error_str or "quota" in error_str.lower():
-                retry_delay = 0
-                # Try to extract retry_delay from error message
-                retry_match = re.search(r'retry.*?(\d+\.?\d*)\s*s', error_str, re.IGNORECASE)
-                if retry_match:
-                    retry_delay = float(retry_match.group(1))
-                elif "retry_delay" in error_str:
-                    # Try to find seconds value
-                    seconds_match = re.search(r'seconds:\s*(\d+)', error_str)
-                    if seconds_match:
-                        retry_delay = float(seconds_match.group(1))
-                if retry_delay > 0:
-                    logger.warning(f"Warning: Rate limit exceeded, waiting {retry_delay:.1f}s before retry...")
-                    await asyncio.sleep(retry_delay)
-                    continue
-            logger.warning(f"Warning: fluency scoring attempt {attempt+1} failed: {e}")
-            if attempt == attempts - 1:
-                logger.warning("Skipping fluency score, returning 0.")
-                return 0
+    @retry_with_attempts(attempts, default_value=0)
+    async def _inner():
+        await rate_limiter.acquire()
+        async with semaphore:
+            start = time.time()
+            response = await asyncio.wait_for(
+                asyncio.to_thread(
+                    model.generate_content,
+                    prompt,
+                    generation_config={"temperature": 0.0}
+                ),
+                timeout=60.0
+            )
+            elapsed = time.time() - start
+            if elapsed > 10:
+                logger.info(f"      [SLOW] Fluency API took {elapsed:.1f}s")
+        content = response.text.strip()
+        return extract_rating(content)
+    return await _inner()
 
 
 def harmonic_mean(scores: List[int]) -> float:

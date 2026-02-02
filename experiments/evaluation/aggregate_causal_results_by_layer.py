@@ -5,7 +5,7 @@ import sys
 from collections import defaultdict
 from typing import List, Dict, Any, Union, Optional
 
-from experiments.evaluation.eval_utils import calculate_entry_means, load_data
+from experiments.evaluation.eval_utils import calculate_entry_means, load_data, create_path_if_not_exists
 from utils import setup_logging
 
 logger = logging.getLogger(__name__)
@@ -121,6 +121,8 @@ def main():
     logger.info(f"Starting processing. Input: {args.input_file}, Target Layers: {args.layers or 'All'}")
 
     raw_data = load_data(args.input_file)
+
+    create_path_if_not_exists(args.output_file, is_file=True)
 
     # Get filtered and aggregated data
     grouped_data = fiter_and_aggregate_entries(raw_data, args.layers)
