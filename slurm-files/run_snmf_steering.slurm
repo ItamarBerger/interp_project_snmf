@@ -68,6 +68,11 @@ if [[ -n "$BASE_DIR" ]]; then
   SCRIPT_CMD="$SCRIPT_CMD --base-dir $BASE_DIR"
 fi
 
+if [[ -n "$CONCURRENCY" ]]; then
+  echo "Using concurrency: $CONCURRENCY"
+  SCRIPT_CMD="$SCRIPT_CMD --concurrency $CONCURRENCY"
+fi
+
 echo "Running command : $SCRIPT_CMD"
 
 bash $SCRIPT_CMD
