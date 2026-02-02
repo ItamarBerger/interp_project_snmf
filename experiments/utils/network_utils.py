@@ -1,6 +1,5 @@
 import asyncio
-import time
-from collections import deque
+from aiolimiter import AsyncLimiter
 import logging
 import re
 
@@ -10,42 +9,23 @@ EXPONENTIAL_BACKOFF_BASE = 2
 BASE_SLEEP = 2
 
 class RateLimiter:
-    """Simple rate limiter for 2000 requests per minute."""
-
-    def __init__(self, max_requests: int = 2000, window_seconds: int = 60):
-        self.max_requests = max_requests
-        self.window_seconds = window_seconds
-        self.request_times = deque()
-        self.lock = asyncio.Lock()
+    """
+    Drop-in replacement that uses a Token Bucket (aiolimiter)
+    to smooth traffic evenly over time, preventing micro-bursts.
+    """
+    def __init__(self, max_requests: int = 25, window_seconds: int = 1):
+        # We default to 25 requests per 1 second (approx 1500 RPM).
+        # This prevents the "spike" that triggers 429s.
+        self._limiter = AsyncLimiter(max_rate=max_requests, time_period=window_seconds)
         self.total_requests = 0
 
     async def acquire(self):
-        """Wait if necessary to respect rate limit, then record request."""
-        async with self.lock:
-            now = time.time()
-            # Remove requests older than the window
-            while self.request_times and self.request_times[0] < now - self.window_seconds:
-                self.request_times.popleft()
-
-            # If we're at the limit, wait until the oldest request expires
-            if len(self.request_times) >= self.max_requests:
-                wait_time = self.request_times[0] + self.window_seconds - now + 0.1
-                if wait_time > 0:
-                    logger.info(
-                        f"Rate limit reached ({len(self.request_times)}/{self.max_requests}), waiting {wait_time:.1f}s...")
-                    await asyncio.sleep(wait_time)
-                    # Clean up again after waiting
-                    now = time.time()
-                    while self.request_times and self.request_times[0] < now - self.window_seconds:
-                        self.request_times.popleft()
-
-            # Record this request
-            self.request_times.append(time.time())
+        """Blocks until a slot is available in the current second."""
+        async with self._limiter:
             self.total_requests += 1
             if self.total_requests % 100 == 0:
-                logger.info(
-                    f"[Rate Limiter] Total requests made: {self.total_requests}, Current window: {len(self.request_times)}/{self.max_requests}")
-
+                logger.info(f"[Rate Limiter] Total requests passed: {self.total_requests}")
+            return
 
 
 

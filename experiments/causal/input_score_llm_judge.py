@@ -263,7 +263,7 @@ async def main():
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel(args.model)
     semaphore = asyncio.Semaphore(args.concurrency)
-    rate_limiter = RateLimiter(max_requests=1900, window_seconds=60)  # 5% safety margin
+    rate_limiter = RateLimiter(max_requests=30, window_seconds=1)
     progress_lock = asyncio.Lock()
     completed_entries = 0
     logger.info(f"  ✓ Model: {args.model}")
