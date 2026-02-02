@@ -12,6 +12,7 @@ BASE_DIR="experiments/artifacts"
 RPS_LIMIT=3500
 RETRIES=5
 BATCH_SIZE=20
+CONCURRENCY=25
 
 
 # Get args to control which steps to run
@@ -64,6 +65,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --batch-size)
       BATCH_SIZE="$2"
+      shift 2
+      ;;
+    --concurrency)
+      CONCURRENCY="$2"
       shift 2
       ;;
     *)
@@ -237,7 +242,8 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
    --model gemini-2.0-flash \
    --ranks $RANKS \
    --layers $LAYERS \
-   --concurrency 25
+   --concurrency $CONCURRENCY \
+   --batch-size $BATCH_SIZE
   fi
   echo "Input score judging completed."
 fi

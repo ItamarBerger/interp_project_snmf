@@ -231,6 +231,7 @@ async def main():
     parser.add_argument("--ranks", required=True, help='K filter, e.g. "100" or "64,100" or "64-128"')
     parser.add_argument("--layers", required=True, help='Layer filter, e.g. "0,8,16" or "0-16"')
     parser.add_argument("--concurrency", type=int, default=30, help="Max concurrent API calls (default: 30)")
+    parser.add_argument("--batch-size", type=int, default=20, help="Number of entries to process in a batch (default: 20)")
     parser.add_argument(
         "--diffmean",
         action="store_true",
@@ -302,7 +303,7 @@ async def main():
     total_entries_global = total_entries
     start_time = time.time()
     
-    batch_size = 20  # Process 20 entries at a time
+    batch_size = args.batch_size
     all_results = []
     
     for batch_start in range(0, total_entries, batch_size):
