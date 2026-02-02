@@ -63,6 +63,11 @@ if [[ -n "$INPUT_SCORE_RESULTS" ]]; then
   SCRIPT_CMD="$SCRIPT_CMD --input-score-results $INPUT_SCORE_RESULTS"
 fi
 
+if [[ -n "$BASE_DIR" ]]; then
+  echo "Using base dir: $BASE_DIR"
+  SCRIPT_CMD="$SCRIPT_CMD --base-dir $BASE_DIR"
+fi
+
 echo "Running command : $SCRIPT_CMD"
 
 bash $SCRIPT_CMD

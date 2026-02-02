@@ -7,7 +7,7 @@ import re
 logger = logging.getLogger(__name__)
 
 EXPONENTIAL_BACKOFF_BASE = 2
-BASE_SLEEP = 10
+BASE_SLEEP = 2
 
 class RateLimiter:
     """Simple rate limiter for 2000 requests per minute."""
