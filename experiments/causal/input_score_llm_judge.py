@@ -241,6 +241,7 @@ async def main():
                         help="Env var name holding your API key (default: GEMINI_API_KEY)")
     args = parser.parse_args()
 
+    logger.info("Using concurrency:", args.concurrency)
     logger.info("\n" + "="*80)
     logger.info("LLM JUDGE - SCORING STEERED SENTENCES")
     logger.info("="*80)
