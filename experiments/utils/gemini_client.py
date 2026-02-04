@@ -10,6 +10,8 @@ import numpy as np
 from google.genai.errors import ClientError
 from enum import StrEnum
 
+from tracker.initialize_tracker import DEFAULT_ENTITY
+
 logger = logging.getLogger(__name__)
 
 MAX_ENQUEUED_TOKENS = 10000000 # Based on https://ai.google.dev/gemini-api/docs/rate-limits
@@ -17,7 +19,7 @@ AGGREGATE_CHAR_COUNT = 3500000 # The number of characters for which we stop and 
 ACTIVE_BATCH_STATES: Set[str] = {JobState.JOB_STATE_PENDING, JobState.JOB_STATE_RUNNING, JobState.JOB_STATE_QUEUED}
 DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION = 30* 60 # 30 minutes
 JOB_BACKUP_FILE_TEMPLATE = "{batch_name}_parsed_results.json"
-JOB_BACKUP_FOLDER = os.path.join("experiments", "artifacts", "batch_job_backups")
+DEFAULT_JOB_BACKUP_FOLDER = os.path.join("experiments", "artifacts", "batch_job_backups")
 # consider only the last NUM_JOBS_FOR_WAIT_TIME for wait time calculation
 NUM_JOBS_FOR_WAIT_TIME = 4
 
@@ -27,25 +29,14 @@ class WaitTimeCalcStrategy(StrEnum):
     MAX = "max"
 
 class GeminiBatchClient:
-    def __init__(self, api_key: str, model_name: str):
+    def __init__(self, api_key: str, model_name: str, job_backup_folder: Optional[str] = None):
         self.client = genai.Client(api_key=api_key)
         self.model_name = model_name
         self.batch_to_tokens: Dict[str, int] = {}
+        self.job_backup_folder = job_backup_folder or DEFAULT_JOB_BACKUP_FOLDER
+
 
     # Static methods
-
-    @staticmethod
-    def get_backup_batch_path(batch_name: str) -> str:
-        """
-        Returns the file path for storing backup parsed results of a batch job.
-        We use this in case the job is deleted from the system after some time (google gives us 48 hours to download results).
-        """
-        if not os.path.exists(JOB_BACKUP_FOLDER):
-            os.makedirs(JOB_BACKUP_FOLDER, exist_ok=True)
-
-        safe_batch_name = batch_name.replace("/", "_")
-        file_name =  JOB_BACKUP_FILE_TEMPLATE.format(batch_name=safe_batch_name)
-        return os.path.join(JOB_BACKUP_FOLDER, file_name)
 
     @staticmethod
     def load_and_update_submitted_jobs_file(jobs_backup_path: str, new_batch_name: str) -> bool:
@@ -70,6 +61,19 @@ class GeminiBatchClient:
 
     # Internal Methods
 
+    def _get_backup_batch_path(self, batch_name: str) -> str:
+        """
+        Returns the file path for storing backup parsed results of a batch job.
+        We use this in case the job is deleted from the system after some time (google gives us 48 hours to download results).
+        """
+        if not os.path.exists(self.job_backup_folder):
+            os.makedirs(self.job_backup_folder, exist_ok=True)
+
+        safe_batch_name = batch_name.replace("/", "_")
+        file_name =  JOB_BACKUP_FILE_TEMPLATE.format(batch_name=safe_batch_name)
+        return os.path.join(self.job_backup_folder, file_name)
+
+
     def _count_batch_tokens(self, jsonl_filepath):
         """
         Counts total tokens for a JSONL batch file by grouping prompts
@@ -80,7 +84,7 @@ class GeminiBatchClient:
         current_chunk = []
         current_chunk_char_count = 0
 
-        logger.info("Counting to")
+        logger.info("Counting tokens for batch file %s...", jsonl_filepath)
         with open(jsonl_filepath, 'r') as f:
             for line in f:
                 data = json.loads(line)
@@ -156,6 +160,7 @@ class GeminiBatchClient:
 
         np_func = getattr(np, strategy)
         estimated_wait_time = np_func(durations)
+        logger.info("Calculated estimated wait time for new job submission using strategy '%s': %.2f seconds", strategy, estimated_wait_time)
         return estimated_wait_time
 
 
@@ -163,19 +168,27 @@ class GeminiBatchClient:
 
     # External Methods
 
-    async def download_and_save_successful_jobs(self, job_names: list[str]) -> bool:
+    async def download_and_save_successful_jobs(self, job_names: list[str], override: bool = False) -> bool:
         """
         Downloads and saves the results of all successful jobs in job_names to local JSON files.
         This is used to back up results in case the whole process does not finish before the jobs are scheduled to be deleted.
         It is recommended to use this method periodically while waiting for jobs to finish.
+        Args:
+            job_names: A list of job names to check and download if successful.
+            override: If True, it will override existing backup files. If False, it will skip downloading if a backup file already exists for a job.
         """
         batches = self.client.batches.list()
         errors = 0
         for batch in batches:
             if batch.state == JobState.JOB_STATE_SUCCEEDED and batch.name in job_names:
                 try:
+                    backup_filename = self._get_backup_batch_path(batch.name)
+                    if os.path.exists(backup_filename) and not override:
+                        logger.info(f"Backup file already exists for {batch.name} at {backup_filename}. Skipping download.")
+                        continue
+
+                    logger.info(f"Couldn't find backup for {batch.name}. Trying to download results...")
                     parsed_results = await self.retrieve_batch_results(batch.name)
-                    backup_filename = self.get_backup_batch_path(batch.name)
                     with open(backup_filename, 'w') as f:
                         json.dump(parsed_results, f, indent=2)
                     logger.info(f"Saved results for {batch.name} to {backup_filename}")
@@ -322,7 +335,7 @@ class GeminiBatchClient:
                     # We might get a ClientError if the job was deleted from the system because it has been too long
                     # But we might have a backup of the results already saved locally
                     # In this case, we still want to add the job name to the completed_successfully list
-                    job_backup_file = self.get_backup_batch_path(job_name)
+                    job_backup_file = self._get_backup_batch_path(job_name)
                     if os.path.exists(job_backup_file):
                         logger.info("Batch %s was deleted but we have backup. Marking as successful.", job_name)
                         completed_successfully.append(job_name)
@@ -389,7 +402,7 @@ class GeminiBatchClient:
                     logger.warning(f"Failed to parse result line in {job_name}: {e}")
         except ClientError as e:
                     # See if we already have a backup of the results - and use them.
-                    job_backup_file = self.get_backup_batch_path(job_name)
+                    job_backup_file = self._get_backup_batch_path(job_name)
                     if os.path.exists(job_backup_file):
                         logger.info("The batch %s was probably deleted, but the good news is we have backup. Restored from backup file", job_name)
                         with open(job_backup_file, 'r') as f:

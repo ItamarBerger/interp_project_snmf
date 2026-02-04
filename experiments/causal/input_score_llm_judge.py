@@ -8,6 +8,7 @@ import time
 from typing import List, Generator
 from dotenv import load_dotenv
 import logging
+from experiments.causal.judge_utils import extract_rating, chunk_dict, submit_batches, load_existing_jobs
 from experiments.utils import GeminiBatchClient
 from utils import setup_logging
 
@@ -30,24 +31,6 @@ def parse_int_list(spec: str) -> List[int]:
             out.append(int(part))
     return out
 
-def extract_rating(response_text):
-    """
-    Extracts the rating from the LLM response.
-    Supports both "Rating: [[score]]" and "Rating: score" formats.
-    Returns None if extraction fails instead of raising an exception.
-    """
-    try:
-        match = re.search(r'Rating:\s*(?:\[\[(\d+)\]\]|(\d+))', response_text)
-        if match:
-            score_str = match.group(1) if match.group(1) is not None else match.group(2)
-            return int(score_str)
-        else:
-            logger.info(f"⚠ Warning: Could not extract rating from response: {response_text[:100]}...")
-            return None
-    except Exception as e:
-        logger.info(f"⚠ Warning: Error extracting rating: {e}")
-        return None
-
 
 def harmonic_mean(scores):
     """
@@ -68,41 +51,35 @@ def harmonic_mean(scores):
     return len(valid_scores) / sum(1.0 / score for score in valid_scores)
 
 
-def chunk_dict(data: dict, size: int) -> Generator[dict, None, None]:
-    """Yields chunks of the dictionary with a maximum size."""
-    keys = list(data.keys())
-    for i in range(0, len(keys), size):
-        yield {k: data[k] for k in keys[i:i + size]}
-
 # ------------------------------
 # Prompts
 # ------------------------------
 
 def get_concept_prompt(concept: str, sentence_fragment: str) -> str:
     return  f"""Please act as an impartial judge and evaluate whether the specified concept is presented in the sentence fragment provided below. Focus solely on whether the concept is clearly incorporated, without regard for grammar or logical coherence.
-    Begin your evaluation by providing a short explanation of whether the concept is clearly incorporated.
-    Point out references to the concept in the fragment, noting any minimal or awkward incorporations.
-    After providing your explanation, rate the concept's relevance on a scale from 0 to 2, where 0 indicates the concept is not present at all, 1 indicates the concept is somewhat present but minimally or awkwardly incorporated, and 2 indicates the concept is more fully and effectively incorporated, with stronger and more natural integration.
-    Provide your rating using this exact format: "Rating: [[score]]".
-    
-    [Concept Start]
-    {concept}
-    [Concept End]
-    
-    [Sentence Fragment Start]
-    {sentence_fragment}
-    [Sentence Fragment End]"""
+Begin your evaluation by providing a short explanation of whether the concept is clearly incorporated.
+Point out references to the concept in the fragment, noting any minimal or awkward incorporations.
+After providing your explanation, rate the concept's relevance on a scale from 0 to 2, where 0 indicates the concept is not present at all, 1 indicates the concept is somewhat present but minimally or awkwardly incorporated, and 2 indicates the concept is more fully and effectively incorporated, with stronger and more natural integration.
+Provide your rating using this exact format: "Rating: [[score]]".
+
+[Concept Start]
+{concept}
+[Concept End]
+
+[Sentence Fragment Start]
+{sentence_fragment}
+[Sentence Fragment End]"""
 
 
 def get_fluency_prompt(sentence_fragment: str) -> str:
     return f"""Please act as an impartial judge and evaluate the fluency of the sentence fragment provided below. Focus solely on fluency, disregarding its completeness, relevance, coherence with any broader context, or informativeness.
-    Begin your evaluation by briefly describing the fluency of the sentence, noting any unnatural phrasing, awkward transitions, grammatical errors, or repetitive structures that may hinder readability.
-    After providing your explanation, rate the sentence's fluency on a scale from 0 to 2, where 0 indicates the sentence is not fluent and highly unnatural (e.g., incomprehensible or repetitive), 1 indicates it is somewhat fluent but contains noticeable errors or awkward phrasing, and 2 indicates the sentence is fluent and almost perfect.
-    Provide your rating using this exact format: "Rating: [[score]]".
-    
-    [Sentence Fragment Start]
-    {sentence_fragment}
-    [Sentence Fragment End]"""
+Begin your evaluation by briefly describing the fluency of the sentence, noting any unnatural phrasing, awkward transitions, grammatical errors, or repetitive structures that may hinder readability.
+After providing your explanation, rate the sentence's fluency on a scale from 0 to 2, where 0 indicates the sentence is not fluent and highly unnatural (e.g., incomprehensible or repetitive), 1 indicates it is somewhat fluent but contains noticeable errors or awkward phrasing, and 2 indicates the sentence is fluent and almost perfect.
+Provide your rating using this exact format: "Rating: [[score]]".
+
+[Sentence Fragment Start]
+{sentence_fragment}
+[Sentence Fragment End]"""
 
 
 def process_entries(filtered: list, concept_map_dict: dict):
@@ -160,46 +137,12 @@ def process_entries(filtered: list, concept_map_dict: dict):
                 # Map IDs to the result object for O(1) update later
                 meta_map[c_id] = (sent_obj, "concept_score")
                 meta_map[f_id] = (sent_obj, "fluency_score")
-
+        else:
+            logger.warning(f"⚠ Warning: No concept for {key}")
         processed_structure.append(entry_result)
 
     return processed_structure, meta_map, prompts_map
 
-
-async def submit_batches(prompts_map: dict, client: GeminiBatchClient, existing_jobs: list, args) -> List[str]:
-    active_jobs = existing_jobs.copy()
-    logger.info(f"Phase 1: Submitting {len(prompts_map)} prompts in batches...")
-    prompt_batches = list(chunk_dict(prompts_map, args.batch_size))
-    submitted_jobs_file = args.submitted_jobs_file
-
-    # Skip batches that were already submitted
-    start_index = len(active_jobs)
-    if start_index > 0:
-        logger.info(f"  Skipping first {start_index} batches found in {submitted_jobs_file}")
-        if start_index >= len(prompt_batches):
-            logger.info("All batches appear to have been submitted already.")
-            return active_jobs
-
-    for i in range(start_index, len(prompt_batches)):
-        batch_prompts = prompt_batches[i]
-
-        try:
-            logger.info(f"  Submitting Batch {i + 1}/{len(prompt_batches)}...")
-            job_name = await client.submit_batch_job(
-                batch_name=f"input_judge_batch_{int(time.time())}_{i}",
-                prompts_map=batch_prompts,
-                generation_config={"temperature": 0.0},
-                jobs_backup_path=submitted_jobs_file
-            )
-            active_jobs.append(job_name)
-
-            # Prevent hitting CreateBatch rate limits
-            if i < len(prompt_batches) - 1:
-                await asyncio.sleep(5)
-        except Exception as e:
-            logger.error(f"  Error submitting batch {i + 1}: {e}")
-            sys.exit(1)
-    return active_jobs
 
 
 def load_data(args):
@@ -211,22 +154,6 @@ def load_data(args):
 
     return steered_entries, concepts
 
-
-def load_existing_jobs(args) -> list:
-    existing_jobs = []
-    if args.submitted_jobs_file and os.path.exists(args.submitted_jobs_file):
-        try:
-            with open(args.submitted_jobs_file, "r") as f:
-                existing_jobs = json.load(f)
-            if not isinstance(existing_jobs, list):
-                logger.warning("State file content is not a list. Ignoring.")
-                existing_jobs = []
-            else:
-                logger.info(f"Loaded {len(existing_jobs)} existing jobs from {args.submitted_jobs_file}")
-        except Exception as e:
-            logger.warning(f"Could not load state file: {e}. Starting fresh.")
-            existing_jobs = []
-    return existing_jobs
 
 # ------------------------------
 # Main
@@ -245,6 +172,7 @@ async def main():
     parser.add_argument("--api-key-var", default="GEMINI_API_KEY",
                         help="Env var name holding your API key (default: GEMINI_API_KEY)")
     parser.add_argument("--submitted-jobs-file", type=str, help="In case the execution failed - this file holds the list of already submitted jobs to avoid resubmission.")
+    parser.add_argument("--job-backup-folder", default=None, type=str, help="Folder to back up job submissions.")
     args = parser.parse_args()
 
     logger.info("=== LLM JUDGE (Batch Processing) ===")
@@ -271,7 +199,7 @@ async def main():
     logger.info(f"Filtering: selected {len(filtered)} entries out of {len(steered_entries)}.")
 
     concept_map_dict = {
-        (int(c["K"]), int(c["layer"]), int(c.get("level", 0)),
+        (int(c["K"]), int(c["layer"]), int(c["level"]),
          int(c['h_row'] if 'h_row' in c else c.get('index', 0))): c.get("description", c.get("concept"))
         for c in concepts
         if c.get("description", c.get("concept")) and "TRASH" not in c.get("description", c.get("concept"))
@@ -288,8 +216,8 @@ async def main():
 
     existing_jobs = load_existing_jobs(args)
     # Submit jobs
-    client = GeminiBatchClient(api_key=api_key, model_name=args.model)
-    active_jobs = await submit_batches(prompts_map, client, existing_jobs, args)
+    client = GeminiBatchClient(api_key=api_key, model_name=args.model, job_backup_folder=args.job_backup_folder)
+    active_jobs = await submit_batches(prompts_map, client, existing_jobs, args, judge_type="input")
 
     # Wait for jobs to complete
     logger.info("Phase 2: Waiting for jobs to complete...")
