@@ -3,7 +3,8 @@ import json
 import os
 import argparse
 from typing import List, Any
-import google.generativeai as genai
+from google import genai
+from google.genai.types import GenerateContentConfig
 
 from dotenv import load_dotenv
 import logging
@@ -96,7 +97,7 @@ def build_arg_parser():
     return p
 
 # ---------------- Async workers ---------------- #
-def make_generate_concept(retries: int, model, max_tokens: int, semaphore: asyncio.Semaphore, rate_limiter):
+def make_generate_concept(retries: int, client, model_name, max_tokens: int, semaphore: asyncio.Semaphore, rate_limiter):
     @retry_with_attempts(attempts=retries, default_value=None)
     async def _inner(entry, top_m: int):
         # sort and pick top-M by activation
@@ -115,9 +116,10 @@ def make_generate_concept(retries: int, model, max_tokens: int, semaphore: async
         await rate_limiter.acquire()
         async with semaphore:
             resp = await asyncio.to_thread(
-                model.generate_content,
-                prompt,
-                generation_config={"max_output_tokens": max_tokens, "temperature": 0.2}
+                client.models.generate_content,
+                model=model_name,
+                contents=prompt,
+                config=GenerateContentConfig(max_output_tokens=max_tokens, temperature=0.2),
             )
         return extract_results_section(resp.text.strip())
     return _inner
@@ -150,8 +152,7 @@ async def run(args):
     if not api_key:
         raise RuntimeError(f"API key not found in environment variable '{args.env_var}'.")
 
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel(args.model)
+    client = genai.Client(api_key=api_key)
 
     semaphore = asyncio.Semaphore(args.concurrency)
     # Use aiolimiter for proper token bucket rate limiting
@@ -160,7 +161,8 @@ async def run(args):
 
     generate_concept = make_generate_concept(
         retries=args.retries,
-        model=model,
+        client=client,
+        model_name=args.model,
         max_tokens=args.max_tokens,
         semaphore=semaphore,
         rate_limiter=rate_limiter,

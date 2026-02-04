@@ -13,6 +13,8 @@ RPS_LIMIT=3500
 RETRIES=5
 BATCH_SIZE=20
 CONCURRENCY=25
+MAX_REQUESTS_PER_SECOND=30
+POLL_INTERVAL=300 # 5 minutes
 
 
 # Get args to control which steps to run
@@ -69,6 +71,18 @@ while [[ $# -gt 0 ]]; do
       ;;
     --concurrency)
       CONCURRENCY="$2"
+      shift 2
+      ;;
+    --max-requests-per-second)
+      MAX_REQUESTS_PER_SECOND="$2"
+      shift 2
+      ;;
+    --poll-interval)
+      POLL_INTERVAL="$2"
+      shift 2
+      ;;
+    --input-judge-jobs-file)
+      INPUT_JUDGE_JOB_STATE_FILE="$2"
       shift 2
       ;;
     *)
@@ -242,8 +256,8 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
    --model gemini-2.0-flash \
    --ranks $RANKS \
    --layers $LAYERS \
-   --concurrency $CONCURRENCY \
-   --batch-size $BATCH_SIZE
+   --poll-interval $POLL_INTERVAL \
+   --submitted-jobs-file ${INPUT_JUDGE_JOB_STATE_FILE:-}
   fi
   echo "Input score judging completed."
 fi

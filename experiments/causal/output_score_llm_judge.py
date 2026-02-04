@@ -6,7 +6,8 @@ import argparse
 import time
 from typing import List, Tuple
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
+from google.genai.types import GenerateContentConfig
 
 from experiments.utils import RateLimiter, retry_with_attempts
 from utils import setup_logging
@@ -81,9 +82,10 @@ Provide your rating using this exact format: "Rating: [[score]]".
            start = time.time()
            response = await asyncio.wait_for(
                asyncio.to_thread(
-                   model.generate_content,
-                   prompt,
-                   generation_config={"temperature": 0.0}
+                   client.models.generate_content,
+                   model=model_name,
+                   contents=prompt,
+                   config=GenerateContentConfig(temperature=0.0)
                ),
                timeout=60.0
            )
@@ -115,9 +117,10 @@ Provide your rating using this exact format: "Rating: [[score]]".
             start = time.time()
             response = await asyncio.wait_for(
                 asyncio.to_thread(
-                    model.generate_content,
-                    prompt,
-                    generation_config={"temperature": 0.0}
+                    client.models.generate_content,
+                    model=model_name,
+                    contents=prompt,
+                    config=GenerateContentConfig(temperature=0.0)
                 ),
                 timeout=60.0
             )
@@ -253,9 +256,9 @@ async def main():
 
     # Initialize global model + semaphore + rate limiter
     logger.info(f"\n[STEP 2/5] Initializing components...")
-    global model, semaphore, rate_limiter, completed_entries, total_entries_global, progress_lock
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel(args.model)
+    global client,model_name, semaphore, rate_limiter, completed_entries, total_entries_global, progress_lock
+    model_name = args.model
+    client = genai.Client(api_key=api_key)
     semaphore = asyncio.Semaphore(args.concurrency)
     rate_limiter = RateLimiter(max_requests=1900, window_seconds=60)  # 5% safety margin
     progress_lock = asyncio.Lock()
