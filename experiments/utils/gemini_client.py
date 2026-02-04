@@ -22,6 +22,7 @@ JOB_BACKUP_FILE_TEMPLATE = "{batch_name}_parsed_results.json"
 DEFAULT_JOB_BACKUP_FOLDER = os.path.join("experiments", "artifacts", "batch_job_backups")
 # consider only the last NUM_JOBS_FOR_WAIT_TIME for wait time calculation
 NUM_JOBS_FOR_WAIT_TIME = 4
+BASE_BACKOFF_FACTOR = 2
 
 class WaitTimeCalcStrategy(StrEnum):
     MEAN = "mean"
@@ -264,25 +265,28 @@ class GeminiBatchClient:
 
             # Create Batch Job
             logger.info(f"  Submitting Batch Job for file {batch_input_file.name}...")
-            try:
-                batch_job = self.client.batches.create(
-                    model=self.model_name,
-                    src=batch_input_file.name,
-                )
-            except Exception as e:
-                err_msg = str(e)
-                if "429" in err_msg or "resource" in err_msg or "exhausted" in err_msg or "quota" in err_msg:
-                    logger.error("Rate limit or quota exceeded while submitting batch job.")
-                    # Add wait time, but don't go crazy
-                    new_wait_time = self._calculate_wait_time_for_new_submission(WaitTimeCalcStrategy.MIN)
-                    logger.info("Waiting for %d minutes before retrying job submission...", int(new_wait_time/60))
-                    await asyncio.sleep(new_wait_time)
+            created_batch = False
+            num_quota_errors = 0
+            while not created_batch:
+                try:
                     batch_job = self.client.batches.create(
                         model=self.model_name,
                         src=batch_input_file.name,
                     )
-                else:
-                    raise e
+                    created_batch = True
+                except Exception as e:
+                    err_msg = str(e)
+                    if "429" in err_msg or "resource" in err_msg or "exhausted" in err_msg or "quota" in err_msg:
+                        num_quota_errors += 1
+                        logger.error("Rate limit or quota exceeded while submitting batch job.")
+                        # Add wait time - do exponential backoff if we keep hitting quota errors
+                        backoff_factor = BASE_BACKOFF_FACTOR ** (num_quota_errors - 1)
+                        logger.info("Starting exponential backoff. Number of quota errors so far: %d", num_quota_errors)
+                        new_wait_time = self._calculate_wait_time_for_new_submission(WaitTimeCalcStrategy.MIN) * backoff_factor
+                        logger.info("Waiting for %d minutes before retrying job submission...", int(new_wait_time/60))
+                        await asyncio.sleep(new_wait_time)
+                    else:
+                        raise e
 
 
             # Update backup file if provided

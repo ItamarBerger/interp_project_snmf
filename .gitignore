@@ -34,3 +34,10 @@ playground.ipynb
 
 # Ignore artifacts
 experiments/artifacts/*
+
+# Ignore local jobs files & mocks
+k400_llama_input_judge_submitted_jobs.json
+mock/
+
+# Ignore output from tutorial
+hier_nmf.pkl
