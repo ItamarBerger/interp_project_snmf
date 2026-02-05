@@ -58,7 +58,6 @@ async def submit_batches(prompts_map: dict, client: GeminiBatchClient, existing_
                 batch_name=f"{judge_type}_judge_batch_{int(time.time())}_{i}",
                 prompts_map=batch_prompts,
                 generation_config={"temperature": 0.0},
-                jobs_backup_path=submitted_jobs_file
             )
             active_jobs.append(job_name)
 

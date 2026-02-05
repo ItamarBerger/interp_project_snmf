@@ -10,19 +10,19 @@ import numpy as np
 from google.genai.errors import ClientError
 from enum import StrEnum
 
-from tracker.initialize_tracker import DEFAULT_ENTITY
 
 logger = logging.getLogger(__name__)
 
 MAX_ENQUEUED_TOKENS = 10000000 # Based on https://ai.google.dev/gemini-api/docs/rate-limits
 AGGREGATE_CHAR_COUNT = 3500000 # The number of characters for which we stop and count all the tokens
 ACTIVE_BATCH_STATES: Set[str] = {JobState.JOB_STATE_PENDING, JobState.JOB_STATE_RUNNING, JobState.JOB_STATE_QUEUED}
-DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION = 30* 60 # 30 minutes
+DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION = 20* 60
 JOB_BACKUP_FILE_TEMPLATE = "{batch_name}_parsed_results.json"
 DEFAULT_JOB_BACKUP_FOLDER = os.path.join("experiments", "artifacts", "batch_job_backups")
 # consider only the last NUM_JOBS_FOR_WAIT_TIME for wait time calculation
-NUM_JOBS_FOR_WAIT_TIME = 4
-BASE_BACKOFF_FACTOR = 2
+NUM_JOBS_FOR_WAIT_TIME = 5
+CLIENT_TMP_FOLDER = "gemini_tmp"
+BATCH_TO_TOKENS_FILE = os.path.join(CLIENT_TMP_FOLDER, "batch_to_tokens.json")
 
 class WaitTimeCalcStrategy(StrEnum):
     MEAN = "mean"
@@ -30,37 +30,76 @@ class WaitTimeCalcStrategy(StrEnum):
     MAX = "max"
 
 class GeminiBatchClient:
-    def __init__(self, api_key: str, model_name: str, job_backup_folder: Optional[str] = None):
+    def __init__(self, api_key: str, model_name: str, submitted_jobs_path: str, job_backup_folder: Optional[str] = None):
         self.client = genai.Client(api_key=api_key)
         self.model_name = model_name
-        self.batch_to_tokens: Dict[str, int] = {}
+        self.batch_to_tokens: Dict[str, int] = self._load_batch_to_tokens()
         self.job_backup_folder = job_backup_folder or DEFAULT_JOB_BACKUP_FOLDER
+        self.submitted_jobs_path = submitted_jobs_path
+        # memoization for job durations
+        self.jobs_durations_memo: Dict[str, float] = {}
 
 
     # Static methods
+    @staticmethod
+    def _calculate_batch_duration(batch: genai.types.BatchJob) -> float:
+        """Calculates the duration of a batch job in seconds."""
+        if batch.end_time and batch.create_time:
+            return (batch.end_time - batch.create_time).total_seconds()
+        return float('inf')
 
     @staticmethod
-    def load_and_update_submitted_jobs_file(jobs_backup_path: str, new_batch_name: str) -> bool:
+    def _load_batch_to_tokens():
+        if not os.path.exists(CLIENT_TMP_FOLDER):
+            os.makedirs(CLIENT_TMP_FOLDER, exist_ok=True)
+
+        batch_to_tokens = {}
+        if os.path.exists(BATCH_TO_TOKENS_FILE):
+            with open(BATCH_TO_TOKENS_FILE, 'r') as f:
+                batch_to_tokens = json.load(f)
+                logger.info("Loaded batch to tokens mapping from %s", BATCH_TO_TOKENS_FILE)
+        else:
+            logger.info("No existing batch to tokens mapping found at %s. Starting fresh.", BATCH_TO_TOKENS_FILE)
+        return batch_to_tokens
+
+    # Internal Methods
+
+    def _update_batch_to_tokens(self, batch_name, num_tokens):
+        self.batch_to_tokens[batch_name] = num_tokens
+        try:
+            with open(BATCH_TO_TOKENS_FILE, 'w') as f:
+                json.dump(self.batch_to_tokens, f, indent=2)
+            logger.info("Updated batch to tokens mapping file %s", BATCH_TO_TOKENS_FILE)
+        except Exception as e:
+            logger.error(f"Failed to update batch to tokens file: {e}. Fix the file manually and check the error")
+
+    def _load_submitted_jobs_file(self) -> List[str]:
+        job_history = []
+        if os.path.exists(self.submitted_jobs_path):
+            with open(self.submitted_jobs_path, 'r') as f:
+                job_history = json.load(f)
+        else:
+            logger.warning("Could not find submitted jobs file at %s", self.submitted_jobs_path)
+        return job_history
+
+
+    def _load_and_update_submitted_jobs_file(self, new_batch) -> bool:
         """
         Loads the submitted jobs file (a file containing a list of batch names in JSON format),
         and appends the new batch name to it.
         """
+        new_batch_name = new_batch.name
         try:
-            job_history = []
-            if os.path.exists(jobs_backup_path):
-                with open(jobs_backup_path, 'r') as f:
-                    job_history = json.load(f)
+            job_history = self._load_submitted_jobs_file()
             job_history.append(new_batch_name)
-            with open(jobs_backup_path, 'w') as f:
+            with open(self.submitted_jobs_path, 'w') as f:
                 json.dump(job_history, f, indent=2)
-            logger.info("Successfully updated file %s with new job %s", jobs_backup_path, new_batch_name)
+            logger.info("Successfully updated file %s with new job %s", self.submitted_jobs_path, new_batch_name)
             return True
         except Exception as e:
             logger.error(f"Failed to update jobs backup file: {e}")
             logger.warning("Your history might be in danger, manually save this job name: %s", new_batch_name)
             return False
-
-    # Internal Methods
 
     def _get_backup_batch_path(self, batch_name: str) -> str:
         """
@@ -119,15 +158,26 @@ class GeminiBatchClient:
             print(f"Error counting tokens: {e}")
             return 0
 
-    def _can_submit_new_job(self, new_job_tokens: int) -> bool:
+    def _can_submit_new_job(self, new_job_tokens: int, batches_window: Optional[int] = 3) -> bool:
         """
         Checks if a new job with the given token count can be submitted
         without exceeding the MAX_ENQUEUED_TOKENS limit.
         This is only based of what this client instance has in memory,
         so if you restart the program, it will forget previous jobs. That's ok because we also handle rate limits on submission.
+        Args:
+            new_job_tokens: The number of tokens in the new job to be submitted.
+            batches_window: Optional limit on how many recent batches to consider.
         """
         # Get current active batches
-        batches = self.client.batches.list()  # Refresh internal state
+        # We can't use self.client.batches.list() because it makes too many calls (paging) and filtering is not really supported
+        # So we'll use the file that we have in memory
+        logger.info("Checking if we can submit new job with %d tokens...", new_job_tokens)
+        batche_names = self._load_submitted_jobs_file()
+        if len(batche_names) > batches_window:
+            # Get the last 'batches_window' batche_names only
+            batche_names = batche_names[-batches_window:]
+        batches = [self.client.batches.get(name=batch_name) for batch_name in batche_names]
+
         active_batches = [batch for batch in batches if batch.state in ACTIVE_BATCH_STATES]
 
         # Filter the batch_to_tokens to only include active batches
@@ -137,7 +187,7 @@ class GeminiBatchClient:
         projected_total = current_total + new_job_tokens
         return projected_total <= MAX_ENQUEUED_TOKENS
 
-    def _calculate_wait_time_for_new_submission(self, strategy: WaitTimeCalcStrategy = WaitTimeCalcStrategy.MEAN) -> float:
+    def _calculate_wait_time_for_new_submission(self, strategy: WaitTimeCalcStrategy = WaitTimeCalcStrategy.MEAN, refresh: bool = False) -> float:
         """
         Estimates how long we should wait before submitting a new job
         In the case where we exceeded our active enqueued tokens  limit
@@ -145,18 +195,36 @@ class GeminiBatchClient:
         Args:
             strategy: The strategy to use for calculating the wait time.
                       Options are 'mean', 'min', 'max'.
+            refresh: If True, will try to make new calls to get the latest batch info.
         """
-        batches = self.client.batches.list()
-        # Don't take all - let's just consider the most recent ones
-        batches = sorted(batches, key=lambda b: b.create_time, reverse=True)[:NUM_JOBS_FOR_WAIT_TIME]
-        successful_batches = [batch for batch in batches if batch.state == JobState.JOB_STATE_SUCCEEDED]
-        if not successful_batches:
-            return DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION
+        # Take the last NUM_JOBS_FOR_WAIT_TIME and filter the successful ones
+        batch_names = self._load_submitted_jobs_file()
+        if len(batch_names) > NUM_JOBS_FOR_WAIT_TIME:
+            batch_names = batch_names[-NUM_JOBS_FOR_WAIT_TIME:]
 
+        # The list() api is too heavy, so we try to get a few batches by name
+        # and memoize their durations
         durations = []
-        for batch in successful_batches:
-            batch_duration = (batch.end_time - batch.create_time).total_seconds()
-            durations.append(batch_duration)
+        if not self.jobs_durations_memo or refresh:
+            batches = []
+            for batch_name in batch_names:
+                try:
+                    batch = self.client.batches.get(name=batch_name)
+                    if batch.state == JobState.JOB_STATE_SUCCEEDED:
+                        batches.append(batch)
+                except Exception as e:
+                    logger.error(f"Error fetching batch {batch_name} for wait time calculation: {e}")
+
+            if not batches:
+                return DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION
+            for batch in batches:
+                batch_duration = self._calculate_batch_duration(batch)
+                if batch_duration != float('inf'):
+                    # Update memoization
+                    self.jobs_durations_memo[batch.name] = batch_duration
+                    durations.append(batch_duration)
+        else:
+            durations =  list(self.jobs_durations_memo.values())
 
 
         np_func = getattr(np, strategy)
@@ -178,16 +246,16 @@ class GeminiBatchClient:
             job_names: A list of job names to check and download if successful.
             override: If True, it will override existing backup files. If False, it will skip downloading if a backup file already exists for a job.
         """
-        batches = self.client.batches.list()
         errors = 0
-        for batch in batches:
-            if batch.state == JobState.JOB_STATE_SUCCEEDED and batch.name in job_names:
-                try:
-                    backup_filename = self._get_backup_batch_path(batch.name)
-                    if os.path.exists(backup_filename) and not override:
-                        logger.info(f"Backup file already exists for {batch.name} at {backup_filename}. Skipping download.")
-                        continue
+        for job_name in job_names:
+            backup_filename = self._get_backup_batch_path(job_name)
+            if os.path.exists(backup_filename) and not override:
+                logger.info(f"Backup file already exists for {job_name} at {backup_filename}. Skipping download and api calls.")
+                continue
 
+            batch = self.client.batches.get(name=job_name)
+            if batch.state == JobState.JOB_STATE_SUCCEEDED:
+                try:
                     logger.info(f"Couldn't find backup for {batch.name}. Trying to download results...")
                     parsed_results = await self.retrieve_batch_results(batch.name)
                     with open(backup_filename, 'w') as f:
@@ -201,7 +269,7 @@ class GeminiBatchClient:
             return False
         return True
 
-    async def submit_batch_job(self, batch_name: str, prompts_map: Dict[str, str], generation_config: dict, jobs_backup_path: Optional[str] = None) -> str:
+    async def submit_batch_job(self, batch_name: str, prompts_map: Dict[str, str], generation_config: dict) -> str:
         """
         Creates a JSONL file from the prompts, uploads it, and submits a Batch Job.
         Returns the job name (e.g., "projects/.../locations/.../batchJobs/...").
@@ -209,7 +277,6 @@ class GeminiBatchClient:
             batch_name: A name for the batch job.
             prompts_map: A dict mapping custom IDs to prompt strings.
             generation_config: A dict with generation configuration parameters.
-            jobs_backup_path: Optional path to a JSON file where submitted job names will be appended (used for starting the process from a certain point).
         """
         request_ids = list(prompts_map.keys())
         logger.info(f"Preparing batch job for {len(request_ids)} prompts...")
@@ -254,7 +321,7 @@ class GeminiBatchClient:
             logger.info("  Uploading batch file...")
             batch_input_file = self.client.files.upload(
                 file=tmp_path,
-                config=UploadFileConfig(display_name=batch_name, mime_type='jsonl'))
+                config=UploadFileConfig(mime_type='jsonl'))
 
             # Wait for file to be active
             while batch_input_file.state != "ACTIVE":
@@ -272,6 +339,9 @@ class GeminiBatchClient:
                     batch_job = self.client.batches.create(
                         model=self.model_name,
                         src=batch_input_file.name,
+                        config={
+                            "display_name": batch_name,
+                        }
                     )
                     created_batch = True
                 except Exception as e:
@@ -279,22 +349,18 @@ class GeminiBatchClient:
                     if "429" in err_msg or "resource" in err_msg or "exhausted" in err_msg or "quota" in err_msg:
                         num_quota_errors += 1
                         logger.error("Rate limit or quota exceeded while submitting batch job.")
-                        # Add wait time - do exponential backoff if we keep hitting quota errors
-                        backoff_factor = BASE_BACKOFF_FACTOR ** (num_quota_errors - 1)
-                        logger.info("Starting exponential backoff. Number of quota errors so far: %d", num_quota_errors)
-                        new_wait_time = self._calculate_wait_time_for_new_submission(WaitTimeCalcStrategy.MIN) * backoff_factor
-                        logger.info("Waiting for %d minutes before retrying job submission...", int(new_wait_time/60))
-                        await asyncio.sleep(new_wait_time)
+                        # We encountered an error related to rate limits or quota, so don't send more requests.
+                        logger.info("Waiting for default time before retrying submission...(%s minutes)", DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION // 60)
+                        await asyncio.sleep(DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION)
                     else:
                         raise e
 
 
-            # Update backup file if provided
-            if jobs_backup_path:
-                self.load_and_update_submitted_jobs_file(jobs_backup_path, batch_job.name)
+            # Update submitted_jobs_file
+            self._load_and_update_submitted_jobs_file(batch_job)
 
             # Store token count for this batch
-            self.batch_to_tokens[batch_job.name] = total_tokens
+            self._update_batch_to_tokens(batch_job.name, total_tokens)
 
             logger.info(f"  Job created: {batch_job.name}")
             return batch_job.name

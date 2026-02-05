@@ -203,7 +203,8 @@ async def main():
 
     existing_jobs = load_existing_jobs(args)
     # Submit jobs
-    client = GeminiBatchClient(api_key=api_key, model_name=args.model)
+    client = GeminiBatchClient(api_key=api_key, model_name=args.model, submitted_jobs_path=args.submitted_jobs_file,
+                              job_backup_folder=args.job_backup_folder)
     active_jobs = await submit_batches(prompts_map, client, existing_jobs, args, judge_type="output")
 
     # Wait for jobs to complete

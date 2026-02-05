@@ -257,7 +257,8 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
    --ranks $RANKS \
    --layers $LAYERS \
    --poll-interval $POLL_INTERVAL \
-   --submitted-jobs-file ${INPUT_JUDGE_JOB_STATE_FILE:-}
+   --submitted-jobs-file ${INPUT_JUDGE_JOB_STATE_FILE:-} \
+   --job-backup-folder "$BASE_DIR/$MODEL_NAME/batch_job_backups/input"
   fi
   echo "Input score judging completed."
 fi

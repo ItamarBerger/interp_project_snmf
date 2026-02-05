@@ -1,14 +1,11 @@
 import asyncio
 import json
-import re
 import os
-import sys
 import argparse
-import time
-from typing import List, Generator
+from typing import List
 from dotenv import load_dotenv
 import logging
-from experiments.causal.judge_utils import extract_rating, chunk_dict, submit_batches, load_existing_jobs
+from experiments.causal.judge_utils import extract_rating, submit_batches, load_existing_jobs
 from experiments.utils import GeminiBatchClient
 from utils import setup_logging
 
@@ -176,6 +173,7 @@ async def main():
     args = parser.parse_args()
 
     logger.info("=== LLM JUDGE (Batch Processing) ===")
+    logger.info("Using backup folder: %s", args.job_backup_folder)
 
     load_dotenv() # for local development
     api_key = os.getenv(args.api_key_var)
@@ -216,7 +214,7 @@ async def main():
 
     existing_jobs = load_existing_jobs(args)
     # Submit jobs
-    client = GeminiBatchClient(api_key=api_key, model_name=args.model, job_backup_folder=args.job_backup_folder)
+    client = GeminiBatchClient(api_key=api_key, model_name=args.model, job_backup_folder=args.job_backup_folder, submitted_jobs_path=args.submitted_jobs_file)
     active_jobs = await submit_batches(prompts_map, client, existing_jobs, args, judge_type="input")
 
     # Wait for jobs to complete
