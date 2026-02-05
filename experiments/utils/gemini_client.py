@@ -16,7 +16,9 @@ logger = logging.getLogger(__name__)
 MAX_ENQUEUED_TOKENS = 10000000 # Based on https://ai.google.dev/gemini-api/docs/rate-limits
 AGGREGATE_CHAR_COUNT = 3500000 # The number of characters for which we stop and count all the tokens
 ACTIVE_BATCH_STATES: Set[str] = {JobState.JOB_STATE_PENDING, JobState.JOB_STATE_RUNNING, JobState.JOB_STATE_QUEUED}
-DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION = 20* 60
+DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION = 10* 60
+MAX_SLEEP_TIME = 60 * 30  # 30 minutes
+BACKOFF_BASE = 2
 JOB_BACKUP_FILE_TEMPLATE = "{batch_name}_parsed_results.json"
 DEFAULT_JOB_BACKUP_FOLDER = os.path.join("experiments", "artifacts", "batch_job_backups")
 # consider only the last NUM_JOBS_FOR_WAIT_TIME for wait time calculation
@@ -350,8 +352,11 @@ class GeminiBatchClient:
                         num_quota_errors += 1
                         logger.error("Rate limit or quota exceeded while submitting batch job.")
                         # We encountered an error related to rate limits or quota, so don't send more requests.
-                        logger.info("Waiting for default time before retrying submission...(%s minutes)", DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION // 60)
-                        await asyncio.sleep(DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION)
+                        backoff_factor = BACKOFF_BASE ** (num_quota_errors - 1)
+                        # cap sleep time at MAX_SLEEP_TIME
+                        sleep_time = min(DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION * backoff_factor, MAX_SLEEP_TIME)
+                        logger.info("Doing exponential backoff. Sleeping for %s before making any new requests", sleep_time // 60)
+                        await asyncio.sleep(sleep_time)
                     else:
                         raise e
 
