@@ -1,6 +1,9 @@
 import torch
 from transformer_lens import HookedTransformer, utils
 from typing import List
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Intervener:
     def __init__(self, model: HookedTransformer, intervention_type='mlp_act', replace=False):
@@ -293,9 +296,27 @@ class Intervener:
 
         results = {}
         # For each target KL divergence, find an alpha that yields approximately that KL.
+
+        try:
+            kl_value_at_one = compute_kl(1.0)
+        except Exception as e:
+            # if the computation exploded, just default to "infinity"
+            kl_value_at_one = float('inf')
+
         for target in target_kls:
-            low = 1
-            high = 2000
+            # Had to add this for LLama3.1 because for some intervention vectors
+            # We couldn't find any alpha that got us close to the higher KL targets.
+            # this is a bigger model, so we need to adjust the search space for alpha accordingly.
+            if kl_value_at_one > target:
+                # If even alpha=1 is too large for this kl value, we can't possibly reach the target KL with larger alphas.
+                # So search for smaller alphas
+                logger.info("KL at alpha=1 is %s, which is more than target %s. Adjusting search space to [0, 1].", kl_value_at_one, target)
+                low = 0
+                high = 1
+            else:
+                logger.info("Using default search space [1, 2000] for target KL %s.", target)
+                low = 1
+                high = 2000
 
             # Perform binary search between low and high.
             mid = high  # initialize mid for clarity

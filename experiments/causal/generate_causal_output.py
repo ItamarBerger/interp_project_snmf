@@ -136,6 +136,7 @@ def main():
         with open(save_path, "r") as f:
             try:
                 existing = json.load(f)
+                logger.info("Found %d existing rows in output file.", len(existing))
             except json.JSONDecodeError:
                 existing = []
         for row in existing:
@@ -207,6 +208,12 @@ def main():
                         layers=[layer],
                         target_kls=target_kls
                     )
+
+                    # Monitoring
+                    kl_values_mapped = kl_to_alpha.keys()
+                    if set(kl_values_mapped) != set(target_kls):
+                        missing_kl_values = set(target_kls) - set(kl_values_mapped)
+                        logger.warning("Layer %d, level %d, h_row %d: Missing KL targets: %s",layer, level, h_idx, missing_kl_values)
 
                     for kl, alpha in kl_to_alpha.items():
                         intervened_logits = intervener.intervene(

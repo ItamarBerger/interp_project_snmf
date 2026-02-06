@@ -9,8 +9,8 @@ import sys
 
 logger = logging.getLogger(__name__)
 
-async def download_and_save_jobs(batch_client, job_names):
-    result = await batch_client.download_and_save_successful_jobs(job_names)
+async def download_and_save_jobs(batch_client, job_names, raw=False):
+    result = await batch_client.download_and_save_successful_jobs(job_names, save_raw=raw)
 
     if result:
         logger.info("Downloaded and saved all successful jobs.")
@@ -23,6 +23,7 @@ def main():
     parser.add_argument("--submitted-jobs-file", type=str, required=True,
                         help="Path to the JSON file containing submitted job names.")
     parser.add_argument("--backup-folder", type=str, required=True)
+    parser.add_argument("--raw", action="store_true", help="Whether to save raw job outputs instead of parsed results.", default=False)
     args = parser.parse_args()
 
     submitted_jobs_file = args.submitted_jobs_file
@@ -40,7 +41,7 @@ def main():
         logger.error(f"Submitted jobs file {submitted_jobs_file} does not exist.")
         sys.exit(1)
 
-    asyncio.run(download_and_save_jobs(batch_client, job_names))
+    asyncio.run(download_and_save_jobs(batch_client, job_names, raw=args.raw))
 
 
 if __name__ == "__main__":

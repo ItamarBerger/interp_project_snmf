@@ -20,11 +20,13 @@ DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION = 10* 60
 MAX_SLEEP_TIME = 60 * 30  # 30 minutes
 BACKOFF_BASE = 2
 JOB_BACKUP_FILE_TEMPLATE = "{batch_name}_parsed_results.json"
+RAW_JOB_BACKUP_FILE_TEMPLATE = "{batch_name}_raw_output.jsonl"
 DEFAULT_JOB_BACKUP_FOLDER = os.path.join("experiments", "artifacts", "batch_job_backups")
 # consider only the last NUM_JOBS_FOR_WAIT_TIME for wait time calculation
 NUM_JOBS_FOR_WAIT_TIME = 5
 CLIENT_TMP_FOLDER = "gemini_tmp"
 BATCH_TO_TOKENS_FILE = os.path.join(CLIENT_TMP_FOLDER, "batch_to_tokens.json")
+DEFAULT_SUBMITTED_JOBS_FILENAME = "{id}_submitted_jobs.json"
 
 class WaitTimeCalcStrategy(StrEnum):
     MEAN = "mean"
@@ -32,11 +34,14 @@ class WaitTimeCalcStrategy(StrEnum):
     MAX = "max"
 
 class GeminiBatchClient:
-    def __init__(self, api_key: str, model_name: str, submitted_jobs_path: str, job_backup_folder: Optional[str] = None):
+    def __init__(self, api_key: str, model_name: str, submitted_jobs_path: Optional[str] = None, job_backup_folder: Optional[str] = None):
         self.client = genai.Client(api_key=api_key)
         self.model_name = model_name
         self.batch_to_tokens: Dict[str, int] = self._load_batch_to_tokens()
         self.job_backup_folder = job_backup_folder or DEFAULT_JOB_BACKUP_FOLDER
+        if not submitted_jobs_path:
+            submitted_jobs_path = os.path.join(CLIENT_TMP_FOLDER, DEFAULT_SUBMITTED_JOBS_FILENAME.format(id=id(self)))
+            logger.info("No submitted_jobs_path provided. Using default path: %s", submitted_jobs_path)
         self.submitted_jobs_path = submitted_jobs_path
         # memoization for job durations
         self.jobs_durations_memo: Dict[str, float] = {}
@@ -103,7 +108,7 @@ class GeminiBatchClient:
             logger.warning("Your history might be in danger, manually save this job name: %s", new_batch_name)
             return False
 
-    def _get_backup_batch_path(self, batch_name: str) -> str:
+    def _get_backup_batch_path(self, batch_name: str, raw: bool = False) -> str:
         """
         Returns the file path for storing backup parsed results of a batch job.
         We use this in case the job is deleted from the system after some time (google gives us 48 hours to download results).
@@ -112,7 +117,10 @@ class GeminiBatchClient:
             os.makedirs(self.job_backup_folder, exist_ok=True)
 
         safe_batch_name = batch_name.replace("/", "_")
-        file_name =  JOB_BACKUP_FILE_TEMPLATE.format(batch_name=safe_batch_name)
+        if raw:
+            file_name = RAW_JOB_BACKUP_FILE_TEMPLATE.format(batch_name=safe_batch_name)
+        else:
+            file_name =  JOB_BACKUP_FILE_TEMPLATE.format(batch_name=safe_batch_name)
         return os.path.join(self.job_backup_folder, file_name)
 
 
@@ -160,7 +168,7 @@ class GeminiBatchClient:
             print(f"Error counting tokens: {e}")
             return 0
 
-    def _can_submit_new_job(self, new_job_tokens: int, batches_window: Optional[int] = 3) -> bool:
+    def _can_submit_new_job(self, new_job_tokens: int, batches_window: Optional[int] = 5) -> bool:
         """
         Checks if a new job with the given token count can be submitted
         without exceeding the MAX_ENQUEUED_TOKENS limit.
@@ -236,10 +244,23 @@ class GeminiBatchClient:
 
 
 
+    def _update_backup_folder_with_results(self, job_name: str, parsed_results: dict[str, str]) -> bool:
+        backup_filename = self._get_backup_batch_path(job_name)
+        try:
+            with open(backup_filename, 'w') as f:
+                json.dump(parsed_results, f, indent=2)
+            logger.info(f"Saved results for {job_name} to {backup_filename}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to save results for {job_name}: {e}")
+            return False
+
+
+
 
     # External Methods
 
-    async def download_and_save_successful_jobs(self, job_names: list[str], override: bool = False) -> bool:
+    async def download_and_save_successful_jobs(self, job_names: list[str], override: bool = False, save_raw: bool = False) -> bool:
         """
         Downloads and saves the results of all successful jobs in job_names to local JSON files.
         This is used to back up results in case the whole process does not finish before the jobs are scheduled to be deleted.
@@ -247,12 +268,13 @@ class GeminiBatchClient:
         Args:
             job_names: A list of job names to check and download if successful.
             override: If True, it will override existing backup files. If False, it will skip downloading if a backup file already exists for a job.
+            save_raw: If True, it will save the raw JSONL output file from the API instead of the parsed results. This is useful for debugging and to have a complete backup of the original output, but it will take more storage space and won't be as human-readable as the parsed results.
         """
         errors = 0
         new_downloads = 0
         for job_name in job_names:
-            backup_filename = self._get_backup_batch_path(job_name)
-            if os.path.exists(backup_filename) and not override:
+            backup_filename = self._get_backup_batch_path(job_name, raw=save_raw)
+            if os.path.exists(backup_filename) and not override and not save_raw:
                 logger.info(f"Backup file already exists for {job_name} at {backup_filename}. Skipping download and api calls.")
                 continue
 
@@ -260,13 +282,23 @@ class GeminiBatchClient:
             if batch.state == JobState.JOB_STATE_SUCCEEDED:
                 try:
                     logger.info(f"Couldn't find backup for {batch.name}. Trying to download results...")
-                    parsed_results = await self.retrieve_batch_results(batch.name)
-                    with open(backup_filename, 'w') as f:
-                        json.dump(parsed_results, f, indent=2)
-                    logger.info(f"Saved results for {batch.name} to {backup_filename}")
+                    if save_raw:
+                        output_file = batch.dest.file_name
+                        logger.info(f"Saving raw JSONL output file for {job_name} to {backup_filename}...")
+                        file_content = self.client.files.download(file=output_file)
+                        if isinstance(file_content, bytes):
+                            file_content = file_content.decode('utf-8')
+                        with open(backup_filename, 'w') as f:
+                            f.write(file_content)
+                    else:
+                        parsed_results = await self.retrieve_batch_results(batch.name)
+                        update_backup = self._update_backup_folder_with_results(batch.name, parsed_results)
+                        if not update_backup:
+                            raise Exception("Failed to save backup file.")
                     new_downloads += 1
+
                 except Exception as e:
-                    logger.error(f"Failed to retrieve/save results for {batch.name}: {e}")
+                    logger.error("Failed to download and save results for batch %s in file %s: %s", job_name, backup_filename, e, exc_info=True)
                     errors += 1
         if errors > 0:
             logger.warning("Couldn't backup all requested batched. Check the logs.")
@@ -359,7 +391,7 @@ class GeminiBatchClient:
                         backoff_factor = BACKOFF_BASE ** (num_quota_errors - 1)
                         # cap sleep time at MAX_SLEEP_TIME
                         sleep_time = min(DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION * backoff_factor, MAX_SLEEP_TIME)
-                        logger.info("Doing exponential backoff. Sleeping for %s before making any new requests", sleep_time // 60)
+                        logger.info("Doing exponential backoff. Sleeping for %s minutes before making any new requests", sleep_time // 60)
                         await asyncio.sleep(sleep_time)
                     else:
                         raise e
@@ -373,7 +405,8 @@ class GeminiBatchClient:
             return batch_job.name
 
         except Exception as e:
-            logger.error(f"Failed to submit batch job: {e}")
+            logger.error(f"Failed to submit batch job: {e}", exc_info=True)
+            logger.warning("Failed spectacularly. Don't forget your job submit file for the next re-rerun: %s", self.submitted_jobs_path)
             raise e
         finally:
             if tmp_path and os.path.exists(tmp_path):
@@ -394,6 +427,13 @@ class GeminiBatchClient:
             current_check_list = list(active_jobs)
 
             for job_name in current_check_list:
+                # First check if we have a backup of the results - in this case we consider it successful
+                if os.path.exists(self._get_backup_batch_path(job_name)):
+                    logger.info("Found backup for batch %s. Marking as successful without API call.", job_name)
+                    completed_successfully.append(job_name)
+                    active_jobs.remove(job_name)
+                    continue
+
                 try:
                     job = self.client.batches.get(name=job_name)
 
@@ -424,7 +464,7 @@ class GeminiBatchClient:
                     logger.error(f"Error checking status for {job_name}: {e}")
 
             if active_jobs:
-                logger.info(f" Waiting for {len(active_jobs)} jobs to finish...")
+                logger.info(f" Waiting for {len(active_jobs)} jobs to finish. Sleeping for {poll_interval // 60} minutes...")
                 await asyncio.sleep(poll_interval)
 
         if len(completed_successfully) == len(job_names):
@@ -434,15 +474,24 @@ class GeminiBatchClient:
 
         return completed_successfully
 
-    async def retrieve_batch_results(self, job_name: str) -> Dict[str, str]:
+    async def retrieve_batch_results(self, job_name: str, override: bool = False) -> Dict[str, str]:
         """
         Downloads and parses the results for a completed batch job.
         Returns a dict {custom_id: result_text}.
         """
         results_map = {}
         try:
-            # By default - we always try to get "fresh" results.
-            # Otherwise we fall back to local backups
+            # To avoid unnecessary API calls, first check if we have a backup of the results
+            # Unless override is True
+            if not override:
+                job_backup_file = self._get_backup_batch_path(job_name)
+                if os.path.exists(job_backup_file):
+                    logger.info("Found backup for batch %s at %s. Loading results from backup.", job_name, job_backup_file)
+                    with open(job_backup_file, 'r') as f:
+                        results_map = json.load(f)
+                        return results_map
+
+
             batch_job = self.client.batches.get(name=job_name)
             if batch_job.state != JobState.JOB_STATE_SUCCEEDED:
                 logger.warning(f"Cannot retrieve results: Job {job_name} is {batch_job.state}")
@@ -491,4 +540,10 @@ class GeminiBatchClient:
         except Exception as e:
             logger.error(f"Error retrieving/parsing results for {job_name}: {e}")
 
+        # Backup the results
+        backup_success = self._update_backup_folder_with_results(job_name, results_map)
+        if not backup_success:
+            logger.warning("Failed to backup results for %s. Check the logs for details.", job_name)
+        else:
+            logger.info("Results for %s backed up successfully.", job_name)
         return results_map

@@ -138,6 +138,7 @@ def process_entries(filtered: list, concept_map_dict: dict):
             logger.warning(f"⚠ Warning: No concept for {key}")
         processed_structure.append(entry_result)
 
+    logger.info("built processed structure with %d entries and %d prompts", len(processed_structure), len(prompts_map))
     return processed_structure, meta_map, prompts_map
 
 
@@ -195,6 +196,9 @@ async def main():
            and int(e["hier_level"]) in levels
     ]
     logger.info(f"Filtering: selected {len(filtered)} entries out of {len(steered_entries)}.")
+
+    # Sort filtered entries by layer, level, K, h_row, kl, intervention_sign
+    filtered.sort(key=lambda e: (int(e["layer"]), int(e["hier_level"]), int(e["K"]), int(e['h_row']), float(e["kl"]), e["intervention_sign"]))
 
     concept_map_dict = {
         (int(c["K"]), int(c["layer"]), int(c["level"]),

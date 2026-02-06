@@ -116,7 +116,7 @@ OUTPUT_DESCRIPTIONS_FILE="$BASE_DIR/$MODEL_NAME/output_descriptions.json"
 
 # If STEPS is "all", set it to run all steps
 if [[ "${STEPS[0]}" == "all" ]]; then
-  STEPS=("train" "generate_concept_context" "generate_input_descriptions" "generate_vocab_proj" "generate_output_descriptions" "generate_causal_output" "input_score_judge" "output_score_judge")
+    STEPS=("train" "generate_concept_context" "generate_input_descriptions" "generate_vocab_proj" "generate_output_descriptions" "generate_causal_output" "input_score_judge" "output_score_judge")
 fi
 
 echo "========== Overview =========="
@@ -205,8 +205,7 @@ if [[ " ${STEPS[*]} " == *" generate_vocab_proj "* ]]; then
     --top-k 75 \
     --sparsity 0.01 \
     --device cuda \
-    --seed 123 \
-    ---batch-size $BATCH_SIZE
+    --seed 123
   fi
   echo "Vocabulary projections generated."
 fi
