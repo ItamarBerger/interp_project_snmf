@@ -48,9 +48,9 @@ def calculate_entry_means(entry: Dict[str, Any]) -> Dict[str, float]:
             "mean_final_score": 0.0
         }
 
-    total_concept = sum(r.get('concept_score', 0) for r in results)
-    total_fluency = sum(r.get('fluency_score', 0) for r in results)
-    total_final = sum(r.get('final_score', 0) for r in results)
+    total_concept = sum((r.get('concept_score') or 0) for r in results)
+    total_fluency = sum((r.get('fluency_score') or 0) for r in results)
+    total_final = sum((r.get('final_score') or 0) for r in results)
     count = len(results)
 
     return {

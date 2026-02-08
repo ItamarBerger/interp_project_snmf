@@ -9,7 +9,7 @@ from typing import List, Generator, Tuple
 from dotenv import load_dotenv
 import logging
 
-from experiments.causal.judge_utils import extract_rating, load_existing_jobs, submit_batches
+from experiments.causal.judge_utils import extract_rating, load_existing_jobs, submit_batches, harmonic_mean
 from experiments.utils import GeminiBatchClient
 from utils import setup_logging
 
@@ -60,11 +60,6 @@ Provide your rating using this exact format: "Rating: [[score]]".
 [Sentence Fragment Start]
 {sentence_fragment}
 [Sentence Fragment End]"""
-
-def harmonic_mean(scores: List[int]) -> float:
-    if any(s == 0 for s in scores):
-        return 0.0
-    return len(scores) / sum(1.0 / s for s in scores)
 
 
 def process_entries(filtered: list, concept_map_dict: dict, sparsity: str):

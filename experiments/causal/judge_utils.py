@@ -85,3 +85,22 @@ def load_existing_jobs(args) -> list:
             logger.warning(f"Could not load state file: {e}. Starting fresh.")
             existing_jobs = []
     return existing_jobs
+
+
+def harmonic_mean(scores):
+    """
+    Computes the harmonic mean of the provided scores.
+    If any score is zero or None, the harmonic mean will be zero.
+    """
+    # Filter out None values and convert to list
+    valid_scores = [s for s in scores if s is not None]
+
+    # If any scores were None or if any valid score is 0, return 0
+    if len(valid_scores) < len(scores) or any(score == 0 for score in valid_scores):
+        return 0
+
+    # If no valid scores, return 0
+    if not valid_scores:
+        return 0
+
+    return len(valid_scores) / sum(1.0 / score for score in valid_scores)
