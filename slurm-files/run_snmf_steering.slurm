@@ -74,6 +74,7 @@ if [[ -n "$CONCURRENCY" ]]; then
 fi
 
 if [[ -n "$RANKS" ]]; then
+  RANKS=$(echo "$RANKS" | tr '|' ',')
   echo "Using ranks: $RANKS"
   SCRIPT_CMD="$SCRIPT_CMD --ranks $RANKS"
 fi
