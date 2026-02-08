@@ -44,3 +44,6 @@ logs
 
 # Ignore output from tutorial
 hier_nmf.pkl
+
+# Slurm
+slurm_logs/
