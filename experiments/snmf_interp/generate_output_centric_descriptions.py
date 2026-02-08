@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 import re
 import asyncio
@@ -7,7 +6,8 @@ import argparse
 from typing import List, Optional
 
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
+from google.genai.types import GenerateContentConfig
 from experiments.evaluation.json_handler import JsonHandler
 import logging
 from experiments.utils import retry_with_attempts, RateLimiter, batched
@@ -73,8 +73,7 @@ async def run(args):
 
     # client & semaphore
     # client = AsyncOpenAI(api_key=api_key)
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel(model)
+    client = genai.Client(api_key=api_key)
     semaphore = asyncio.Semaphore(concurrency)
 
     rate_limiter = RateLimiter(max_requests=1900, window_seconds=60)
@@ -114,9 +113,10 @@ Make sure you output a very precise and detailed description of the concept that
         await rate_limiter.acquire()
         async with semaphore:
             resp = await asyncio.to_thread(
-                model.generate_content,
-                prompt,
-                generation_config={"max_output_tokens": max_tokens, "temperature": 0.2}
+                client.models.generate_content,
+                model=model,
+                contents=prompt,
+                config=GenerateContentConfig(max_output_tokens=max_tokens, temperature=0.2)
             )
         return resp
 

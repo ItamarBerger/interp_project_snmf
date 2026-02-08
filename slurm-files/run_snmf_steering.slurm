@@ -63,6 +63,22 @@ if [[ -n "$INPUT_SCORE_RESULTS" ]]; then
   SCRIPT_CMD="$SCRIPT_CMD --input-score-results $INPUT_SCORE_RESULTS"
 fi
 
+if [[ -n "$BASE_DIR" ]]; then
+  echo "Using base dir: $BASE_DIR"
+  SCRIPT_CMD="$SCRIPT_CMD --base-dir $BASE_DIR"
+fi
+
+if [[ -n "$CONCURRENCY" ]]; then
+  echo "Using concurrency: $CONCURRENCY"
+  SCRIPT_CMD="$SCRIPT_CMD --concurrency $CONCURRENCY"
+fi
+
+if [[ -n "$RANKS" ]]; then
+  RANKS=$(echo "$RANKS" | tr '|' ',')
+  echo "Using ranks: $RANKS"
+  SCRIPT_CMD="$SCRIPT_CMD --ranks $RANKS"
+fi
+
 echo "Running command : $SCRIPT_CMD"
 
 bash $SCRIPT_CMD

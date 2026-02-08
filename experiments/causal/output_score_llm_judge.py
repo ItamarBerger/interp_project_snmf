@@ -2,23 +2,16 @@ import asyncio
 import json
 import re
 import os
+import sys
 import argparse
 import time
-from typing import List, Tuple
+from typing import List, Generator, Tuple
 from dotenv import load_dotenv
-import google.generativeai as genai
-
-from experiments.utils import RateLimiter, retry_with_attempts
-from utils import setup_logging
-
-# Will be set in main()
-model = None
-semaphore: asyncio.Semaphore = None
-rate_limiter = None
-completed_entries = 0
-total_entries_global = 0
-progress_lock = None
 import logging
+
+from experiments.causal.judge_utils import extract_rating, load_existing_jobs, submit_batches, harmonic_mean
+from experiments.utils import GeminiBatchClient
+from utils import setup_logging
 
 logger = logging.getLogger(__name__)
 
@@ -42,26 +35,8 @@ def parse_int_list(spec: str) -> List[int]:
     return out
 
 
-def extract_rating(response_text: str) -> int:
-    """
-    Extract rating from 'Rating: [[num]]' or 'Rating: num'.
-    """
-    match = re.search(r'Rating:\s*(?:\[\[(\d+)\]\]|(\d+))', response_text)
-    if match:
-        score_str = match.group(1) if match.group(1) is not None else match.group(2)
-        return int(score_str)
-    raise ValueError("Could not extract rating from response: " + response_text)
-
-
-# ------------------------------
-# LLM evaluators
-# ------------------------------
-async def evaluate_concept_score(
-    concept: str,
-    sentence_fragment: str,
-    attempts: int,
-) -> int:
-    prompt = f"""Please act as an impartial judge and evaluate whether the specified concept is presented in the sentence fragment provided below. Focus solely on whether the concept is clearly incorporated, without regard for grammar or logical coherence.
+def get_concept_prompt(concept: str, sentence_fragment: str) -> str:
+    return f"""Please act as an impartial judge and evaluate whether the specified concept is presented in the sentence fragment provided below. Focus solely on whether the concept is clearly incorporated, without regard for grammar or logical coherence.
 Begin your evaluation by providing a short explanation of whether the concept is clearly incorporated.
 Point out references to the concept in the fragment, noting any minimal or awkward incorporations.
 After providing your explanation, rate the concept's relevance on a scale from 0 to 2, where 0 indicates the concept is not present at all, 1 indicates the concept is somewhat present but minimally or awkwardly incorporated, and 2 indicates the concept is more fully and effectively incorporated, with stronger and more natural integration.
@@ -74,33 +49,10 @@ Provide your rating using this exact format: "Rating: [[score]]".
 [Sentence Fragment Start]
 {sentence_fragment}
 [Sentence Fragment End]"""
-    @retry_with_attempts(attempts, default_value=0)
-    async def _inner():
-       await rate_limiter.acquire()
-       async with semaphore:
-           start = time.time()
-           response = await asyncio.wait_for(
-               asyncio.to_thread(
-                   model.generate_content,
-                   prompt,
-                   generation_config={"temperature": 0.0}
-               ),
-               timeout=60.0
-           )
-           elapsed = time.time() - start
-           if elapsed > 10:
-               logger.info(f"      [SLOW] Concept API took {elapsed:.1f}s")
-       content = response.text.strip()
-       return extract_rating(content)
-
-    return await _inner()
 
 
-async def evaluate_fluency_score(
-    sentence_fragment: str,
-    attempts: int,
-) -> int:
-    prompt = f"""Please act as an impartial judge and evaluate the fluency of the sentence fragment provided below. Focus solely on fluency, disregarding its completeness, relevance, coherence with any broader context, or informativeness.
+def get_fluency_prompt(sentence_fragment: str) -> str:
+    return  f"""Please act as an impartial judge and evaluate the fluency of the sentence fragment provided below. Focus solely on fluency, disregarding its completeness, relevance, coherence with any broader context, or informativeness.
 Begin your evaluation by briefly describing the fluency of the sentence, noting any unnatural phrasing, awkward transitions, grammatical errors, or repetitive structures that may hinder readability.
 After providing your explanation, rate the sentence's fluency on a scale from 0 to 2, where 0 indicates the sentence is not fluent and highly unnatural (e.g., incomprehensible or repetitive), 1 indicates it is somewhat fluent but contains noticeable errors or awkward phrasing, and 2 indicates the sentence is fluent and almost perfect.
 Provide your rating using this exact format: "Rating: [[score]]".
@@ -108,114 +60,78 @@ Provide your rating using this exact format: "Rating: [[score]]".
 [Sentence Fragment Start]
 {sentence_fragment}
 [Sentence Fragment End]"""
-    @retry_with_attempts(attempts, default_value=0)
-    async def _inner():
-        await rate_limiter.acquire()
-        async with semaphore:
-            start = time.time()
-            response = await asyncio.wait_for(
-                asyncio.to_thread(
-                    model.generate_content,
-                    prompt,
-                    generation_config={"temperature": 0.0}
-                ),
-                timeout=60.0
-            )
-            elapsed = time.time() - start
-            if elapsed > 10:
-                logger.info(f"      [SLOW] Fluency API took {elapsed:.1f}s")
-        content = response.text.strip()
-        return extract_rating(content)
-    return await _inner()
 
 
-def harmonic_mean(scores: List[int]) -> float:
-    if any(s == 0 for s in scores):
-        return 0.0
-    return len(scores) / sum(1.0 / s for s in scores)
+def process_entries(filtered: list, concept_map_dict: dict, sparsity: str):
+    processed_structure = []
+    meta_map = {}
+    prompts_map = {}
 
+    number_of_concepts_not_found = 0
 
-async def llm_judge(
-    sentence: str,
-    concept: str,
-    entry_idx: int,
-    sent_idx: int,
-    total_sents: int,
-    attempts: int,
-) -> dict:
-    logger.info(f"    → [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents}: calling concept API...")
-    # DEBUG: Log what we're evaluating and flag problematic concepts
-    if sent_idx == 0:  # Only log first sentence per entry to avoid spam
-        is_bad_concept = "only one token" in concept.lower() or len(concept) < 20
-        logger.info(f"      [DEBUG] Concept: '{concept[:200]}'")
-        logger.info(f"      [DEBUG] Sentence: '{sentence[:200]}'")
-    concept_score = await evaluate_concept_score(concept, sentence, attempts=attempts)
-    logger.info(f"    → [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents}: calling fluency API...")
-    fluency_score = await evaluate_fluency_score(sentence, attempts=attempts)
-    final_score = harmonic_mean([concept_score, fluency_score])
-    logger.info(f"    ✓ [Entry {entry_idx}] Sentence {sent_idx+1}/{total_sents} completed - Concept: {concept_score}, Fluency: {fluency_score}, Final: {final_score:.2f}")
-    return {
-        "sentence_index": sent_idx,
-        "steered_sentence": sentence,
-        "concept_score": concept_score,
-        "fluency_score": fluency_score,
-        "final_score": final_score,
-    }
+    for idx, entry in enumerate(filtered):
+        # We never want to default to 0, this must have been something
+        # related to SAEs etc
+        level = entry["hier_level"]
+        h_row = entry['h_row']
+        layer = entry["layer"]
+        k = int(entry["K"])
+        intervention_sign = entry.get("intervention_sign")
 
+        # Important! output_score_llm_judge uses sign in the key
+        # Because the vocab projections contained negative and positive tokens
+        key = (k, layer, level, h_row, intervention_sign)
+        concept_desc = concept_map_dict.get(key)
 
-async def process_entry(
-    idx: int,
-    entry: dict,
-    concept_map: dict,
-    total_entries: int,
-    attempts: int,
-    sparsity: str,
-) -> dict:
-    global completed_entries, total_entries_global, progress_lock
-    
-    level = entry.get('hier_level', 0)
-    h_row = entry.get('h_row', entry.get('index', 0))
-    logger.info(f"\n{'='*80}")
-    logger.info(f"Processing entry {idx+1}/{total_entries} (K={entry.get('K', 'SAE')}, layer={entry['layer']}, level={level}, h_row={h_row})")
-    key: Tuple = (int(entry["K"]) if "K" in entry else "SAE", int(entry["layer"]), int(level), int(h_row), entry.get("intervention_sign"))
-    concept_desc = concept_map.get(key)
+        kl = entry.get("kl")
+        alpha = entry.get("alpha")
 
-    if concept_desc is None:
-        logger.info(f"⚠ Warning: No concept for {key}")
-        sentence_results = []
-    else:
-        sentences = entry.get("steered_sentences", [])
-        total_sents = len(sentences)
-        logger.info(f"  Concept: {concept_desc[:100]}..." if len(concept_desc) > 100 else f"  Concept: {concept_desc}")
-        logger.info(f"  Evaluating {total_sents} sentences...")
-        sentence_results = [
-            await llm_judge(sentence, concept_desc, idx + 1, s_idx, total_sents, attempts=attempts)
-            for s_idx, sentence in enumerate(sentences)
-        ]
-        avg_score = sum(r['final_score'] for r in sentence_results) / len(sentence_results) if sentence_results else 0
-        logger.info(f"  ✓ Entry {idx+1} complete - Average score: {avg_score:.2f}")
-    
-    # Update progress counter
-    async with progress_lock:
-        completed_entries += 1
-        if completed_entries % 10 == 0 or completed_entries == total_entries_global:
-            progress_pct = (completed_entries / total_entries_global) * 100
-            logger.info(f"\n{'*'*80}")
-            logger.info(f"PROGRESS: {completed_entries}/{total_entries_global} entries completed ({progress_pct:.1f}%)")
-            logger.info(f"{'*'*80}\n")
+        # Prepare result skeleton
+        entry_result = {
+            "intervention_sign": intervention_sign,
+            "alpha": alpha,
+            "kl": kl,
+            "K": k,
+            "layer": layer,
+            "level": level,
+            "h_row": h_row,
+            "description": concept_desc,
+            "sparsity": sparsity,
+            "sentence_results": []
+        }
 
-    return {
-        "intervention_sign": entry.get("intervention_sign"),
-        "alpha": entry.get("alpha"),
-        "kl": entry.get("kl"),
-        "K": entry.get("K", "SAE"),
-        "layer": entry["layer"],
-        "level": level,
-        "h_row": h_row,
-        "sentence_results": sentence_results,
-        "description": concept_desc,
-        "sparsity": sparsity,
-    }
+        if concept_desc:
+            sentences = entry.get("steered_sentences", [])
+            for s_idx, sentence in enumerate(sentences):
+                # Unique IDs
+                c_id = f"L{layer}_LV{level}_K{k}_r{h_row}_kl{kl}_IS{intervention_sign}_s{s_idx}_c"
+                f_id = f"L{layer}_LV{level}_K{k}_r{h_row}_kl{kl}_IS{intervention_sign}_s{s_idx}_f"
+
+                # Add to prompts map
+                prompts_map[c_id] = get_concept_prompt(concept_desc, sentence)
+                prompts_map[f_id] = get_fluency_prompt(sentence)
+
+                # Prepare placeholder object
+                sent_obj = {
+                    "sentence_index": s_idx,
+                    "steered_sentence": sentence,
+                    "concept_score": None,
+                    "fluency_score": None,
+                    "final_score": None
+                }
+                entry_result["sentence_results"].append(sent_obj)
+
+                # Map IDs to the result object
+                meta_map[c_id] = (sent_obj, "concept_score")
+                meta_map[f_id] = (sent_obj, "fluency_score")
+        else:
+            number_of_concepts_not_found += 1
+            logger.warning(f"⚠ Warning: No concept for {key}")
+
+        processed_structure.append(entry_result)
+
+    logger.info(f"Processed {len(filtered)} entries. Concepts not found for {number_of_concepts_not_found} entries.")
+    return processed_structure, meta_map, prompts_map
 
 
 # ------------------------------
@@ -223,121 +139,114 @@ async def process_entry(
 # ------------------------------
 async def main():
     setup_logging()
-    parser = argparse.ArgumentParser(description="Score steered sentences (output-centric) for concept coverage and fluency.")
+    parser = argparse.ArgumentParser(
+        description="Score steered sentences (output-centric) for concept coverage and fluency.")
     parser.add_argument("--input", required=True, help="Path to steered entries JSON")
     parser.add_argument("--concepts", required=True, help="Path to concepts JSON")
     parser.add_argument("--output", required=True, help="Where to write aggregated results JSON")
-    parser.add_argument("--ranks", required=True, help='K filter, e.g. \"100\" or \"64,100\" or \"64-128\"')
-    parser.add_argument("--layers", required=True, help='Layer filter, e.g. \"23,31\" or \"0-16\"')
+    parser.add_argument("--ranks", required=True, help='K filter, e.g. "100" or "64,100" or "64-128"')
+    parser.add_argument("--layers", required=True, help='Layer filter, e.g. "23,31" or "0-16"')
     parser.add_argument("--model", default="gemini-2.0-flash", help="Gemini model (default: gemini-2.0-flash)")
-    parser.add_argument("--concurrency", type=int, default=30, help="Max concurrent API calls (default: 30)")
-    parser.add_argument("--attempts", type=int, default=2, help="Retry attempts per scoring call (default: 2)")
+    # [CHANGED] Arguments for batch processing
+    parser.add_argument("--batch-size", type=int, default=10000, help="Batch size for API (default: 10000)")
+    parser.add_argument("--poll-interval", type=int, default=300,
+                        help="Polling interval in seconds (default: 300 seconds = 5 minutes)")
     parser.add_argument("--sparsity", default="s0.05", help="Sparsity tag to include in results (default: s0.05)")
-    parser.add_argument("--api-key-var", default="GEMINI_API_KEY", help="Env var containing the API key (default: GEMINI_API_KEY)")
+    parser.add_argument("--api-key-var", default="GEMINI_API_KEY",
+                        help="Env var containing the API key (default: GEMINI_API_KEY)")
+    parser.add_argument("--submitted-jobs-file", type=str,
+                        help="In case the execution failed - this file holds the list of already submitted jobs to avoid resubmission.")
+    parser.add_argument("--job-backup-folder", default=None, type=str, help="Folder to back up job submissions.")
     args = parser.parse_args()
 
-    logger.info("\n" + "="*80)
-    logger.info("LLM JUDGE - SCORING STEERED SENTENCES (OUTPUT-CENTRIC)")
-    logger.info("="*80)
-    
+    logger.info("=== LLM JUDGE (Batch Processing - Output Centric) ===")
+
     # Load .env and get API key
-    logger.info("\n[STEP 1/5] Loading configuration...")
     load_dotenv()
     api_key = os.getenv(args.api_key_var)
     if not api_key:
-        raise RuntimeError(
-            f"Missing API key in environment variable {args.api_key_var}. "
-            f"Create a .env with {args.api_key_var}=sk-... or export it in your shell."
-        )
-    logger.info(f"  ✓ API key loaded")
-
-    # Initialize global model + semaphore + rate limiter
-    logger.info(f"\n[STEP 2/5] Initializing components...")
-    global model, semaphore, rate_limiter, completed_entries, total_entries_global, progress_lock
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel(args.model)
-    semaphore = asyncio.Semaphore(args.concurrency)
-    rate_limiter = RateLimiter(max_requests=1900, window_seconds=60)  # 5% safety margin
-    progress_lock = asyncio.Lock()
-    completed_entries = 0
-    logger.info(f"  ✓ Model: {args.model}")
-    logger.info(f"  ✓ Concurrency: {args.concurrency}")
-    logger.info(f"  ✓ Rate limit: 1900 requests/minute")
+        raise RuntimeError(f"Missing API key in {args.api_key_var}")
 
     # Read inputs
-    logger.info(f"\n[STEP 3/5] Loading input files...")
+    logger.info("Loading input files...")
     with open(args.input, "r") as f:
         steered_entries = json.load(f)
     with open(args.concepts, "r") as f:
         concepts = json.load(f)
-    logger.info(f"  ✓ Loaded {len(steered_entries)} steered entries from {args.input}")
-    logger.info(f"  ✓ Loaded {len(concepts)} concepts from {args.concepts}")
 
     ranks = parse_int_list(args.ranks)
     layers = parse_int_list(args.layers)
 
     # Filter entries
-    logger.info(f"\n[STEP 4/5] Filtering entries...")
-    logger.info(f"  Filters: K in {ranks}, layer in {layers}")
+    logger.info("Filtering entries...")
     filtered = [e for e in steered_entries if ("K" not in e or int(e["K"]) in ranks) and int(e["layer"]) in layers]
+
+    # Sort filtered entries by layer, level, K, h_row, kl, intervention_sign
+    filtered.sort(key=lambda e: (int(e["layer"]), int(e["hier_level"]), int(e["K"]), int(e['h_row']), float(e["kl"]), e["intervention_sign"]))
+
     total_entries = len(filtered)
-    logger.info(f"  ✓ Selected {total_entries} entries out of {len(steered_entries)}")
+    logger.info(f"Selected {total_entries} entries out of {len(steered_entries)}")
 
     # Build lookup: (K, layer, level, h_row, sign) -> description  (skip TRASH)
     concept_map = {
-        (int(c["K"]) if ("K" in c and c["K"] != "SAE") else "SAE", int(c["layer"]), int(c.get("level", 0)), int(c["h_row"]), c["sign"]): c["description"]
+        (int(c["K"]), int(c["layer"]), int(c["level"]),
+         int(c["h_row"]), c["sign"]): c["description"]
         for c in concepts
         if c.get("description") and "TRASH" not in c["description"]
     }
-    logger.info(f"  ✓ Built concept map with {len(concept_map)} concepts")
 
-    # Process in batches to prevent resource exhaustion
-    logger.info(f"\n[STEP 5/5] Processing entries and scoring sentences...")
-    logger.info(f"{'='*80}")
-    total_entries_global = total_entries
-    start_time = time.time()
-    
-    batch_size = 20  # Process 20 entries at a time
-    all_results = []
-    
-    for batch_start in range(0, total_entries, batch_size):
-        batch_end = min(batch_start + batch_size, total_entries)
-        batch = filtered[batch_start:batch_end]
-        logger.info(f"\n{'*'*80}")
-        logger.info(f"[BATCH {batch_start//batch_size + 1}/{(total_entries + batch_size - 1)//batch_size}] Processing entries {batch_start+1} to {batch_end}...")
-        logger.info(f"{'*'*80}")
-        
-        tasks = [
-            asyncio.create_task(
-                process_entry(batch_start + i, entry, concept_map, total_entries, attempts=args.attempts, sparsity=args.sparsity)
-            )
-            for i, entry in enumerate(batch)
-        ]
-        batch_results = await asyncio.gather(*tasks)
-        all_results.extend(batch_results)
-        
-        batch_time = time.time() - start_time
-        avg_per_entry = batch_time / len(all_results) if all_results else 0
-        remaining = total_entries - len(all_results)
-        eta_seconds = remaining * avg_per_entry if avg_per_entry > 0 else 0
-        logger.info(f"\n{'*'*80}")
-        logger.info(f"[BATCH COMPLETE] {len(all_results)}/{total_entries} total entries done. ETA: {eta_seconds/60:.1f} min")
-        logger.info(f"{'*'*80}\n")
-    
-    elapsed_time = time.time() - start_time
+    # Generate prompts
+    logger.info("Generating prompts and building maps...")
+    # [CHANGED] Call process_entries instead of running async loop
+    processed_structure, meta_map, prompts_map = process_entries(filtered, concept_map, args.sparsity)
+
+    if not prompts_map:
+        logger.warning("No prompts generated (check filters or concept map). Exiting.")
+        return
+
+    existing_jobs = load_existing_jobs(args)
+    # Submit jobs
+    client = GeminiBatchClient(api_key=api_key, model_name=args.model, submitted_jobs_path=args.submitted_jobs_file,
+                              job_backup_folder=args.job_backup_folder)
+    active_jobs = await submit_batches(prompts_map, client, existing_jobs, args, judge_type="output")
+
+    # Wait for jobs to complete
+    logger.info("Phase 2: Waiting for jobs to complete...")
+    completed_jobs = await client.wait_for_jobs(active_jobs, poll_interval=args.poll_interval)
+
+    # Retrieve
+    logger.info("Phase 3: Retrieving results...")
+    results_map = {}
+    for job_name in completed_jobs:
+        batch_results = await client.retrieve_batch_results(job_name)
+        results_map.update(batch_results)
+
+    # Process Scores
+    logger.info("Calculating final scores...")
+    missed_count = 0
+    for rid, result_text in results_map.items():
+        if rid in meta_map:
+            sent_obj, field = meta_map[rid]
+            sent_obj[field] = extract_rating(result_text)
+        else:
+            logger.debug(f"Unknown ID in results: {rid}")
+
+    # Final Aggregation
+    for entry in processed_structure:
+        for sent in entry["sentence_results"]:
+            if sent["concept_score"] is None: missed_count += 1
+            if sent["fluency_score"] is None: missed_count += 1
+
+            sent["final_score"] = harmonic_mean([sent["concept_score"], sent["fluency_score"]])
+
+    if missed_count > 0:
+        logger.warning(f"⚠ {missed_count} scores were missing (defaulted to 0).")
 
     # Save results
-    logger.info(f"\n{'='*80}")
-    logger.info(f"[SAVING RESULTS]")
-    logger.info(f"  Total entries processed: {total_entries}")
-    logger.info(f"  Total time: {elapsed_time:.1f}s ({elapsed_time/60:.1f} minutes)")
-    logger.info(f"  Average time per entry: {elapsed_time/total_entries:.2f}s")
+    logger.info(f"Saving results to {args.output}...")
     with open(args.output, "w") as f:
-        json.dump(all_results, f, indent=2)
-    logger.info(f"  ✓ Results saved to: {args.output}")
-    logger.info(f"\n{'='*80}")
-    logger.info("✓ ALL DONE!")
-    logger.info(f"{'='*80}\n")
+        json.dump(processed_structure, f, indent=2)
+    logger.info("✓ DONE")
 
 if __name__ == "__main__":
     asyncio.run(main())
