@@ -37,6 +37,7 @@ experiments/artifacts/*
 
 # Ignore local jobs files & mocks
 k400_llama_input_judge_submitted_jobs.json
+k400_llama_output_judge_submitted_jobs.json
 gemini_tmp/
 mock/
 
