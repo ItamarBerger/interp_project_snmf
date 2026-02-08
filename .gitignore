@@ -37,8 +37,13 @@ experiments/artifacts/*
 
 # Ignore local jobs files & mocks
 k400_llama_input_judge_submitted_jobs.json
+k400_llama_output_judge_submitted_jobs.json
 gemini_tmp/
 mock/
+logs
 
 # Ignore output from tutorial
 hier_nmf.pkl
+
+# Slurm
+slurm_logs/

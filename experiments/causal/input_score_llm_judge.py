@@ -5,7 +5,7 @@ import argparse
 from typing import List
 from dotenv import load_dotenv
 import logging
-from experiments.causal.judge_utils import extract_rating, submit_batches, load_existing_jobs
+from experiments.causal.judge_utils import extract_rating, submit_batches, load_existing_jobs, harmonic_mean
 from experiments.utils import GeminiBatchClient
 from utils import setup_logging
 
@@ -28,24 +28,6 @@ def parse_int_list(spec: str) -> List[int]:
             out.append(int(part))
     return out
 
-
-def harmonic_mean(scores):
-    """
-    Computes the harmonic mean of the provided scores.
-    If any score is zero or None, the harmonic mean will be zero.
-    """
-    # Filter out None values and convert to list
-    valid_scores = [s for s in scores if s is not None]
-
-    # If any scores were None or if any valid score is 0, return 0
-    if len(valid_scores) < len(scores) or any(score == 0 for score in valid_scores):
-        return 0
-
-    # If no valid scores, return 0
-    if not valid_scores:
-        return 0
-
-    return len(valid_scores) / sum(1.0 / score for score in valid_scores)
 
 
 # ------------------------------
@@ -138,6 +120,7 @@ def process_entries(filtered: list, concept_map_dict: dict):
             logger.warning(f"⚠ Warning: No concept for {key}")
         processed_structure.append(entry_result)
 
+    logger.info("built processed structure with %d entries and %d prompts", len(processed_structure), len(prompts_map))
     return processed_structure, meta_map, prompts_map
 
 
@@ -195,6 +178,9 @@ async def main():
            and int(e["hier_level"]) in levels
     ]
     logger.info(f"Filtering: selected {len(filtered)} entries out of {len(steered_entries)}.")
+
+    # Sort filtered entries by layer, level, K, h_row, kl, intervention_sign
+    filtered.sort(key=lambda e: (int(e["layer"]), int(e["hier_level"]), int(e["K"]), int(e['h_row']), float(e["kl"]), e["intervention_sign"]))
 
     concept_map_dict = {
         (int(c["K"]), int(c["layer"]), int(c["level"]),

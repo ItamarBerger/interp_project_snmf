@@ -73,6 +73,12 @@ if [[ -n "$CONCURRENCY" ]]; then
   SCRIPT_CMD="$SCRIPT_CMD --concurrency $CONCURRENCY"
 fi
 
+if [[ -n "$RANKS" ]]; then
+  RANKS=$(echo "$RANKS" | tr '|' ',')
+  echo "Using ranks: $RANKS"
+  SCRIPT_CMD="$SCRIPT_CMD --ranks $RANKS"
+fi
+
 echo "Running command : $SCRIPT_CMD"
 
 bash $SCRIPT_CMD

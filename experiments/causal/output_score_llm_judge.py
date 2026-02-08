@@ -9,7 +9,7 @@ from typing import List, Generator, Tuple
 from dotenv import load_dotenv
 import logging
 
-from experiments.causal.judge_utils import extract_rating, load_existing_jobs, submit_batches
+from experiments.causal.judge_utils import extract_rating, load_existing_jobs, submit_batches, harmonic_mean
 from experiments.utils import GeminiBatchClient
 from utils import setup_logging
 
@@ -61,16 +61,13 @@ Provide your rating using this exact format: "Rating: [[score]]".
 {sentence_fragment}
 [Sentence Fragment End]"""
 
-def harmonic_mean(scores: List[int]) -> float:
-    if any(s == 0 for s in scores):
-        return 0.0
-    return len(scores) / sum(1.0 / s for s in scores)
-
 
 def process_entries(filtered: list, concept_map_dict: dict, sparsity: str):
     processed_structure = []
     meta_map = {}
     prompts_map = {}
+
+    number_of_concepts_not_found = 0
 
     for idx, entry in enumerate(filtered):
         # We never want to default to 0, this must have been something
@@ -128,10 +125,12 @@ def process_entries(filtered: list, concept_map_dict: dict, sparsity: str):
                 meta_map[c_id] = (sent_obj, "concept_score")
                 meta_map[f_id] = (sent_obj, "fluency_score")
         else:
+            number_of_concepts_not_found += 1
             logger.warning(f"⚠ Warning: No concept for {key}")
 
         processed_structure.append(entry_result)
 
+    logger.info(f"Processed {len(filtered)} entries. Concepts not found for {number_of_concepts_not_found} entries.")
     return processed_structure, meta_map, prompts_map
 
 
@@ -181,6 +180,10 @@ async def main():
     # Filter entries
     logger.info("Filtering entries...")
     filtered = [e for e in steered_entries if ("K" not in e or int(e["K"]) in ranks) and int(e["layer"]) in layers]
+
+    # Sort filtered entries by layer, level, K, h_row, kl, intervention_sign
+    filtered.sort(key=lambda e: (int(e["layer"]), int(e["hier_level"]), int(e["K"]), int(e['h_row']), float(e["kl"]), e["intervention_sign"]))
+
     total_entries = len(filtered)
     logger.info(f"Selected {total_entries} entries out of {len(steered_entries)}")
 

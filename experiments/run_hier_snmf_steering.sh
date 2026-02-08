@@ -85,6 +85,10 @@ while [[ $# -gt 0 ]]; do
       INPUT_JUDGE_JOB_STATE_FILE="$2"
       shift 2
       ;;
+    --output-judge-jobs-file)
+      OUTPUT_JUDGE_JOB_STATE_FILE="$2"
+      shift 2
+      ;;
     *)
       echo "Unknown arg: $1" >&2
       exit 1
@@ -112,11 +116,13 @@ INPUT_DESCRIPTIONS_FILE="$BASE_DIR/$MODEL_NAME/input_descriptions.json"
 VOCAB_PROJ_FILE="$BASE_DIR/$MODEL_NAME/vocab_proj.json"
 OUTPUT_DESCRIPTIONS_FILE="$BASE_DIR/$MODEL_NAME/output_descriptions.json"
 
+INPUT_JOBS_BACKUP_FOLDER="$BASE_DIR/$MODEL_NAME/batch_job_backups/input"
+OUTPUT_JOBS_BACKUP_FOLDER="$BASE_DIR/$MODEL_NAME/batch_job_backups/output"
 
 
 # If STEPS is "all", set it to run all steps
 if [[ "${STEPS[0]}" == "all" ]]; then
-  STEPS=("train" "generate_concept_context" "generate_input_descriptions" "generate_vocab_proj" "generate_output_descriptions" "generate_causal_output" "input_score_judge" "output_score_judge")
+    STEPS=("train" "generate_concept_context" "generate_input_descriptions" "generate_vocab_proj" "generate_output_descriptions" "generate_causal_output" "input_score_judge" "output_score_judge")
 fi
 
 echo "========== Overview =========="
@@ -125,7 +131,14 @@ echo "Layers: $LAYERS"
 echo "Ranks: $RANKS"
 echo "save path for causal output: $CAUSAL_OUTPUT_PATH"
 echo "Using factorization base path: $FACTORIZATION_BASE_PATH"
-
+if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
+  echo "Input score judge will use job state file: ${INPUT_JUDGE_JOB_STATE_FILE:-None}"
+  echo "Input score judge will backup job states to: $INPUT_JOBS_BACKUP_FOLDER"
+fi
+if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
+  echo "Output score judge will use job state file: ${OUTPUT_JUDGE_JOB_STATE_FILE:-None}"
+  echo "Output score judge will backup job states to: $OUTPUT_JOBS_BACKUP_FOLDER"
+fi
 echo "========== Starting Steps =========="
 
 if [[ " ${STEPS[*]} " == *" train "* ]]; then
@@ -205,8 +218,7 @@ if [[ " ${STEPS[*]} " == *" generate_vocab_proj "* ]]; then
     --top-k 75 \
     --sparsity 0.01 \
     --device cuda \
-    --seed 123 \
-    ---batch-size $BATCH_SIZE
+    --seed 123
   fi
   echo "Vocabulary projections generated."
 fi
@@ -271,10 +283,10 @@ if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
    --concepts $OUTPUT_DESCRIPTIONS_FILE \
    --output $OUTPUT_SCORE_RESULTS \
    --layers $LAYERS \
-  --ranks $RANKS \
+   --ranks $RANKS \
    --model gemini-2.0-flash \
-   --concurrency 25 \
-   --attempts 2 \
+   --job-backup-folder $OUTPUT_JOBS_BACKUP_FOLDER \
+   --submitted-jobs-file ${OUTPUT_JUDGE_JOB_STATE_FILE:-} \
    --sparsity 0.01
   fi
     echo "Output score judging completed."
