@@ -261,41 +261,42 @@ def main():
         # only now the top activations will be relative to the hierarchical decomposition, and the context that we will send
 
         # start with the highest hierarchical level (lowest rank) and go down to the lowest level (highest rank)
-        root_rank = pretrained_levels[-1].H.shape[0]
-        nx_trees = []
-        for concept_idx in range(root_rank):  # concept_idx is the index of the concept in the highest level
-            tree = build_concept_tree(
-                levels=pretrained_levels,
-                concept_idx=concept_idx,
-                level_idx=len(pretrained_levels) - 1,  # start at the highest level
-                top_k_factors=args.top_k_factors,  # hyperparam: how many child factors to keep at each level
-                top_k_tokens=args.num_samples_per_factor,  # how many top tokens to keep for each factor
-                minimal_activation=args.minimal_activation,  # threshold for including child factors based on activation
-            )
-            tree_id = f"root_l{layer}_K{root_rank}_c{concept_idx}"
-            # Build nx tree
-            nx_tree = nx.DiGraph(tree_id=tree_id)
-            build_nx_tree(
-                tree=nx_tree,
-                node=tree,
-                layer=layer,
-                level=len(pretrained_levels) - 1,
-                parent_id=None,
-            )
-            nx_trees.append(nx_tree)
+        for level_idx in reversed(range(len(pretrained_levels))):
+            rank = pretrained_levels[level_idx].H.shape[0]
+            nx_trees = []
+            for concept_idx in range(rank):  # concept_idx is the index of the concept in the highest level
+                tree = build_concept_tree(
+                    levels=pretrained_levels,
+                    concept_idx=concept_idx,
+                    level_idx=level_idx,  # start at the highest level
+                    top_k_factors=args.top_k_factors,  # hyperparam: how many child factors to keep at each level
+                    top_k_tokens=args.num_samples_per_factor,  # how many top tokens to keep for each factor
+                    minimal_activation=args.minimal_activation,  # threshold for including child factors based on activation
+                )
+                tree_id = f"root_l{layer}_K{rank}_LV{level_idx}_c{concept_idx}"
+                # Build nx tree
+                nx_tree = nx.DiGraph(tree_id=tree_id)
+                build_nx_tree(
+                    tree=nx_tree,
+                    node=tree,
+                    layer=layer,
+                    level=level_idx,
+                    parent_id=None,
+                )
+                nx_trees.append(nx_tree)
 
-            # Add to concept context file
-            add_node_data_to_layer_feature_dict(
-                node=tree,
-                layer=layer,
-                feature_dict=layer_feature_dict,
-                token_contexts=token_context,
-                concept_idx=concept_idx,
-                sparsity=args.sparsity,
-                tree_id=tree_id,
-                pretrained_levels=pretrained_levels,
-            )
-        write_graphml_trees(nx_trees, layer, args.concept_trees_folder)
+                # Add to concept context file
+                add_node_data_to_layer_feature_dict(
+                    node=tree,
+                    layer=layer,
+                    feature_dict=layer_feature_dict,
+                    token_contexts=token_context,
+                    concept_idx=concept_idx,
+                    sparsity=args.sparsity,
+                    tree_id=tree_id,
+                    pretrained_levels=pretrained_levels,
+                )
+            write_graphml_trees(nx_trees, layer, args.concept_trees_folder)
 
     for key, val in layer_feature_dict.items():
         json_handler.add_row(**val)
