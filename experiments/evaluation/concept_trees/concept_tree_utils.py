@@ -174,3 +174,7 @@ def load_nmf_decompositions(layers: list[int], factorization_base_path: str, ran
             logger.warning(f"Missing hierarchical file for layer {layer}: {fp}")
 
     return nmf_models
+
+
+def get_node_id(tree_id: int, layer: int, level: int, concept_idx: int):
+    return f"Tree[{tree_id}]_L{layer}_LV{level}_C{concept_idx}"

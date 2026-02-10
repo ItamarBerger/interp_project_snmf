@@ -6,7 +6,7 @@ import numpy as np
 import networkx as nx
 import json
 from collections import Counter, defaultdict
-from experiments.concept_trees.concept_tree_utils import build_concept_tree, parse_int_list, load_nmf_decompositions
+from experiments.evaluation.concept_trees.concept_tree_utils import build_concept_tree, parse_int_list, load_nmf_decompositions
 from utils import setup_logging
 import logging
 
