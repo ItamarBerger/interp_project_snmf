@@ -199,7 +199,7 @@ if [[ " ${STEPS[*]} " == *" generate_input_descriptions "* ]]; then
     --k-values $RANKS \
     --top-m 10 \
     --max-tokens 200 \
-    --concurrency 50 \
+    --concurrency $CONCURRENCY \
     --retries $RETRIES
   fi
   echo "Input descriptions generated."

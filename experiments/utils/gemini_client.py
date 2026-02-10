@@ -86,7 +86,7 @@ class GeminiBatchClient:
             with open(self.submitted_jobs_path, 'r') as f:
                 job_history = json.load(f)
         else:
-            logger.warning("Could not find submitted jobs file at %s", self.submitted_jobs_path)
+            logger.info("Could not find submitted jobs file at %s - If you just started, don't worry, it will be created", self.submitted_jobs_path)
         return job_history
 
 

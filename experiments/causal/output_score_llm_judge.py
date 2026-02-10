@@ -1,16 +1,13 @@
 import asyncio
 import json
-import re
 import os
-import sys
 import argparse
-import time
-from typing import List, Generator, Tuple
+from typing import List
 from dotenv import load_dotenv
 import logging
 
-from experiments.causal.judge_utils import extract_rating, load_existing_jobs, submit_batches, harmonic_mean
-from experiments.utils import GeminiBatchClient
+from experiments.utils.judge_utils import extract_rating, harmonic_mean
+from experiments.utils import GeminiBatchClient, load_existing_jobs, submit_batches
 from utils import setup_logging
 
 logger = logging.getLogger(__name__)
@@ -204,11 +201,21 @@ async def main():
         logger.warning("No prompts generated (check filters or concept map). Exiting.")
         return
 
-    existing_jobs = load_existing_jobs(args)
+    existing_jobs = load_existing_jobs(args.submitted_jobs_file)
     # Submit jobs
     client = GeminiBatchClient(api_key=api_key, model_name=args.model, submitted_jobs_path=args.submitted_jobs_file,
                               job_backup_folder=args.job_backup_folder)
-    active_jobs = await submit_batches(prompts_map, client, existing_jobs, args, judge_type="output")
+    active_jobs = await submit_batches(
+        prompts_map=prompts_map,
+        client=client,
+        existing_jobs=existing_jobs,
+        submitted_jobs_file=args.submitted_jobs_file,
+        batch_size=args.batch_size,
+        batch_name_prefix="output_score_judge",
+        generation_config={
+            "temperature": 0.0
+        }
+    )
 
     # Wait for jobs to complete
     logger.info("Phase 2: Waiting for jobs to complete...")
