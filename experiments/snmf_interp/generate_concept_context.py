@@ -1,4 +1,5 @@
 import sys, os, argparse, random, numpy as np, torch, pickle
+from collections import Counter
 from pathlib import Path
 import json
 from typing import List, Optional
@@ -73,8 +74,14 @@ def generate_token_contexts(tokens, sample_ids, act_generator, context_window: i
     return token_ds
 
 
-def add_node_data_to_context_file(
-    node, layer, json_handler, token_contexts, concept_idx, sparsity, tree_id: str, pretrained_levels: List[NMFSemiNMF]
+
+def lists_equal_unordered(l1, l2):
+    # For simple dicts with hashable values
+    return Counter(map(frozenset, [d.items() for d in l1])) == \
+           Counter(map(frozenset, [d.items() for d in l2]))
+
+def add_node_data_to_layer_feature_dict(
+    node, layer, feature_dict, token_contexts, concept_idx, sparsity, tree_id: str, pretrained_levels: List[NMFSemiNMF]
 ):
     # Recursively add node data to JSON handler.
     level = node["level"]
@@ -83,21 +90,38 @@ def add_node_data_to_context_file(
         token_str, context_str = token_contexts[sample_idx]
         top_activations.append({"token": token_str, "context": context_str, "activation": activation})
 
-    json_handler.add_row(
-        K=pretrained_levels[level].H.shape[0],
-        level=level,
-        layer=layer,
-        h_row=concept_idx,
-        tree_id=tree_id,
-        top_activations=top_activations,
-        sparsity=sparsity,
-    )
+    key = (layer, level, concept_idx)
+    if not key in feature_dict:
+        feature_dict[key] = {
+            "K": pretrained_levels[level].H.shape[0],
+            "level": level,
+            "layer": layer,
+            "h_row": concept_idx,
+            "tree_ids": [tree_id],
+            "top_activations": top_activations,
+            "sparsity": sparsity,
+        }
+    else:
+        if not lists_equal_unordered(feature_dict[key]["top_activations"], top_activations):
+            logger.info("The activations are different, so we're adding another entry to the feature dict with the same key but different tree_id")
+            new_key = (layer, level, concept_idx, tree_id) # It doesn't matter that it's not the same key format, we're going to use only the values
+            feature_dict[new_key] = {
+                "K": pretrained_levels[level].H.shape[0],
+                "level": level,
+                "layer": layer,
+                "h_row": concept_idx,
+                "tree_ids": [tree_id],
+                "top_activations": top_activations,
+                "sparsity": sparsity,
+            }
+        else:
+            feature_dict[key]["tree_ids"].append(tree_id)
 
     for child in node.get("children", []):
-        add_node_data_to_context_file(
+        add_node_data_to_layer_feature_dict(
             node=child,
             layer=layer,
-            json_handler=json_handler,
+            feature_dict=feature_dict,
             token_contexts=token_contexts,
             concept_idx=child["concept"],
             sparsity=sparsity,
@@ -206,7 +230,7 @@ def main():
     tokens, sample_ids, labels = extract_token_ids_sample_ids_and_labels(dataset, act_generator)
     token_context = generate_token_contexts(tokens, sample_ids, act_generator, args.context_window)
 
-    json_handler = JsonHandler(["K", "level", "layer", "h_row", "tree_id", "top_activations", "sparsity"], str(save_path), auto_write=False)
+    json_handler = JsonHandler(["K", "level", "layer", "h_row", "tree_ids", "top_activations", "sparsity"], str(save_path), auto_write=False)
     ranks = args.ranks
     ranks_str = "-".join(map(str, ranks))
     layers = args.layers
@@ -214,6 +238,7 @@ def main():
     # Load per (layer): {models-dir}/{layer}/hier_snmf-l{layer}-r{rank0}-{}-...-{rankL-1}.pkl
     # Essientially loading hierarchical models once per layer
     nmf_models = {}
+    layer_feature_dict = {}  # (layer, level, concept_idx) -> {K, layer, level, h_row, top_activations, tree_ids, sparsity}
     for layer in layers:
         fp = os.path.join(models_dir, str(layer), f"hier_snmf-l{layer}-r{ranks_str}.pkl")
         if os.path.isfile(fp):
@@ -250,23 +275,30 @@ def main():
             tree_id = f"root_l{layer}_K{root_rank}_c{concept_idx}"
             # Build nx tree
             nx_tree = nx.DiGraph(tree_id=tree_id)
-            build_nx_tree(nx_tree, tree, layer, level=0)
+            build_nx_tree(
+                tree=nx_tree,
+                node=tree,
+                layer=layer,
+                level=len(pretrained_levels) - 1,
+                parent_id=None,
+            )
             nx_trees.append(nx_tree)
 
             # Add to concept context file
-            add_node_data_to_context_file(
+            add_node_data_to_layer_feature_dict(
                 node=tree,
                 layer=layer,
-                json_handler=json_handler,
+                feature_dict=layer_feature_dict,
                 token_contexts=token_context,
                 concept_idx=concept_idx,
-                sparsity=args.sparsity,  # bookkeeping only
+                sparsity=args.sparsity,
                 tree_id=tree_id,
                 pretrained_levels=pretrained_levels,
             )
-
         write_graphml_trees(nx_trees, layer, args.concept_trees_folder)
 
+    for key, val in layer_feature_dict.items():
+        json_handler.add_row(**val)
     json_handler.write()
     log("Done.")
 
