@@ -1,3 +1,7 @@
+import json
+from typing import Optional
+
+import networkx as nx
 import numpy as np
 import logging
 import pickle
@@ -178,3 +182,27 @@ def load_nmf_decompositions(layers: list[int], factorization_base_path: str, ran
 
 def get_node_id(tree_id: int, layer: int, level: int, concept_idx: int):
     return f"Tree[{tree_id}]_L{layer}_LV{level}_C{concept_idx}"
+
+
+def build_nx_tree(tree: nx.DiGraph, node: dict, layer: int, level: int, parent_id: Optional[str] = None):
+    """
+    Recursively build tree as nx.DiGraph.
+    """
+    concept_idx = node["concept"]
+    node_id = get_node_id(tree.graph["tree_id"], layer, level, concept_idx)
+
+    top_indices = node.get("top_indices", [])
+    # Add root node
+    tree.add_node(
+        node_id,
+        layer=layer,
+        level=level,
+        concept_idx=concept_idx,
+        top_indices=json.dumps(top_indices),
+    )
+
+    if parent_id is not None:
+        tree.add_edge(parent_id, node_id)
+
+    for child in node.get("children", []):
+        build_nx_tree(tree=tree, node=child, layer=layer, level=child["level"], parent_id=node_id)

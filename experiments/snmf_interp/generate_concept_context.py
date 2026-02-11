@@ -1,16 +1,15 @@
 import sys, os, argparse, random, numpy as np, torch, pickle
 from collections import Counter
 from pathlib import Path
-import json
 from time import sleep
-from typing import List, Optional
+from typing import List
 import networkx as nx
 
 from utils import setup_logging
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from experiments.evaluation.json_handler import JsonHandler
-from experiments.evaluation.concept_trees.concept_tree_utils import build_concept_tree, get_node_id
+from experiments.evaluation.concept_trees.concept_tree_utils import build_concept_tree, build_nx_tree
 from llm_utils.activation_generator import ActivationGenerator, extract_token_ids_sample_ids_and_labels
 from data_utils.concept_dataset import SupervisedConceptDataset
 from factorization.seminmf import NMFSemiNMF  # typing only
@@ -129,30 +128,6 @@ def add_node_data_to_layer_feature_dict(
             tree_id=tree_id,
             pretrained_levels=pretrained_levels,
         )
-
-
-def build_nx_tree(tree: nx.DiGraph, node: dict, layer: int, level: int, parent_id: Optional[str] = None):
-    """
-    Recursively build tree as nx.DiGraph.
-    """
-    concept_idx = node["concept"]
-    node_id = get_node_id(tree.graph["tree_id"], layer, level, concept_idx)
-
-    top_indices = node.get("top_indices", [])
-    # Add root node
-    tree.add_node(
-        node_id,
-        layer=layer,
-        level=level,
-        concept_idx=concept_idx,
-        top_indices=json.dumps(top_indices),
-    )
-
-    if parent_id is not None:
-        tree.add_edge(parent_id, node_id)
-
-    for child in node.get("children", []):
-        build_nx_tree(tree=tree, node=child, layer=layer, level=child["level"], parent_id=node_id)
 
 
 def write_graphml_trees(nx_trees: List[nx.DiGraph], layer: int, output_folder: str):
