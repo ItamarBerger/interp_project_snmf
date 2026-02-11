@@ -13,7 +13,13 @@ from enum import StrEnum
 
 logger = logging.getLogger(__name__)
 
-MAX_ENQUEUED_TOKENS = 10000000 # Based on https://ai.google.dev/gemini-api/docs/rate-limits
+# Based on https://ai.google.dev/gemini-api/docs/rate-limits
+MAX_ENQUEUED_TOKENS_PER_MODEL = {
+    "gemini-2.0-flash": 10000000,
+    "gemini-2.5-flash": 3000000,
+    "gemini-2.5-flash-lite": 10000000
+}
+MAX_ENQUEUED_TOKENS = 3000000 # Fallback
 AGGREGATE_CHAR_COUNT = 3500000 # The number of characters for which we stop and count all the tokens
 ACTIVE_BATCH_STATES: Set[str] = {JobState.JOB_STATE_PENDING, JobState.JOB_STATE_RUNNING, JobState.JOB_STATE_QUEUED}
 DEFAULT_WAIT_TIME_FOR_NEW_JOB_SUBMISSION = 10* 60
@@ -86,7 +92,7 @@ class GeminiBatchClient:
             with open(self.submitted_jobs_path, 'r') as f:
                 job_history = json.load(f)
         else:
-            logger.warning("Could not find submitted jobs file at %s", self.submitted_jobs_path)
+            logger.info("Could not find submitted jobs file at %s - If you just started, don't worry, it will be created", self.submitted_jobs_path)
         return job_history
 
 
@@ -195,7 +201,10 @@ class GeminiBatchClient:
 
         current_total = sum(active_batch_to_tokens.values())
         projected_total = current_total + new_job_tokens
-        return projected_total <= MAX_ENQUEUED_TOKENS
+        max_token_limit = MAX_ENQUEUED_TOKENS_PER_MODEL.get(self.model_name, MAX_ENQUEUED_TOKENS)
+        if new_job_tokens > max_token_limit:
+            raise "This job alone exceeds the maximum token limit. You need to reduce the batch size"
+        return projected_total <= max_token_limit
 
     def _calculate_wait_time_for_new_submission(self, strategy: WaitTimeCalcStrategy = WaitTimeCalcStrategy.MEAN, refresh: bool = False) -> float:
         """
@@ -387,6 +396,7 @@ class GeminiBatchClient:
                     if "429" in err_msg or "resource" in err_msg or "exhausted" in err_msg or "quota" in err_msg:
                         num_quota_errors += 1
                         logger.error("Rate limit or quota exceeded while submitting batch job. Errors so far for this job: %d", num_quota_errors)
+                        logger.warning("If you see a lot of these errors, consider reducing the batch size or increasing the base wait time.")
                         # We encountered an error related to rate limits or quota, so don't send more requests.
                         backoff_factor = BACKOFF_BASE ** (num_quota_errors - 1)
                         # cap sleep time at MAX_SLEEP_TIME
