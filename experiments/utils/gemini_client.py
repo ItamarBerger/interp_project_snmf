@@ -355,7 +355,9 @@ class GeminiBatchClient:
 
             # Check if we can submit the new job, if not, we'll wait and retry
             # This might take a lot of time to complete
-            while not self._can_submit_new_job(total_tokens):
+            while True:
+                if self._can_submit_new_job(total_tokens):
+                    break
                 wait_time = self._calculate_wait_time_for_new_submission()
                 logger.warning(
                     f"Cannot submit new job '{batch_name}' now. "
