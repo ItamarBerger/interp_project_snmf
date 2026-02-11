@@ -84,7 +84,7 @@ def lists_equal_unordered(l1, l2):
 def add_node_data_to_layer_feature_dict(
     node, layer, feature_dict, token_contexts, concept_idx, sparsity, tree_id: str, pretrained_levels: List[NMFSemiNMF]
 ):
-    # Recursively add node data to JSON handler.
+    # Recursively add node data to feature dict
     level = node["level"]
     top_activations = []
     for sample_idx, activation in node.get("top_indices", []):

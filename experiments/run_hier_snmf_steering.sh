@@ -224,45 +224,42 @@ if [[ " ${STEPS[*]} " == *" generate_input_descriptions "* ]]; then
   echo "Input descriptions generated."
 fi
 
-# TODO: fix this. We need to understand how to use this in hierarchical context
-#
-#if [[ " ${STEPS[*]} " == *" generate_vocab_proj "* ]]; then
-#  echo "Generating vocabulary projections..."
-#  if [[ $DRY_RUN -eq 0 ]]; then
-#   PYTHONPATH=. python experiments/snmf_interp/generate_vocab_proj.py \
-#    --model-name $MODEL_NAME \
-#    --base-path . \
-#    --factorization-base-path $FACTORIZATION_BASE_PATH \
-#    --output-path $VOCAB_PROJ_FILE \
-#    --layers $LAYERS \
-#    --ranks $RANKS \
-#    --top-k 75 \
-#    --sparsity 0.01 \
-#    --device cuda \
-#    --seed 123
-#  fi
-#  echo "Vocabulary projections generated."
-#fi
+if [[ " ${STEPS[*]} " == *" generate_vocab_proj "* ]]; then
+  echo "Generating vocabulary projections..."
+  if [[ $DRY_RUN -eq 0 ]]; then
+   PYTHONPATH=. python experiments/snmf_interp/generate_vocab_proj.py \
+    --model-name "$MODEL_NAME" \
+    --base-path . \
+    --factorization-base-path "$FACTORIZATION_BASE_PATH" \
+    --output-path "$VOCAB_PROJ_FILE" \
+    --layers "$LAYERS" \
+    --ranks "$RANKS" \
+    --top-k 75 \
+    --sparsity 0.01 \
+    --device cuda \
+    --seed 123
+  fi
+  echo "Vocabulary projections generated."
+fi
 
 
-# TODO: fix this. We need to understand how to use this in hierarchical context
-#if [[ " ${STEPS[*]} " == *" generate_output_descriptions "* ]]; then
-#  echo "Generating output descriptions..."
-#  if [[ $DRY_RUN -eq 0 ]]; then
-#    PYTHONPATH=. python experiments/snmf_interp/generate_output_centric_descriptions.py \
-#  --input $VOCAB_PROJ_FILE \
-#  --output $OUTPUT_DESCRIPTIONS_FILE \
-#  --model gemini-2.0-flash \
-#  --layers $LAYERS \
-#  --ranks $RANKS \
-#  --concurrency 25 \
-#  --top-m 25 \
-#  --max-tokens 5000 \
-#  --retries $RETRIES \
-#  --batch-size $BATCH_SIZE
-#  fi
-#  echo "Output descriptions generated."
-#fi
+if [[ " ${STEPS[*]} " == *" generate_output_descriptions "* ]]; then
+  echo "Generating output descriptions..."
+  if [[ $DRY_RUN -eq 0 ]]; then
+    PYTHONPATH=. python experiments/snmf_interp/generate_output_centric_descriptions.py \
+  --input "$VOCAB_PROJ_FILE" \
+  --output "$OUTPUT_DESCRIPTIONS_FILE" \
+  --model gemini-2.0-flash \
+  --layers "$LAYERS" \
+  --ranks "$RANKS" \
+  --concurrency 25 \
+  --top-m 25 \
+  --max-tokens 5000 \
+  --retries "$RETRIES" \
+  --batch-size "$BATCH_SIZE"
+  fi
+  echo "Output descriptions generated."
+fi
 
 if [[ " ${STEPS[*]} " == *" generate_causal_output "* ]]; then
   echo "Generating causal output..."
@@ -298,22 +295,21 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
   echo "Input score judging completed."
 fi
 
-# TODO: one we understand how to use output descriptions in hierarchical context, we can enable this step
-#if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
-#  echo "Starting output score judging..."
-#  if [[ $DRY_RUN -eq 0 ]]; then
-#    PYTHONPATH=. python experiments/causal/output_score_llm_judge.py \
-#    --input $CAUSAL_OUTPUT_PATH \
-#   --concepts $OUTPUT_DESCRIPTIONS_FILE \
-#   --output $OUTPUT_SCORE_RESULTS \
-#   --layers $LAYERS \
-#   --ranks $RANKS \
-#   --model gemini-2.0-flash \
-#   --job-backup-folder $OUTPUT_JOBS_BACKUP_FOLDER \
-#   --submitted-jobs-file ${OUTPUT_JUDGE_JOB_STATE_FILE:-} \
-#   --sparsity 0.01
-#  fi
-#    echo "Output score judging completed."
-#fi
+if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
+  echo "Starting output score judging..."
+  if [[ $DRY_RUN -eq 0 ]]; then
+    PYTHONPATH=. python experiments/causal/output_score_llm_judge.py \
+    --input "$CAUSAL_OUTPUT_PATH" \
+   --concepts "$OUTPUT_DESCRIPTIONS_FILE" \
+   --output "$OUTPUT_SCORE_RESULTS" \
+   --layers "$LAYERS" \
+   --ranks "$RANKS" \
+   --model gemini-2.0-flash \
+   --job-backup-folder "$OUTPUT_JOBS_BACKUP_FOLDER" \
+   --submitted-jobs-file "${OUTPUT_JUDGE_JOB_STATE_FILE:-}" \
+   --sparsity 0.01
+  fi
+    echo "Output score judging completed."
+fi
 
 echo "Finished."
