@@ -107,10 +107,15 @@ if [[ -z "${CAUSAL_OUTPUT_PATH:-}" ]]; then
   CAUSAL_OUTPUT_PATH="$BASE_DIR/$MODEL_NAME/causal_output.json"
 fi
 
+if [[ -z "${OUTPUT_SCORE_RESULTS:-}" ]]; then
+  OUTPUT_SCORE_RESULTS="$BASE_DIR/$MODEL_NAME/causal_results_out.json"
+fi
+
+if [[ -z "${INPUT_SCORE_RESULTS:-}" ]]; then
+  INPUT_SCORE_RESULTS="$BASE_DIR/$MODEL_NAME/causal_results_in.json"
+fi
 
 FACTORIZATION_BASE_PATH="$BASE_DIR/$MODEL_NAME/hier"
-OUTPUT_SCORE_RESULTS="$BASE_DIR/$MODEL_NAME/causal_results_out.json"
-INPUT_SCORE_RESULTS="$BASE_DIR/$MODEL_NAME/causal_results_in.json"
 CONCEPTS_CONTEXT_FILE="$BASE_DIR/$MODEL_NAME/concept_contexts.json"
 INPUT_DESCRIPTIONS_FILE="$BASE_DIR/$MODEL_NAME/input_descriptions.json"
 VOCAB_PROJ_FILE="$BASE_DIR/$MODEL_NAME/vocab_proj.json"
