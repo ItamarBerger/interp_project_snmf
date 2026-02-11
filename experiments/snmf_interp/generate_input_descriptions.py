@@ -173,6 +173,9 @@ async def run(args):
     # Filter data
     filtered_data = [e for e in data if (int(e["layer"]) in layers and int(e["K"]) in k_values and int(e["level"]) in levels)]
 
+    # Sort for consistency of batching
+    filtered_data.sort(key=lambda x: (x["layer"], x["K"], x["level"], x["h_row"]))
+
     # Prepare the prompts and metadata for all entries first (before any API calls) to ensure we have a complete mapping
     prompts_map, meta_map = prepare_prompts_and_metadata(filtered_data, args.top_m)
 

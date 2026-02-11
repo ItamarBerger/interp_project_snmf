@@ -2,6 +2,7 @@ import sys, os, argparse, random, numpy as np, torch, pickle
 from collections import Counter
 from pathlib import Path
 import json
+from time import sleep
 from typing import List, Optional
 import networkx as nx
 
@@ -161,6 +162,7 @@ def write_graphml_trees(nx_trees: List[nx.DiGraph], layer: int, output_folder: s
         # Create folder structure if it doesn't exist
         Path(output_file).parent.mkdir(parents=True, exist_ok=True)
         nx.write_graphml(tree, output_file)
+        sleep(0.5)  # small delay to avoid file system issues
         log(f"Saved concept tree {tree_id} to {output_file}")
 
 

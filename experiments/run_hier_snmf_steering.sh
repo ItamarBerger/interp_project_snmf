@@ -11,7 +11,7 @@ RANKS="400,200,100,50"
 BASE_DIR="experiments/artifacts"
 RPS_LIMIT=3500
 RETRIES=5
-BATCH_SIZE=20
+BATCH_SIZE=10000 # optimal for gemini-2.0-flash.
 CONCURRENCY=25
 MAX_REQUESTS_PER_SECOND=30
 POLL_INTERVAL=300 # 5 minutes
@@ -116,8 +116,26 @@ INPUT_DESCRIPTIONS_FILE="$BASE_DIR/$MODEL_NAME/input_descriptions.json"
 VOCAB_PROJ_FILE="$BASE_DIR/$MODEL_NAME/vocab_proj.json"
 OUTPUT_DESCRIPTIONS_FILE="$BASE_DIR/$MODEL_NAME/output_descriptions.json"
 
-INPUT_JOBS_BACKUP_FOLDER="$BASE_DIR/$MODEL_NAME/batch_job_backups/input"
-OUTPUT_JOBS_BACKUP_FOLDER="$BASE_DIR/$MODEL_NAME/batch_job_backups/output"
+INPUT_JUDGE_JOBS_BACKUP_FOLDER="$BASE_DIR/$MODEL_NAME/batch_job_backups/input_judge"
+OUTPUT_JUDGE_JOBS_BACKUP_FOLDER="$BASE_DIR/$MODEL_NAME/batch_job_backups/output_judge"
+INPUT_DESCRIPTIONS_JOBS_BACKUP_FOLDER="$BASE_DIR/$MODEL_NAME/batch_job_backups/input_descriptions"
+
+# Get the top rank from RANKS to use in naming the job state files
+IFS=',' read -r -a RANKS_ARRAY <<< "$RANKS"
+TOP_RANK="${RANKS_ARRAY[0]}"
+
+LAYERS_STR=$(echo "$LAYERS" | tr ',' '_')
+MODEL_NAME_STR=$(echo "$MODEL_NAME" | tr '/' '_')
+MODEL_NAME_STR=$(echo "$MODEL_NAME_STR" | tr '-' '_')
+INPUT_DESCRIPTION_SUBMITTED_JOBS_FILE="submitted_job_files/k${TOP_RANK}_input_descriptions_${MODEL_NAME_STR}_layers_${LAYERS_STR}_submitted_jobs.json"
+
+if [[ -z "${INPUT_JUDGE_JOB_STATE_FILE:-}" ]]; then
+  INPUT_JUDGE_JOB_STATE_FILE="submitted_job_files/${TOP_RANK}_input_judge_${MODEL_NAME_STR}_layers_${LAYERS_STR}_submitted_jobs.json"
+fi
+
+if [[ -z "${OUTPUT_JUDGE_JOB_STATE_FILE:-}" ]]; then
+  OUTPUT_JUDGE_JOB_STATE_FILE="submitted_job_files/k${TOP_RANK}_output_judge_${MODEL_NAME_STR}_layers_${LAYERS_STR}_submitted_jobs.json"
+fi
 
 
 # If STEPS is "all", set it to run all steps
@@ -133,11 +151,11 @@ echo "save path for causal output: $CAUSAL_OUTPUT_PATH"
 echo "Using factorization base path: $FACTORIZATION_BASE_PATH"
 if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
   echo "Input score judge will use job state file: ${INPUT_JUDGE_JOB_STATE_FILE:-None}"
-  echo "Input score judge will backup job states to: $INPUT_JOBS_BACKUP_FOLDER"
+  echo "Input score judge will backup job states to: $INPUT_JUDGE_JOBS_BACKUP_FOLDER"
 fi
 if [[ " ${STEPS[*]} " == *" output_score_judge "* ]]; then
   echo "Output score judge will use job state file: ${OUTPUT_JUDGE_JOB_STATE_FILE:-None}"
-  echo "Output score judge will backup job states to: $OUTPUT_JOBS_BACKUP_FOLDER"
+  echo "Output score judge will backup job states to: $OUTPUT_JUDGE_JOBS_BACKUP_FOLDER"
 fi
 echo "========== Starting Steps =========="
 
@@ -146,21 +164,21 @@ if [[ " ${STEPS[*]} " == *" train "* ]]; then
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/train/train_hier.py \
      --sparsity 0.01 \
-     --ranks $RANKS \
+     --ranks "$RANKS" \
       --max-iterations-per-layer 2000 \
       --patience 1500 \
       --ft-lr 1e-3 \
       --ft-iters 500 \
       --fine-tune \
-      --model-name $MODEL_NAME \
+      --model-name "$MODEL_NAME" \
       --factorization-mode mlp \
-      --layers $LAYERS \
+      --layers "$LAYERS" \
       --data-path data/hier_concepts.json \
       --model-device cuda \
       --data-device cpu \
       --fitting-device cuda \
       --base-path . \
-      --save-path $FACTORIZATION_BASE_PATH \
+      --save-path "$FACTORIZATION_BASE_PATH" \
       --seed 42
     fi
   echo "Training step completed."
@@ -170,16 +188,16 @@ if [[ " ${STEPS[*]} " == *" generate_concept_context "* ]]; then
   echo "Generating concept contexts..."
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/snmf_interp/generate_concept_context.py \
-    --models-dir $FACTORIZATION_BASE_PATH \
-    --output-json $CONCEPTS_CONTEXT_FILE \
+    --models-dir "$FACTORIZATION_BASE_PATH" \
+    --output-json "$CONCEPTS_CONTEXT_FILE" \
     --data-path data/hier_concepts.json \
-    --layers $LAYERS \
-    --ranks $RANKS \
+    --layers "$LAYERS" \
+    --ranks "$RANKS" \
     --num-samples-per-factor 25 \
     --context-window 15 \
     --sparsity 0.01 \
     --seed 42 \
-    --model-name $MODEL_NAME \
+    --model-name "$MODEL_NAME" \
     --factor-mode mlp \
     --model-device cuda \
     --data-device cpu
@@ -191,16 +209,17 @@ if [[ " ${STEPS[*]} " == *" generate_input_descriptions "* ]]; then
   echo "Generating input descriptions..."
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/snmf_interp/generate_input_descriptions.py \
-    --input-json $CONCEPTS_CONTEXT_FILE \
-    --output-json $INPUT_DESCRIPTIONS_FILE \
-    --model gemini-2.0-flash \
+    --input-json "$CONCEPTS_CONTEXT_FILE" \
+    --output-json "$INPUT_DESCRIPTIONS_FILE" \
+    --model gemini-2.5-flash \
     --env-var GEMINI_API_KEY \
-    --layers $LAYERS \
-    --k-values $RANKS \
+    --layers "$LAYERS" \
+    --k-values "$RANKS" \
+    --batch-size "$BATCH_SIZE" \
     --top-m 10 \
     --max-tokens 200 \
-    --concurrency $CONCURRENCY \
-    --retries $RETRIES
+    --submitted-jobs-file "${INPUT_DESCRIPTION_SUBMITTED_JOBS_FILE}" \
+    --job-backup-folder "$INPUT_DESCRIPTIONS_JOBS_BACKUP_FOLDER"
   fi
   echo "Input descriptions generated."
 fi
@@ -249,12 +268,12 @@ if [[ " ${STEPS[*]} " == *" generate_causal_output "* ]]; then
   echo "Generating causal output..."
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/causal/generate_causal_output.py \
-   --model-name $MODEL_NAME \
-   --layers $LAYERS \
-  --ranks $RANKS \
+   --model-name "$MODEL_NAME" \
+   --layers "$LAYERS" \
+  --ranks "$RANKS" \
    --sparsity 0.01 \
-   --factorization-base-path $FACTORIZATION_BASE_PATH \
-   --save-path $CAUSAL_OUTPUT_PATH \
+   --factorization-base-path "$FACTORIZATION_BASE_PATH" \
+   --save-path "$CAUSAL_OUTPUT_PATH" \
    --device cuda
   fi
   echo "Causal output generated."
@@ -266,15 +285,15 @@ if [[ " ${STEPS[*]} " == *" input_score_judge "* ]]; then
   echo "Starting input score judging..."
   if [[ $DRY_RUN -eq 0 ]]; then
     PYTHONPATH=. python experiments/causal/input_score_llm_judge.py \
-   --input $CAUSAL_OUTPUT_PATH \
-   --concepts $INPUT_DESCRIPTIONS_FILE \
-   --output $INPUT_SCORE_RESULTS \
+   --input "$CAUSAL_OUTPUT_PATH" \
+   --concepts "$INPUT_DESCRIPTIONS_FILE" \
+   --output "$INPUT_SCORE_RESULTS" \
    --model gemini-2.0-flash \
-   --ranks $RANKS \
-   --layers $LAYERS \
-   --poll-interval $POLL_INTERVAL \
-   --submitted-jobs-file ${INPUT_JUDGE_JOB_STATE_FILE:-} \
-   --job-backup-folder "$BASE_DIR/$MODEL_NAME/batch_job_backups/input"
+   --ranks "$RANKS" \
+   --layers "$LAYERS" \
+   --poll-interval "$POLL_INTERVAL" \
+   --submitted-jobs-file "${INPUT_JUDGE_JOB_STATE_FILE:-}" \
+   --job-backup-folder "$INPUT_JUDGE_JOBS_BACKUP_FOLDER"
   fi
   echo "Input score judging completed."
 fi
