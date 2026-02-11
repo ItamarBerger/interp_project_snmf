@@ -7,6 +7,7 @@ from typing import List
 import logging
 from .gemini_client import GeminiBatchClient
 from .batching import chunk_dict
+from constants import LOGS_FOLDER, LogColor
 
 
 logger = logging.getLogger(__name__)
@@ -62,3 +63,24 @@ async def submit_batches(prompts_map: dict, client: GeminiBatchClient, existing_
             logger.error(f"  Error submitting batch {i + 1}: {e}")
             sys.exit(1)
     return active_jobs
+
+
+def ensure_all_prompts_have_results(prompts_map: dict, results_map: dict) -> bool:
+    missing_prompts = []
+    for prompt_id in prompts_map.keys():
+        if prompt_id not in results_map:
+            missing_prompts.append(prompt_id)
+
+    missing_prompts_file_location = os.path.join(LOGS_FOLDER, f"{int(time.time())}_missing_prompts.json")
+    if missing_prompts:
+        # Create log folder if it doesn't exist
+        os.makedirs(LOGS_FOLDER, exist_ok=True)
+        with open(missing_prompts_file_location, "w") as f:
+            json.dump(missing_prompts, f, indent=2)
+        num_missing_prompts = len(missing_prompts)
+        logger.warning(f"{LogColor.RED}->>>> There are {num_missing_prompts} prompts without results.\n Missing prompt IDs have been saved to {missing_prompts_file_location}{LogColor.RESET}")
+        return False
+    else:
+        logger.info(f"{LogColor.GREEN} All prompts have results!{LogColor.RESET}")
+        return True
+
