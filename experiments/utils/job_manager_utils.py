@@ -66,10 +66,10 @@ async def submit_batches(prompts_map: dict, client: GeminiBatchClient, existing_
 
 
 def ensure_all_prompts_have_results(prompts_map: dict, results_map: dict) -> bool:
-    missing_prompts = []
-    for prompt_id in prompts_map.keys():
+    missing_prompts = {}
+    for prompt_id, prompt in prompts_map.items():
         if prompt_id not in results_map:
-            missing_prompts.append(prompt_id)
+            missing_prompts[prompt_id] = prompt
 
     missing_prompts_file_location = os.path.join(LOGS_FOLDER, f"{int(time.time())}_missing_prompts.json")
     if missing_prompts:
@@ -77,8 +77,10 @@ def ensure_all_prompts_have_results(prompts_map: dict, results_map: dict) -> boo
         os.makedirs(LOGS_FOLDER, exist_ok=True)
         with open(missing_prompts_file_location, "w") as f:
             json.dump(missing_prompts, f, indent=2)
-        num_missing_prompts = len(missing_prompts)
-        logger.warning(f"{LogColor.RED}->>>> There are {num_missing_prompts} prompts without results.\n Missing prompt IDs have been saved to {missing_prompts_file_location}{LogColor.RESET}")
+        num_missing_prompts = len(missing_prompts.keys())
+        logger.warning(f"{LogColor.RED}->>>> There are {num_missing_prompts} prompts without results."
+                       f"\n Missing prompts_map have been saved to {missing_prompts_file_location}{LogColor.RESET}"
+                       f"\n This could then be submitted as-is to retrieve the missing results.")
         return False
     else:
         logger.info(f"{LogColor.GREEN} All prompts have results!{LogColor.RESET}")
