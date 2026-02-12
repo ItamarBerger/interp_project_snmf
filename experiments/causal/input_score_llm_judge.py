@@ -5,7 +5,7 @@ import argparse
 from typing import List
 from dotenv import load_dotenv
 import logging
-from experiments.utils import GeminiBatchClient,extract_rating, submit_batches, load_existing_jobs, harmonic_mean
+from experiments.utils import GeminiBatchClient, extract_rating, submit_batches, load_existing_jobs, harmonic_mean, ensure_all_prompts_have_results
 from utils import setup_logging
 
 logger = logging.getLogger(__name__)
@@ -242,11 +242,16 @@ async def main():
     if missed_count > 0:
         logger.warning(f"⚠ {missed_count} scores were missing (defaulted to 0).")
 
+
     # 7. Save
     logger.info(f"Saving results to {args.output}...")
     with open(args.output, "w") as f:
         json.dump(processed_structure, f, indent=2)
-    logger.info("✓ DONE")
+
+    if not ensure_all_prompts_have_results(prompts_map, results_map):
+        logger.warning("Could not find results for all prompts. Check logs for details. Saved only partial results.")
+    else:
+        logger.info("✓ DONE")
 
 if __name__ == "__main__":
     asyncio.run(main())
