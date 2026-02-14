@@ -155,6 +155,7 @@ def main():
         for level_idx, nmf_model in enumerate(pretrained_levels):
             rank = pretrained_levels[level_idx].H.shape[0]
             for concept_idx in range(rank):
+                logger.info("Processing layer %d, level %d, concept %d (rank %d)", layer, level_idx, concept_idx, rank)
                 top_indices, top_act = get_top_activating_indices_hierarchical(
                     levels=pretrained_levels,
                     concept_idx=concept_idx,
@@ -163,7 +164,7 @@ def main():
                 )
 
                 formatted = [
-                    {"token": token_context[i][0], "activation": float(top_act[a]), "context": token_context[i][1]}
+                    {"token": token_context[i][0], "activation": a, "context": token_context[i][1]}
                     for i, a in zip(top_indices, top_act)
                 ]
 
