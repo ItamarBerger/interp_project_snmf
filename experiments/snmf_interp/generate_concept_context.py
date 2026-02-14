@@ -163,7 +163,7 @@ def main():
                 )
 
                 formatted = [
-                    {"token": token_context[i][0], "activation": float(top_act[j]), "context": token_context[i][1]}
+                    {"token": token_context[i][0], "activation": float(top_act[a]), "context": token_context[i][1]}
                     for i, a in zip(top_indices, top_act)
                 ]
 
