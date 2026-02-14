@@ -52,22 +52,15 @@ LAYER_COLOR_PALETTE = {
     1: "#fb9a99",  # Light Red
     2: "#33a02c",  # Dark Green
     3: "#ff7f00",  # Orange
+    4: "#cab2d6",  # Light Violet
     6: "#1f78b4",  # Dark Blue
+    8: "#b2df8a",  # Soft Green
     9: "#e31a1c",  # Red
     11: "#a6cee3",  # Light Blue
     12: "#b15928",  # Brown
     18: "#8dd3c7",  # Teal
     25: "#ffffb3",  # Yellow
 }
-# LAYER_COLOR_PALETTE = {
-#     0:  "#4C72B0",  # Muted Blue
-#     1:  "#CFA0BF",  # Thistle/Purple
-#     2:  "#55A868",  # Muted Green (Sage)
-#     3:  "#C44E52",  # Muted Red (Rose)
-#     6:  "#8C564B",  # Muted Brown (Cocoa)
-#     9:  "#64B5CD",  # Muted Cyan/Blue-Grey
-#     11: "#EEDC82"  # Muted Yellow (Goldenrod)
-# }
 
 def parse_arguments():
     """
