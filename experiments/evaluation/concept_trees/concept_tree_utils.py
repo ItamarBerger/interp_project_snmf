@@ -6,26 +6,8 @@ import numpy as np
 import logging
 import pickle
 import os
-
-# FIXME: temp monkey patching
-import io
-import torch
-
-# Store original
-_original_load = pickle.load
-
-def _cpu_pickle_load(f, **kwargs):
-    class CPUUnpickler(pickle.Unpickler):
-        def find_class(self, module, name):
-            if module == 'torch.storage' and name == '_load_from_bytes':
-                return lambda b: torch.load(io.BytesIO(b), map_location='cpu', weights_only=False)
-            return super().find_class(module, name)
-    return CPUUnpickler(f).load()
-
-# Monkey-patch
-pickle.load = _cpu_pickle_load
-
 from numpy import ndarray, dtype
+
 
 logger = logging.getLogger(__name__)
 MIN_TOTAL_MASS = 1e-6  # to avoid division by zero in top-p calculations
