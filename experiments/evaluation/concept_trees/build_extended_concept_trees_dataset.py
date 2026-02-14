@@ -39,16 +39,18 @@ OUTPUT_CAUSAL_RESULTS_FILE = os.path.join("{steering_base_path}", "causal_result
 DATA_PATH_TEMPLATE = os.path.join("{steering_base_path}", "concept_trees", "{description_type}", "extended_concept_trees_layer_{layer}.graphml")
 MISSING_LAYER_WARNING_THRESHOLD = 100
 FACTORIZATION_BASE_TEMPLATE = os.path.join("{steering_base_path}", "hier")
-TREE_OUTPUT_PATH = os.path.join("{steering_base_path}", "concept_trees","{strategy}_{strat_values}", "layer_{layer}", "concept_tree_{tree_id}.graphml")
+TREE_OUTPUT_PATH = os.path.join("{steering_base_path}", "concept_trees","{strategy}_{strat_values}", "K{root_k}",  "layer_{layer}", "concept_tree_{tree_id}.graphml")
 LAYER_TREE_ID_INC = defaultdict(int)
 CONCEPT_CONTEXTS_FILE = os.path.join("{steering_base_path}", "concept_contexts.json")
 
 
-def get_output_path_for_tree(base_steering_path: str, layer: int, tree_id: int, args):
+def get_output_path_for_tree(base_steering_path: str, layer: int, tree: nx.DiGraph, args):
+    tree_id = tree.graph["tree_id"]
+    root_k = tree.graph["root_k"]
     strat_values = f"top_k{args.top_k_tokens}_min_act{args.minimal_activation}"
     if args.concept_tree_strategy == ConceptTreeStrategy.TOP_P:
         strat_values = f"top_p{args.top_p}"
-    output_file = TREE_OUTPUT_PATH.format(steering_base_path=base_steering_path, layer=layer, tree_id=tree_id, strategy=args.concept_tree_strategy, strat_values=strat_values)
+    output_file = TREE_OUTPUT_PATH.format(steering_base_path=base_steering_path, layer=layer, tree_id=tree_id, strategy=args.concept_tree_strategy, strat_values=strat_values, root_k=root_k)
     output_folder = os.path.dirname(output_file)
     if not os.path.exists(output_folder):
         os.makedirs(output_folder, exist_ok=True)
@@ -106,10 +108,8 @@ def save_trees_to_files(trees: list[nx.DiGraph], layer: int, base_steering_path:
     # Create a single graph just for saving
     try:
         for tree in trees:
-            tree_id = tree.graph["tree_id"]
-            output_path = get_output_path_for_tree(base_steering_path=base_steering_path, layer=layer, tree_id=tree_id, args=args)
+            output_path = get_output_path_for_tree(base_steering_path=base_steering_path, layer=layer, tree=tree, args=args)
             nx.write_graphml(tree, output_path)
-            logger.info("Saved tree %s for layer %s to %s", tree_id, layer, output_path)
         return True
     except Exception as e:
         logger.error("Couldn't save file", exc_info=e)
@@ -119,6 +119,7 @@ def save_trees_to_files(trees: list[nx.DiGraph], layer: int, base_steering_path:
 def build_trees_for_layer(
     layer: int,
     ranks: list[int],
+    root_levels: list[int],
     layer_steering_data: dict,
     nmf_decompositions,
     top_k_factors: int,
@@ -129,32 +130,33 @@ def build_trees_for_layer(
 ) -> list[nx.DiGraph]:
     trees: list[nx.DiGraph] = []
     nmf_list = nmf_decompositions["pretrained_layers"]
-    rank = ranks[-1]
-    for concept_idx in range(rank):
-        level_idx = len(nmf_list) - 1
-        if strategy == ConceptTreeStrategy.TOP_P:
-            concept_tree = build_concept_tree_top_p(
-                levels=nmf_list,
-                concept_idx=concept_idx,
-                level_idx=level_idx,
-                top_p=top_p,
-                top_k_tokens=top_k_tokens,
-                minimal_activation=minimal_activation,
-            )
-        else:
-            concept_tree = build_concept_tree(
-                levels=nmf_list,
-                concept_idx=concept_idx,
-                level_idx=level_idx,
-                top_k_factors=top_k_factors,
-                top_k_tokens=top_k_tokens,
-                minimal_activation=minimal_activation,
-            )
-        tree_id = get_tree_id(layer=layer, rank=rank, level_idx=level_idx, concept_idx=concept_idx)
-        tree = nx.DiGraph(tree_id=tree_id)
+    for root_level in root_levels:
+        rank = ranks[root_level]
+        for concept_idx in range(rank):
+            level_idx = root_level
+            if strategy == ConceptTreeStrategy.TOP_P:
+                concept_tree = build_concept_tree_top_p(
+                    levels=nmf_list,
+                    concept_idx=concept_idx,
+                    level_idx=level_idx,
+                    top_p=top_p,
+                    top_k_tokens=top_k_tokens,
+                    minimal_activation=minimal_activation,
+                )
+            else:
+                concept_tree = build_concept_tree(
+                    levels=nmf_list,
+                    concept_idx=concept_idx,
+                    level_idx=level_idx,
+                    top_k_factors=top_k_factors,
+                    top_k_tokens=top_k_tokens,
+                    minimal_activation=minimal_activation,
+                )
+            tree_id = get_tree_id(layer=layer, rank=rank, level_idx=level_idx, concept_idx=concept_idx)
+            tree = nx.DiGraph(tree_id=tree_id, root_k=rank)
 
-        build_tree(tree, concept_tree, layer, level_idx, layer_steering_data)
-        trees.append(tree)
+            build_tree(tree, concept_tree, layer, level_idx, layer_steering_data)
+            trees.append(tree)
 
     return trees
 
@@ -163,6 +165,11 @@ def validate_args(args):
     if args.input_layers and not args.causal_input_file:
         args.causal_input_file = INPUT_CAUSAL_RESULTS_FILE.format(steering_base_path=args.base_steering_path)
         logger.warning("Causal output file is not provided. Using default: %s", args.causal_input_file)
+
+    min_level = min(args.root_levels)
+    if min_level ==0:
+        logger.warning("You cannot build trees with root node at level 0, ignoring level 0 in the levels list.")
+        args.root_levels = [level for level in args.root_levels if level != 0]
 
 def load_best_results_for_feature(causal_results_path: str, layers: list[int]) -> dict:
     raw_causal_results = load_data(causal_results_path)
@@ -189,6 +196,7 @@ def process_layers(
         layer_trees = build_trees_for_layer(
             layer=layer,
             ranks=args.ranks,
+            root_levels=args.root_levels,
             layer_steering_data=best_input_results[layer],
             nmf_decompositions=nmf_decompositions[layer],
             top_k_factors=args.top_k_factors,
@@ -198,7 +206,7 @@ def process_layers(
             strategy=args.concept_tree_strategy,
         )
         if save_trees_to_files(layer_trees, layer, args.base_steering_path, args):
-            logger.info("Successfully saved trees for layer %s", layer)
+            logger.info("Successfully saved all trees for layer %s", layer)
 
 
 def load_concept_contexts(file_path: str) -> dict:
@@ -239,6 +247,7 @@ def main():
         default=None,
         help="Path to the JSON file containing the causal results relating to input descriptions.",
     )
+    parser.add_argument("--root-levels", type=parse_int_list, default=[2,3], help="A comma-separated list of levels for the root nodes. Do not start from 0 (leaf level)")
     parser.add_argument("--top-p", type=float, default=0.1, help="Cumulative activation threshold for including child nodes in the tree.")
     parser.add_argument("--top-k-factors", type=int, default=3, help="Number of top factors to include for each concept in the tree.")
     parser.add_argument("--top-k-tokens", type=int, default=10, help="Number of top tokens to include for each concept in the tree.")

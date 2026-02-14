@@ -115,8 +115,6 @@ def main():
     data_path = Path(args.data_path).resolve()
     save_path.parent.mkdir(parents=True, exist_ok=True)
 
-    if args.concept_trees_folder is None:
-        args.concept_trees_folder = os.path.join(Path(args.output_json).parent, "concept_trees")
 
     log("Job started.")
     log(f"Models dir: {models_dir}")
