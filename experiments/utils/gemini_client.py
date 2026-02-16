@@ -269,6 +269,13 @@ class GeminiBatchClient:
 
     # External Methods
 
+    def load_submitted_jobs(self) -> List[str]:
+        """
+        Loads the list of submitted job names from the submitted jobs file.
+        Returns an empty list if the file doesn't exist or is invalid.
+        """
+        return self._load_submitted_jobs_file()
+
     async def download_and_save_successful_jobs(self, job_names: list[str], override: bool = False, save_raw: bool = False) -> bool:
         """
         Downloads and saves the results of all successful jobs in job_names to local JSON files.

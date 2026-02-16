@@ -153,7 +153,7 @@ def build_trees_for_layer(
                     minimal_activation=minimal_activation,
                 )
             tree_id = get_tree_id(layer=layer, rank=rank, level_idx=level_idx, concept_idx=concept_idx)
-            tree = nx.DiGraph(tree_id=tree_id, root_k=rank)
+            tree = nx.DiGraph(tree_id=tree_id, root_k=rank, root_node_id=get_node_id(tree_id, layer, level_idx, concept_idx))
 
             build_tree(tree, concept_tree, layer, level_idx, layer_steering_data)
             trees.append(tree)

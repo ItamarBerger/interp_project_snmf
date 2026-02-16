@@ -1,5 +1,6 @@
 import json
-from typing import Optional, Any
+from pathlib import Path
+from typing import Optional, Any, List
 
 import networkx as nx
 import numpy as np
@@ -8,6 +9,24 @@ import pickle
 import os
 from numpy import ndarray, dtype
 
+# FIXME: temp monkey patching - for running locally - remove after done with trees
+# import io
+# import torch
+#
+# # Store original
+# _original_load = pickle.load
+#
+# def _cpu_pickle_load(f, **kwargs):
+#     class CPUUnpickler(pickle.Unpickler):
+#         def find_class(self, module, name):
+#             if module == 'torch.storage' and name == '_load_from_bytes':
+#                 return lambda b: torch.load(io.BytesIO(b), map_location='cpu', weights_only=False)
+#             return super().find_class(module, name)
+#     return CPUUnpickler(f).load()
+#
+# # Monkey-patch
+# pickle.load = _cpu_pickle_load
+# FIXME: end monkey patching
 
 logger = logging.getLogger(__name__)
 MIN_TOTAL_MASS = 1e-6  # to avoid division by zero in top-p calculations
@@ -288,3 +307,39 @@ def build_nx_tree(tree: nx.DiGraph, node: dict, layer: int, level: int, parent_i
 
     for child in node.get("children", []):
         build_nx_tree(tree=tree, node=child, layer=layer, level=child["level"], parent_id=node_id)
+
+
+def discover_trees(base_path: str, filter_k: None | str = None, layers: list[int] | None = None) -> List[str]:
+    """
+    Discover all graphml tree files under the base path.
+
+    Expects structure: base_path/K{rank}/layer_{layer}/*.graphml
+
+    Returns:
+        List of paths to graphml files.
+    """
+    base = Path(base_path)
+    graphml_files = []
+
+    # Find all K{rank} directories
+    for k_dir in sorted(base.iterdir()):
+        if not k_dir.is_dir() or not k_dir.name.startswith("K"):
+            continue
+
+        if filter_k and k_dir.name != filter_k:
+            continue
+
+        # Find all layer_{layer} directories
+        for layer_dir in sorted(k_dir.iterdir()):
+            if not layer_dir.is_dir() or not layer_dir.name.startswith("layer_"):
+                continue
+
+            if layers is not None:
+                if not any(layer_dir.name == f"layer_{layer}" for layer in layers):
+                    continue
+
+            # Find all graphml files
+            for graphml_file in sorted(layer_dir.glob("*.graphml")):
+                graphml_files.append(str(graphml_file))
+
+    return graphml_files
