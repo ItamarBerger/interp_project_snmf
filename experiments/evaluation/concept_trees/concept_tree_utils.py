@@ -309,7 +309,7 @@ def build_nx_tree(tree: nx.DiGraph, node: dict, layer: int, level: int, parent_i
         build_nx_tree(tree=tree, node=child, layer=layer, level=child["level"], parent_id=node_id)
 
 
-def discover_trees(base_path: str, filter_k: None | str = None, layers: list[int] | None = None) -> List[str]:
+def discover_trees(base_path: str, filter_k: None | list[int] = None, layers: list[int] | None = None) -> List[str]:
     """
     Discover all graphml tree files under the base path.
 
@@ -326,7 +326,7 @@ def discover_trees(base_path: str, filter_k: None | str = None, layers: list[int
         if not k_dir.is_dir() or not k_dir.name.startswith("K"):
             continue
 
-        if filter_k and k_dir.name != filter_k:
+        if filter_k and not any(k_dir.name == f"K{rank}" for rank in filter_k):
             continue
 
         # Find all layer_{layer} directories

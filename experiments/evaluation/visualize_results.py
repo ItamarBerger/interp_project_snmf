@@ -50,13 +50,13 @@ LAYER_COLOR_PALETTE = {
     1: "#fb9a99",  # Light Red
     2: "#33a02c",  # Dark Green
     3: "#ff7f00",  # Orange
-    4: "#cab2d6",  # Light Violet
-    6: "#1f78b4",  # Dark Blue
-    8: "#b2df8a",  # Soft Green
-    9: "#e31a1c",  # Red
+    4: "#8fd7d7",  # Light Teal
+    6: "#fdb462",  # Light Orange
+    8: "#00b0be", # med blue
+    9: "#b2df8a",  # Soft Green
     11: "#a6cee3",  # Light Blue
     12: "#b15928",  # Brown
-    18: "#8dd3c7",  # Teal
+    16: "#bdd373",  # light green
     25: "#ffffb3",  # Yellow
 }
 
@@ -316,7 +316,7 @@ def parse_arguments():
     parser.add_argument("--metrics", type=str, nargs='*',
                         default=None, help="Filter by specific metrics (concept, final, fluency).")
 
-    parser.add_argument("--mode", type=str, choices=[e.value for e in PlotMode], default=PlotMode.MULTI_PLOT,
+    parser.add_argument("--mode", type=str, choices=[e for e in PlotMode], default=PlotMode.MULTI_PLOT,
                         help="Plotting mode: single_plot or multi_plot.")
     parser.add_argument("--model-name", type=str, help="Name of the model (used in plot titles and filenames).")
 

@@ -199,6 +199,54 @@ def fix_unwrapped_values(result: dict) -> None:
             logger.warning(f"Group '{group}' has a single value that is not wrapped in a list: '{values}'. Wrapping this value in a list for consistency.")
             result[group] = [values]
 
+
+def clean_duplicates(result: dict) -> dict:
+    fixed_results = copy.deepcopy(result)
+
+    # Clean duplicates from each group first
+    for group, values in fixed_results.items():
+        unique_values = set(values)
+        if len(unique_values) < len(values):
+            logger.warning(f"Group '{group}' has duplicate values: {set([v for v in values if values.count(v) > 1])}. Removing duplicates from this group.")
+            fixed_results[group] = list(unique_values)
+
+    # Clean duplicate values from the ungrouped category if they are already present in other groups
+    ungrouped_values = set(result.get(UNGROUPED_KEY, []))
+    to_remove_from_ungrouped = set()
+    for group, values in fixed_results.items():
+        if group == UNGROUPED_KEY:
+            continue
+        values_set = set(values)
+        duplicates = values_set.intersection(ungrouped_values)
+        to_remove_from_ungrouped.update(duplicates)
+
+    if to_remove_from_ungrouped:
+        num_to_remove = len(to_remove_from_ungrouped)
+        fixed_results[UNGROUPED_KEY] = [v for v in fixed_results.get(UNGROUPED_KEY, []) if v not in to_remove_from_ungrouped]
+        logger.info("Removed %d duplicate values from %s group that were already present in other groups: %s", num_to_remove, UNGROUPED_KEY, to_remove_from_ungrouped)
+
+    # If there are still any duplicates in other groups, just remove them from one of those groups
+    entries_by_groups = defaultdict(list)
+    for group, values in fixed_results.items():
+        for value in values:
+            if group in entries_by_groups.get(value, []):
+               raise "This really should not happen, this means that we have the same value duplicated in the same group even after cleaning, which should be impossible. Please investigate."
+            entries_by_groups[value].append(group)
+
+    duplicate_entries = {value: groups for value, groups in entries_by_groups.items() if len(groups) > 1}
+    for value, groups in duplicate_entries.items():
+        logger.warning(f"Value '{value}' is duplicated across groups {groups}. Removing randomly from all but the first group.")
+        # remove from all groups except the first one
+        for group in groups[1:]:
+            if value in fixed_results[group]:
+                fixed_results[group].remove(value)
+                if not fixed_results[group]:
+                    logger.warning(f"Group '{group}' is now empty after removing duplicate value '{value}'. Deleting this group from results.")
+                    del fixed_results[group]
+    return fixed_results
+
+
+
 def fix_results(result: dict, descriptions: set) -> dict:
     """
     The model sometimes misses items in the results. This is not ideal, but in such case, we add them to the
@@ -208,11 +256,14 @@ def fix_results(result: dict, descriptions: set) -> dict:
     returned_group_values = set(v for group in result.values() for v in group)
 
     # Make a copy of the original result to modify while iterating
-    fixed_results = copy.deepcopy(result)
+    fixed_results = clean_duplicates(result)
 
     # first remove extra values that the model added but are not in the descriptions (if any)
     extra_values = returned_group_values - descriptions
     for group, values in result.items():
+        if group not in fixed_results:
+            # This means that this group was already removed due to duplicates, so we can skip it
+            continue
         values_without_extra = set(values) - extra_values
         if len(values_without_extra) < len(values):
             logger.warning(f"Group '{group}' has extra values that are not in descriptions: {extra_values}. Removing these from the group.")
@@ -235,15 +286,22 @@ def fix_results(result: dict, descriptions: set) -> dict:
     return fixed_results
 
 
-def re_organize_result(result: dict)-> None:
+def re_organize_result(result: dict)-> dict:
     """
     Removes the UNGROUPED_KEY category and re-assigns its values to their own group with the same name as the value.
      This is done to make the results more consistent and easier to analyze for trends, since we want to treat ungrouped terms as their own individual groups in the analysis.
     """
-    if UNGROUPED_KEY in result:
-        ungrouped_values = result.pop(UNGROUPED_KEY)
+    organized_result = copy.deepcopy(result)
+    if UNGROUPED_KEY in organized_result:
+        ungrouped_values = organized_result.pop(UNGROUPED_KEY)
         for value in ungrouped_values:
-            result[value] = [value]
+            if value in organized_result:
+                logger.warning(f"Value {value} already exists. We assume we can extend the group, but you should verify")
+                organized_result[value].append(value)
+            else:
+                organized_result[value] = [value]
+
+    return organized_result
 
 def process_and_validate_results(results_map: dict, meta_map: dict):
     processed_results = {}
@@ -282,16 +340,14 @@ def save_processes_results(processed_results: dict, args):
         model_name = data["model_name"]
         top_rank = data["top_rank"]
         layer = data["layer"]
-        level = data["level"]
 
         if model_name not in final_results:
             final_results[model_name] = {}
         if top_rank not in final_results[model_name]:
-            final_results[model_name][top_rank] = {}
-        if layer not in final_results[model_name][top_rank]:
-            final_results[model_name][top_rank][layer] = defaultdict(list)
+            final_results[model_name][top_rank] = defaultdict(list)
 
-        final_results[model_name][top_rank][layer][level].append(data)
+        final_results[model_name][top_rank][layer].append(data)
+
 
     with open(output_file, "w") as f:
         json.dump(final_results, f, indent=2)
@@ -419,7 +475,7 @@ def make_synchronous_calls(prompts_map: dict, meta_map: dict, args, gen_config: 
 
             fix_unwrapped_values(grouping)
             grouping = fix_results(grouping, descriptions)
-            re_organize_result(grouping)
+            grouping = re_organize_result(grouping)
 
             # Sanity check to see if the results are valid after fixing
             if not validate_result(grouping, meta_map[prompt_id]["descriptions"]):
