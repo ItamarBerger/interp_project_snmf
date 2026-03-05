@@ -73,7 +73,7 @@ class SupervisedConceptDataset:
         
         elif path.endswith('.json'):
             try:
-                # Try to load as a DataFrame; this will work if the JSON is a list of dicts - like in final_dataset_20_concepts.json
+                # Try to load as a DataFrame; this will work if the JSON is a list of dicts
                 df = pd.read_json(self.path, encoding="utf-8")
             except ValueError:
                 # If the JSON structure is not suitable for read_json, try with orient='index'
