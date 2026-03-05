@@ -1,9 +1,12 @@
-import sys, os, argparse, random, numpy as np, torch, pickle
-from collections import Counter
+import argparse
+import numpy as np
+import os
+import pickle
+import random
+import sys
+import torch
 from pathlib import Path
-from time import sleep
 from typing import List
-import networkx as nx
 
 from utils import setup_logging
 
@@ -12,7 +15,6 @@ from experiments.evaluation.json_handler import JsonHandler
 from experiments.evaluation.concept_trees.concept_tree_utils import get_top_activating_indices_hierarchical
 from llm_utils.activation_generator import ActivationGenerator, extract_token_ids_sample_ids_and_labels
 from data_utils.concept_dataset import SupervisedConceptDataset
-from factorization.seminmf import NMFSemiNMF  # typing only
 import logging
 
 logger = logging.getLogger(__name__)
