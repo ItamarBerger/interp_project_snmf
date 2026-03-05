@@ -1,13 +1,35 @@
 import json
-from typing import Optional
+from pathlib import Path
+from typing import Optional, Any, List
 
 import networkx as nx
 import numpy as np
 import logging
 import pickle
 import os
+from numpy import ndarray, dtype
+
+# FIXME: temp monkey patching - for running locally - remove after done with trees
+# import io
+# import torch
+#
+# # Store original
+# _original_load = pickle.load
+#
+# def _cpu_pickle_load(f, **kwargs):
+#     class CPUUnpickler(pickle.Unpickler):
+#         def find_class(self, module, name):
+#             if module == 'torch.storage' and name == '_load_from_bytes':
+#                 return lambda b: torch.load(io.BytesIO(b), map_location='cpu', weights_only=False)
+#             return super().find_class(module, name)
+#     return CPUUnpickler(f).load()
+#
+# # Monkey-patch
+# pickle.load = _cpu_pickle_load
+# FIXME: end monkey patching
 
 logger = logging.getLogger(__name__)
+MIN_TOTAL_MASS = 1e-6  # to avoid division by zero in top-p calculations
 
 
 def parse_int_list(spec: str):
@@ -159,6 +181,85 @@ def build_concept_tree(
     return node
 
 
+def get_top_p_factors_indices(contributions: np.ndarray, top_p: float) -> ndarray[Any, dtype[Any]]:
+    """Get the concept indices of the top-p contributing factors."""
+    total_mass = contributions.sum()
+    if total_mass < MIN_TOTAL_MASS:
+        return np.array([])  # avoid division by zero, treat as no contributors
+
+    probs = contributions / total_mass
+
+    sorted_idxs = np.argsort(probs)[::-1] # From highest to lowest
+    sorted_probs = probs[sorted_idxs]
+    # Get the cumulative sum of the sorted probabilities [p1, p1+p2, p1+p2+p3, ...] when p1 is the highest
+    cumulative_probs = np.cumsum(sorted_probs)
+    # Search for the cutoff index where cumulative probability exceeds top_p, starting from the left (highest contributors)
+    cutoff_idx = np.searchsorted(cumulative_probs, top_p)
+    # Make sure the cutoff doesn't go beyond the array length
+    cutoff_idx = min(cutoff_idx, probs.size - 1)
+
+    # Return the indices of the top contributors that together account for at least top_p of the mass
+    return sorted_idxs[:cutoff_idx + 1]
+
+
+
+def build_concept_tree_top_p(
+    levels: list,
+    concept_idx: int,
+    level_idx: int,
+    top_k_tokens: int = 10,
+    top_p: float = 0.9,
+    minimal_activation: float = 0.0
+):
+    # 1) Get the raw top activations (no filtering)
+    indices, acts = get_top_activating_indices_hierarchical(
+        levels, concept_idx, level_idx,
+        num_samples=top_k_tokens * 5,  # grab extra so filtering has room
+        minimal_activation=0.0
+    )
+
+    # 2) Compute a per-node threshold
+    if 0.0 < minimal_activation < 1.0:
+        node_max = max(acts) if acts else 0.0
+        token_thresh = minimal_activation * node_max
+    else:
+        token_thresh = minimal_activation
+
+    # 3) Filter token activations and cap at top_k_tokens
+    filtered_tokens = [(i, a) for i, a in zip(indices, acts) if a >= token_thresh]
+    filtered_tokens.sort(key=lambda x: x[1], reverse=True)
+    filtered_tokens = filtered_tokens[:top_k_tokens]
+
+    node = {
+        'level': level_idx,
+        'concept': concept_idx,
+        'top_indices': filtered_tokens,
+        'children': []
+    }
+
+    # 4) Recurse for factor-level children if not at bottom
+    if level_idx > 0:
+        W = levels[level_idx].W.detach().cpu().numpy()
+        contrib = W[:, concept_idx]  # each lower-level factor’s importance
+
+        top_factors = get_top_p_factors_indices(contrib, top_p)
+
+        # stop this branch if there's only one child to create
+        if len(top_factors) <= 1:
+            return node
+
+        for f_idx in top_factors:
+            child = build_concept_tree(
+                levels,
+                concept_idx=int(f_idx),
+                level_idx=level_idx - 1,
+                top_k_tokens=top_k_tokens,
+                minimal_activation=minimal_activation
+            )
+            node['children'].append(child)
+
+    return node
+
 
 def load_nmf_decompositions(layers: list[int], factorization_base_path: str, ranks: list[int]):
     # 2.1 load hierarchical models once per layer
@@ -206,3 +307,39 @@ def build_nx_tree(tree: nx.DiGraph, node: dict, layer: int, level: int, parent_i
 
     for child in node.get("children", []):
         build_nx_tree(tree=tree, node=child, layer=layer, level=child["level"], parent_id=node_id)
+
+
+def discover_trees(base_path: str, filter_k: None | list[int] = None, layers: list[int] | None = None) -> List[str]:
+    """
+    Discover all graphml tree files under the base path.
+
+    Expects structure: base_path/K{rank}/layer_{layer}/*.graphml
+
+    Returns:
+        List of paths to graphml files.
+    """
+    base = Path(base_path)
+    graphml_files = []
+
+    # Find all K{rank} directories
+    for k_dir in sorted(base.iterdir()):
+        if not k_dir.is_dir() or not k_dir.name.startswith("K"):
+            continue
+
+        if filter_k and not any(k_dir.name == f"K{rank}" for rank in filter_k):
+            continue
+
+        # Find all layer_{layer} directories
+        for layer_dir in sorted(k_dir.iterdir()):
+            if not layer_dir.is_dir() or not layer_dir.name.startswith("layer_"):
+                continue
+
+            if layers is not None:
+                if not any(layer_dir.name == f"layer_{layer}" for layer in layers):
+                    continue
+
+            # Find all graphml files
+            for graphml_file in sorted(layer_dir.glob("*.graphml")):
+                graphml_files.append(str(graphml_file))
+
+    return graphml_files

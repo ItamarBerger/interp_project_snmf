@@ -27,7 +27,7 @@ outputs/*
 wandb/*
 
 # Ignore playground files
-playground.ipynb
+*playground.ipynb
 
 # VS Code launch configuration
 .vscode/launch.json
